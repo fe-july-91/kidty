@@ -1,2 +1,1 @@
-
-export type LangTypes = 'UA'| 'EN'
+export type LangTypes = 'UA' | 'EN';

@@ -1,5 +1,5 @@
-import { months } from "../../Utils/kit";
-import { Data } from "../types/types";
+import { months } from '../../Utils/kit';
+import { Data } from '../types/types';
 
 export function sortDataByMonth(data: Data[]) {
   const monthsOrder = months;

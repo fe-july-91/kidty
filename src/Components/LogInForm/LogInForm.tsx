@@ -1,21 +1,21 @@
-import { Link, useNavigate } from "react-router-dom";
-import "./LogInForm.scss";
-import { useContext, useState } from "react";
-import { AuthContext } from "../../Context/AuthContext";
-import { client } from "../../Utils/httpClient";
-import cn from "classnames";
-import { useLocalStorage } from "../../Shared/CustomHooks/useLocalStorage";
+import { Link, useNavigate } from 'react-router-dom';
+import './LogInForm.scss';
+import { useContext, useState } from 'react';
+import { AuthContext } from '../../Context/AuthContext';
+import { client } from '../../Utils/httpClient';
+import cn from 'classnames';
+import { useLocalStorage } from '../../Shared/CustomHooks/useLocalStorage';
 
 export const LogInForm = () => {
   const navigate = useNavigate();
-  const [savedEmail, setSavedEmail] = useLocalStorage<string>("email", "");
+  const [savedEmail, setSavedEmail] = useLocalStorage<string>('email', '');
   const [savedPassword, setSavedPassword] = useLocalStorage<string>(
-    "password",
-    ""
+    'password',
+    ''
   );
 
   const { logIn, setToken } = useContext(AuthContext);
-  const [errowMessage, setErrowmessage] = useState("");
+  const [errowMessage, setErrowmessage] = useState('');
   const [email, setEmail] = useState(savedEmail);
   const [password, setPassword] = useState(savedPassword);
   const [checked, setChecked] = useState(true);
@@ -30,13 +30,13 @@ export const LogInForm = () => {
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     event.preventDefault();
-    setErrowmessage("");
+    setErrowmessage('');
 
     client
-      .post("auth/login", { email: email.trim(), password: password.trim() })
+      .post('auth/login', { email: email.trim(), password: password.trim() })
       .then((response: any) => {
-        if (response.status === "BAD_REQUEST") {
-          throw new Error("Електронна пошта або пароль неправильні");
+        if (response.status === 'BAD_REQUEST') {
+          throw new Error('Електронна пошта або пароль неправильні');
         }
 
         if (checked) {
@@ -46,7 +46,7 @@ export const LogInForm = () => {
 
         setToken(response.token);
         logIn();
-        navigate("/account");
+        navigate('/account');
       })
       .catch((error) => setErrowmessage(error.message));
   };
@@ -62,8 +62,8 @@ export const LogInForm = () => {
           <input
             type="email"
             value={email}
-            className={cn("form__control", {
-              "form__control--invalid": errowMessage,
+            className={cn('form__control', {
+              'form__control--invalid': errowMessage,
             })}
             id="exampleInputEmail1"
             aria-describedby="emailHelp"
@@ -77,8 +77,8 @@ export const LogInForm = () => {
           <input
             type="password"
             value={password}
-            className={cn("form__control", {
-              "form__control--invalid": errowMessage,
+            className={cn('form__control', {
+              'form__control--invalid': errowMessage,
             })}
             id="exampleInputPassword1"
             onChange={(event) => setPassword(event.target.value)}
@@ -93,8 +93,8 @@ export const LogInForm = () => {
           <div className="form__check">
             <input
               type="checkbox"
-              className={cn("form__check__input", {
-                "form__check__input--active": checked,
+              className={cn('form__check__input', {
+                'form__check__input--active': checked,
               })}
               id="exampleCheck1"
               onClick={handleCheckedButton}

@@ -1,37 +1,35 @@
-
 export type Data = {
   id: number;
   year: string;
   month: string;
   value: number;
-}
-
+};
 
 export interface YearlyMeasurementData {
-  type: "weight" | "height" | "foot";
+  type: 'weight' | 'height' | 'foot';
   data: Data[];
 }
 
 export type Eye = {
   leftEye: number;
-  rightEye: number
-}
+  rightEye: number;
+};
 
 export interface EyesData {
   type: string;
-  data: Eye
-};
+  data: Eye;
+}
 
 export type VaccineData = {
-  id: number
+  id: number;
   type: string;
   date: string;
-}
+};
 
 export type VaccinesData = {
   type: string;
   data: VaccineData[];
-}
+};
 export type ChildData = (YearlyMeasurementData | EyesData | VaccinesData)[];
 
 export type Child = {
@@ -44,7 +42,7 @@ export type Child = {
   image: string;
   userId: number;
   userEmail: string;
-  userName: string
+  userName: string;
 };
 
 export enum CardTitleTypes {
@@ -56,7 +54,7 @@ export enum CardTitleTypes {
 }
 
 export type PersonalData = {
-  id: number,
-  name: string,
-  email: string
-}
+  id: number;
+  name: string;
+  email: string;
+};

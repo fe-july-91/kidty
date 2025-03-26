@@ -1,7 +1,7 @@
-import React, { useEffect, useRef } from "react";
-import { select } from "d3";
-import { DrowLineChart } from "./DrowLineChart";
-import { Data } from "../../Shared/types/types";
+import React, { useEffect, useRef } from 'react';
+import { select } from 'd3';
+import { DrowLineChart } from './DrowLineChart';
+import { Data } from '../../Shared/types/types';
 
 interface GraphProps {
   width: number;
@@ -20,7 +20,6 @@ export const WeightLineChart: React.FC<GraphProps> = ({
   slider,
   HandleGraph,
 }) => {
-
   const margin = 20;
   const targetMonth = selectedMonth;
 
@@ -40,8 +39,5 @@ export const WeightLineChart: React.FC<GraphProps> = ({
     );
   }, [data, targetMonth, width, height, slider, HandleGraph]);
 
-  return (
-    <svg ref={rectRef} viewBox={`0 0 ${width} ${height}`}>
-    </svg>
-  );
+  return <svg ref={rectRef} viewBox={`0 0 ${width} ${height}`}></svg>;
 };

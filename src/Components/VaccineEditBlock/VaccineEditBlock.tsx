@@ -1,6 +1,5 @@
-
-import { VaccineData } from "../../Shared/types/types";
-import { vaccinesSelect } from "../../Utils/kit";
+import { VaccineData } from '../../Shared/types/types';
+import { vaccinesSelect } from '../../Utils/kit';
 
 type Props = {
   activeVaccine: VaccineData | null;
@@ -11,7 +10,9 @@ type Props = {
   setActiveButton: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedVaccine: React.Dispatch<React.SetStateAction<string>>;
   handleData: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-  handleRemoveData: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  handleRemoveData: (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => void;
 };
 
 export const VaccineEditBlock: React.FC<Props> = ({
@@ -42,7 +43,7 @@ export const VaccineEditBlock: React.FC<Props> = ({
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     if (activeVaccine) {
-      handleRemoveData(e)
+      handleRemoveData(e);
     }
     setActiveButton(false);
   };
@@ -82,7 +83,7 @@ export const VaccineEditBlock: React.FC<Props> = ({
             <input
               type="date"
               className="vaccine__top--selectDate"
-              value={startDate.toISOString().split("T")[0]} // yyyy-mm-dd
+              value={startDate.toISOString().split('T')[0]} // yyyy-mm-dd
               onChange={(e) => {
                 const newDate = new Date(e.target.value);
                 setStartDate(newDate);
@@ -101,7 +102,7 @@ export const VaccineEditBlock: React.FC<Props> = ({
               className="vaccine__top__button vaccine__top__button--cancel"
               onClick={handleRemoveClick}
             >
-              {" "}
+              {' '}
               {activeVaccine ? `Видалити` : `Скасувати`}
             </button>
           </div>

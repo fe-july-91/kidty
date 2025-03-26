@@ -1,13 +1,13 @@
-import { CardTitleTypes } from "../types/types";
+import { CardTitleTypes } from '../types/types';
 
 export const setUnits = (title: string) => {
   switch (title) {
     case CardTitleTypes.foot:
     case CardTitleTypes.height:
-      return "см";
+      return 'см';
     case CardTitleTypes.weight:
-      return "кг";
+      return 'кг';
     default:
-      return "";
+      return '';
   }
 };

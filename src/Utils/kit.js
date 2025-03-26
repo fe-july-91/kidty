@@ -37,12 +37,43 @@ import avatarImage17 from '../assets/avatars/17.webp'
 import avatarImage18 from '../assets/avatars/18.webp'
 import avatarImage19 from '../assets/avatars/19.webp'
 import avatarImage20 from '../assets/avatars/20.webp'
+import background from '../assets/images/bg.webp'
 
-import bg from '../assets/images/bg.webp'
+
+
+import bg from '../assets/images/bg.webp';
+
+//carousel
+
+import one from '../assets/images/notebook2.png'
+import two from '../assets/images/weight.png'
+import three from '../assets/images/vaccination.png'
+import forr from '../assets/images/screen.png'
+import fife from '../assets/images/phone.png'
+import kidtygif from '../assets/gif/kidty.gif'
+
 
 //photos
 export const Maria = MariasPhoto;
 export const Yana = YanasPhoto;
+export const back = background;
+export const notebook = one;
+export const weightCard = two;
+export const vaccination = three;
+export const screen = forr;
+export const phone = fife;
+export const giff = kidtygif;
+
+
+export const carouselImages = [
+  { src: one, alt: "kidty1" },
+  { src: fife, alt: "kidty5" },
+  { src: three, alt: "kidty3" },
+  { src: forr, alt: "kidty4" },
+  { src: two, alt: "kidty2" },
+]
+
+
 
 //bg
 export const bakground = bg;

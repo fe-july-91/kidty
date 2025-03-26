@@ -1,5 +1,5 @@
-import { eye, foot, height, weight } from "../../Utils/kit";
-import { CardTitleTypes } from "../types/types";
+import { eye, foot, height, weight } from '../../Utils/kit';
+import { CardTitleTypes } from '../types/types';
 
 export const findCardImage = (name: string): string => {
   switch (name) {
@@ -13,5 +13,5 @@ export const findCardImage = (name: string): string => {
       return foot;
     default:
       return '';
- }
-}
+  }
+};

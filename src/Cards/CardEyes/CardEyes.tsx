@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
-import cn from "classnames";
-import "./CardEyes.scss";
-import { CardTitleTypes } from "../../Shared/types/types";
-import { cardSize, eye, sliderRange } from "../../Utils/kit";
-import { EyesChart } from "../../Charts/EyesChart/EyesChart";
-import { TitleCardBlock } from "../../Components/CardTitleBlock/TitleCardBlock";
-import { SliderElement } from "../../Components/SliderElement/SliderElement";
-import { ButtonsCardBlock } from "../../Components/ButtonsCardBlock/ButtonsCardBlock";
-import { client } from "../../Utils/httpClient";
+import React, { useEffect, useState } from 'react';
+import cn from 'classnames';
+import './CardEyes.scss';
+import { CardTitleTypes } from '../../Shared/types/types';
+import { cardSize, eye, sliderRange } from '../../Utils/kit';
+import { EyesChart } from '../../Charts/EyesChart/EyesChart';
+import { TitleCardBlock } from '../../Components/CardTitleBlock/TitleCardBlock';
+import { SliderElement } from '../../Components/SliderElement/SliderElement';
+import { ButtonsCardBlock } from '../../Components/ButtonsCardBlock/ButtonsCardBlock';
+import { client } from '../../Utils/httpClient';
 
 type Props = {
-  childId: number
+  childId: number;
 };
 
 type EyeResponce = {
@@ -18,31 +18,34 @@ type EyeResponce = {
   childId: number;
   leftEye: number;
   rightEye: number;
-}
+};
 
 export const CardEyes: React.FC<Props> = ({ childId }) => {
   const initialData = {
-    "id": 0,
-    "childId": childId,
-    "leftEye": 0,
-    "rightEye": 0
-  }
+    id: 0,
+    childId: childId,
+    leftEye: 0,
+    rightEye: 0,
+  };
 
   const [data, setData] = useState<EyeResponce>(initialData);
-  const [errowMessage, setErrowmessage] = useState("");
+  const [errowMessage, setErrowmessage] = useState('');
   const [activeSlider, setActiveSlider] = useState(false);
   const [leftSliderValue, setLeftSliderValue] = useState({ x: data.leftEye });
-  const [rightSliderValue, setRightSliderValue] = useState({ x: data.rightEye });
+  const [rightSliderValue, setRightSliderValue] = useState({
+    x: data.rightEye,
+  });
 
   useEffect(() => {
-    client.get<EyeResponce>(`children/${childId}/eye`)
-      .then(response => {
-        setData(response)
-        setLeftSliderValue({ x: response.leftEye })
-        setRightSliderValue({x: response.rightEye})
+    client
+      .get<EyeResponce>(`children/${childId}/eye`)
+      .then((response) => {
+        setData(response);
+        setLeftSliderValue({ x: response.leftEye });
+        setRightSliderValue({ x: response.rightEye });
       })
-      .catch(err => setErrowmessage(err.message || "Щось пішло не так"));
-  }, [childId])
+      .catch((err) => setErrowmessage(err.message || 'Щось пішло не так'));
+  }, [childId]);
 
   const saveData = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     if (e) {
@@ -53,17 +56,18 @@ export const CardEyes: React.FC<Props> = ({ childId }) => {
       rightEye: rightSliderValue.x,
     };
 
-    client.put<EyeResponce>(`children/${childId}/eye`, newParametrs)
-    .then(response => {
-      setData(response)
-    })
-    .catch(err => setErrowmessage(err.message || "Щось пішло не так"));
+    client
+      .put<EyeResponce>(`children/${childId}/eye`, newParametrs)
+      .then((response) => {
+        setData(response);
+      })
+      .catch((err) => setErrowmessage(err.message || 'Щось пішло не так'));
   };
 
   return (
     <div className="eyes">
       <div className="eyes__top">
-      {errowMessage && <div className="form__error">{errowMessage}</div>}
+        {errowMessage && <div className="form__error">{errowMessage}</div>}
         <TitleCardBlock image={eye} title={CardTitleTypes.eyes} />
 
         <div className="eyes__edit">
@@ -79,8 +83,8 @@ export const CardEyes: React.FC<Props> = ({ childId }) => {
         <div className="eyes__values">
           <p className="eyes__sign">Ліве око:</p>
           <p
-            className={cn("eyes__value", {
-              "eyes__value--activeLeft": activeSlider,
+            className={cn('eyes__value', {
+              'eyes__value--activeLeft': activeSlider,
             })}
           >
             {activeSlider ? leftSliderValue.x : data.leftEye}
@@ -101,8 +105,8 @@ export const CardEyes: React.FC<Props> = ({ childId }) => {
         <div className="eyes__values">
           <p className="eyes__sign">Праве око:</p>
           <p
-            className={cn("eyes__value", {
-              "eyes__value--activeRight": activeSlider,
+            className={cn('eyes__value', {
+              'eyes__value--activeRight': activeSlider,
             })}
           >
             {activeSlider ? rightSliderValue.x : data.rightEye}

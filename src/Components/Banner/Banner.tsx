@@ -16,11 +16,22 @@ const generateRandomItem = (key: number, columnIndex: number) => {
   if (randomType < 0.33) {
     const letterIndex = key % letters.length;
     const randomLetter = letters[letterIndex];
-    return { type: 'letter', content: randomLetter, color: '#6c6e90', key, columnIndex };
+    return {
+      type: 'letter',
+      content: randomLetter,
+      color: '#6c6e90',
+      key,
+      columnIndex,
+    };
   } else if (randomType < 0.66) {
     const randomShape = shapes[Math.floor(Math.random() * shapes.length)];
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
-    return { type: `shape ${randomShape}`, color: randomColor, key, columnIndex };
+    return {
+      type: `shape ${randomShape}`,
+      color: randomColor,
+      key,
+      columnIndex,
+    };
   } else {
     const randomAvatar = avatars[Math.floor(Math.random() * avatars.length)];
     return { type: 'avatar', src: randomAvatar, key, columnIndex };
@@ -28,7 +39,6 @@ const generateRandomItem = (key: number, columnIndex: number) => {
 };
 
 const Banner = () => {
-
   const generateInitialGrid = () => {
     const items = [];
     for (let i = 0; i < rows; i++) {
@@ -64,10 +74,9 @@ const Banner = () => {
     const interval = setInterval(() => {
       partiallyUpdateGrid();
     }, 6000);
-  
+
     return () => clearInterval(interval);
   }, [partiallyUpdateGrid]);
-  
 
   const handleBannerClick = () => {
     partiallyUpdateGrid();
@@ -81,13 +90,20 @@ const Banner = () => {
             key={i}
             className={`grid-item ${item.type}`}
             style={{
-              backgroundColor: item.type.startsWith('shape') ? item.color : undefined,
+              backgroundColor: item.type.startsWith('shape')
+                ? item.color
+                : undefined,
               color: item.type === 'letter' ? item.color : undefined,
             }}
           >
             {item.type === 'letter' && item.content}
             {item.type === 'avatar' && (
-              <img src={item.src} loading="lazy" alt="Avatar" className="avatar" />
+              <img
+                src={item.src}
+                loading="lazy"
+                alt="Avatar"
+                className="avatar"
+              />
             )}
           </div>
         ))}
@@ -97,4 +113,3 @@ const Banner = () => {
 };
 
 export default Banner;
-

@@ -1,5 +1,5 @@
-import { parseDate } from "../hendlers/parseDate";
-import { VaccineData } from "../types/types";
+import { parseDate } from '../hendlers/parseDate';
+import { VaccineData } from '../types/types';
 
 export const updateVaccines = (
   newVaccine: VaccineData,

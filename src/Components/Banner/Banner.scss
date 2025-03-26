@@ -21,11 +21,11 @@
   transition: transform 1s linear;
 
   @include on-tablet {
-    grid-template-columns: repeat(3, 1fr); 
+    grid-template-columns: repeat(4, 1fr); 
     grid-template-rows: repeat(3, 1fr); 
   }
   @include middle {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     grid-template-rows: repeat(3, 1fr); 
   }
 

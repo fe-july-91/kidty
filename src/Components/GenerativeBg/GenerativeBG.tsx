@@ -15,19 +15,24 @@ const GenerativeBG: React.FC<Props> = ({ isloading }) => {
   const generateRandomItem = useCallback((key: number, columnIndex: number) => {
     const randomShape = shapes[Math.floor(Math.random() * shapes.length)];
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
-    return { type: `shape ${randomShape}`, color: randomColor, key, columnIndex };
+    return {
+      type: `shape ${randomShape}`,
+      color: randomColor,
+      key,
+      columnIndex,
+    };
   }, []);
 
   const grid = useMemo(() => {
-    return Array.from({ length: rows * columns }, (_, index) => 
+    return Array.from({ length: rows * columns }, (_, index) =>
       generateRandomItem(index, index % columns)
     );
   }, []);
 
   return (
-   <div className={`bg-container ${isloading ? 'loading' : ''}`}>
+    <div className={`bg-container ${isloading ? 'loading' : ''}`}>
       <div className="bg-grid">
-        {grid.map(item => (
+        {grid.map((item) => (
           <div
             key={item.key}
             className={`bg-grid-item ${item.type}`}
