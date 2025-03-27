@@ -13,6 +13,12 @@ module.exports = {
       '32px': 'repeat(24, 32px)',
     },
     extend: {
+      scrollSnapType: {
+        y: 'y mandatory',
+      },
+      scrollSnapAlign: {
+        start: 'start',
+      },
       scrollBehavior: ['smooth'],
       boxShadow: {
         custom: '0px 0px 8px rgba(34, 2, 73, 0.4)',

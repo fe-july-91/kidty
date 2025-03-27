@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { client } from '../../Utils/httpClient';
 import cn from 'classnames';
 import { useNavigate } from 'react-router-dom';
+import { button, signUpForm } from '../../Utils/Lang';
 
 export const SignUpForm = () => {
   const navigate = useNavigate();
@@ -76,10 +77,10 @@ export const SignUpForm = () => {
     <>
       {!isRegistered ? (
         <form className="form">
-          <div className="form__title">Ласкаво просимо до Kidti</div>
+          <div className="form__title">{signUpForm.header.ua}</div>
           <div className="form__input">
             <label htmlFor="name" className="form__label">
-              Ім'я
+            {signUpForm.name.ua}
             </label>
             <input
               type="text"
@@ -96,7 +97,7 @@ export const SignUpForm = () => {
           </div>
           <div className="form__input">
             <label htmlFor="exampleInputEmail1" className="form__label">
-              Адреса електронної пошти
+            {signUpForm.email.ua}
             </label>
             <input
               type="email"
@@ -117,7 +118,7 @@ export const SignUpForm = () => {
           </div>
           <div className="form__input">
             <label htmlFor="exampleInputPassword1" className="form__label">
-              Пароль
+            {signUpForm.password.ua}
             </label>
             <input
               type="password"
@@ -137,7 +138,7 @@ export const SignUpForm = () => {
           </div>
           <div className="form__input">
             <label htmlFor="exampleInputPassword2" className="form__label">
-              Підтвердити пароль
+            {signUpForm.repeatPassword.ua}
             </label>
             <input
               type="password"
@@ -163,29 +164,22 @@ export const SignUpForm = () => {
             onClick={(e) => handleSubmit(e)}
             disabled={!isFormValid}
           >
-            Зареєструватися
+            {button.signUp.ua}
           </button>
 
           <button type="button" className="form__button-social">
-            <i className="icons icons--google"></i> Зареєструватися з Google
+            <i className="icons icons--google"></i> {button.signUp.ua} з Google
           </button>
         </form>
       ) : (
         <div className="notification">
-          <div className="notification__header">
-            {' '}
-            Мяу 🎉 ! <br /> Лист-підтвердження надіслано на вказану електронну
-            пошту!
-          </div>
-          <p className="notification__text">
-            Для завершення реєстрації вам необхідно зайти на свою електронну
-            пошту, відкрити лист і перейти за вказаним посиланням.
-          </p>
+          <div className="notification__header">{signUpForm.success.header.ua}</div>
+          <p className="notification__text">{signUpForm.success.text.ua}</p>
           <button
             className="homePage__button homePage__button--logIn"
             onClick={() => navigate('/login')}
           >
-            Увійти
+            {button.logIn.ua}
           </button>
         </div>
       )}

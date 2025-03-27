@@ -13,7 +13,7 @@ export const BannerWrapper = ({ sketch }) => {
   }, [sketch]);
 
   return <div
-    className='flex flex-col items-center'
+    className='flex flex-col items-center text-white'
     ref={canvasRef} 
     style={{ width: '100%', height: '500px' }}>
     </div>;

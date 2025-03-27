@@ -7,10 +7,12 @@ export const RightsPage: React.FC = () => {
   const { currentLang } = useContext(LangContext);
 
   return (
-    <div className="h-full py-8 ">
-      <div className="grid gap-4 grid-cols-4 justify-center px-4 sm:px-8 sm:grid-cols-24 lg:grid-cols-24 xl:grid-cols-32px grid-rows-[auto,auto]">
-        <div className="col-span-full p-8 bg-white shadow-custom rounded-2xl h-fit flex flex-col gap-4 items-start">
-          <header className="text-5xl text-primary-800 font-medium">
+    <div className=" h-full py-8 md:py-12 z-50 relative bg-[#F6F7F8] min-h-[calc(100vh-96px)] md:min-h-[calc(100vh-128px)]">
+      <div className='absolute top-44 w-[1500px] h-[1500px] rounded-full bg-info z-0'>
+      </div>
+      <div className=" grid gap-4 grid-cols-4 justify-center px-4 sm:px-8 sm:grid-cols-24 lg:grid-cols-24 xl:grid-cols-32px grid-rows-[auto,auto]">
+        <div className="z-20 col-span-full h-fit flex flex-col gap-4 items-start  mb-4">
+          <header className="text-5xl text-secondary-500 font-medium">
             {currentLang === 'UA' ? 'Вітаємо!' : 'Hi!'}
           </header>
           <p className="col-span-2 pb-2 text-[20px] text-left text-gray-800 sm:col-span-full">
@@ -20,11 +22,11 @@ export const RightsPage: React.FC = () => {
           </p>
         </div>
 
-        <div className="col-span-full">
+        <div className="col-span-full mb-4">
           <div className="flex flex-col md:flex-row gap-6">
-            <div className="flex flex-col gap-4 p-8 bg-primary-300 rounded-3xl">
+            <div className="flex flex-col gap-4 p-8 rounded-3xl bg-secondary-500 animate-floatUp shadow-custom">
               <div className="flex flex-row justify-start items-center gap-4 ">
-                <div className="w-[100px] h-[100px] rounded-full overflow-hidden flex-shrink-0">
+                <div className="w-[100px] h-[100px] rounded-full overflow-hidden flex-shrink-0 border-2">
                   <img className="object-cover" src={Maria} alt="Maria" />
                 </div>
                 <div className="flex flex-col gap-1 text-lg text-white">
@@ -34,7 +36,7 @@ export const RightsPage: React.FC = () => {
                   <p>Front End Developer, UX/UI Designer</p>
                   <div className="text-left flex flex-row gap-2">
                     <a
-                      className="text-secondary-700 hover:text-secondary-900"
+                      className="text-primary-700 hover:text-info"
                       href="https://www.linkedin.com/in/mariashmakova/"
                       target="_blank"
                       rel="noopener noreferrer"
@@ -42,7 +44,7 @@ export const RightsPage: React.FC = () => {
                       LinkedIn
                     </a>
                     <a
-                      className="text-secondary-700 hover:text-secondary-900"
+                      className="text-primary-700 hover:text-info"
                       href="https://github.com/msdreams"
                       target="_blank"
                       rel="noopener noreferrer"
@@ -52,16 +54,16 @@ export const RightsPage: React.FC = () => {
                   </div>
                 </div>
               </div>
-              <div className="text-[18px] text-gray-700 text-left">
+              <div className="text-[18px] text-gray-100 text-left">
                 {currentLang === 'UA'
-                  ? 'Привіт! Я фронтенд-розробниця, яка захоплена візуалізацією даних. Цей додаток я створила в першу чергу для мам, тому що сама є мамою двох дітей і знаю, що нам завжди треба мати все під рукою. Сподіваюся, що з цією програмою я зможу подарувати мамам трішки спокою та впевненості, а ще усмішку, адже наші дітки котики так швидко ростуть!'
+                  ? 'Привіт! Я фронтенд-розробниця, яка захоплена візуалізацією даних. Сподіваюся, що з цією програмою я зможу подарувати мамам трішки спокою та впевненості, а ще усмішку, адже наші дітки-котики так швидко ростуть!'
                   : 'Hi there! I’m a front-end developer with a passion for data visualization. As a mom of two, I know firsthand how important it is to have everything you need right at your fingertips. That’s why I created this app—designed especially for moms. My hope is that it brings you a little peace of mind, confidence, and maybe even a smile as you watch your little ones grow up so quickly!'}
               </div>
             </div>
 
-            <div className="flex flex-col p-8 gap-4 bg-primary-300 rounded-3xl">
+            <div className="flex flex-col gap-4 p-8 rounded-3xl bg-secondary-500 animate-floatUp shadow-custom">
               <div className="flex flex-row gap-4">
-                <div className="w-[100px] h-[100px] rounded-full overflow-hidden flex-shrink-0">
+                <div className="w-[100px] h-[100px] rounded-full overflow-hidden flex-shrink-0 border-2">
                   <img className="object-cover" src={Yana} alt="Maria" />
                 </div>
                 <div className="flex flex-col gap-1 text-lg text-white">
@@ -71,7 +73,7 @@ export const RightsPage: React.FC = () => {
                   <p className="text-left">Java Developer</p>
                   <div className="text-left flex flex-row gap-2">
                     <a
-                      className="text-secondary-700 hover:text-secondary-900"
+                      className="text-primary-700 hover:text-info"
                       href="https://www.linkedin.com/in/yana-stepanova-syna/"
                       target="_blank"
                       rel="noopener noreferrer"
@@ -79,7 +81,7 @@ export const RightsPage: React.FC = () => {
                       LinkedIn
                     </a>
                     <a
-                      className="text-secondary-700 hover:text-secondary-900"
+                      className="text-primary-700 hover:text-info"
                       href="https://github.com/yanna-stepanova"
                       target="_blank"
                       rel="noopener noreferrer"
@@ -89,17 +91,17 @@ export const RightsPage: React.FC = () => {
                   </div>
                 </div>
               </div>
-              <div className="text-[18px] text-gray-700 text-left">
+              <div className="text-[18px] text-gray-100 text-left">
                 {currentLang === 'UA'
-                  ? 'Привіт! Я — бекенд-розробниця. Робота над створенням бекенд-частини була для мене не лише професійним викликом, а й справжнім задоволенням. Як мама, я щиро зацікавилася кожним елементом цього проєкту. Особливо захоплює зручне графічне відображення даних, яке робить інформацію про здоров’я та динаміку розвитку дитини зрозумілою та легкою для аналізу.'
+                  ? 'Привіт! Я — бекенд-розробниця. Як мама, я щиро зацікавилася кожним елементом цього проєкту. Особливо захоплює зручне графічне відображення даних, яке робить інформацію про здоров’я та динаміку розвитку дитини зрозумілою та легкою для аналізу.'
                   : 'Hi! Working on the backend part of this project was not only a professional challenge for me but also a true pleasure. As a mom, I found myself deeply invested in every element of this project. I’m especially fascinated by the intuitive graphical representation of data, which makes information about a child’s health and development dynamics clear and easy to analyze.'}
               </div>
             </div>
           </div>
         </div>
 
-        <div className="col-span-full p-8 bg-white rounded-3xl shadow-custom">
-          <p className="text-lg text-gray-800 mb-4">
+        <div className="z-20 col-span-full mt-4">
+          <p className="z-20 text-lg text-gray-800 mb-4 text-center">
             {currentLang === 'UA'
               ? 'У разі запитань та пропозицій звертайтесь до нас!'
               : 'If you have any questions or suggestions, please contact us!'}
@@ -113,7 +115,7 @@ export const RightsPage: React.FC = () => {
                 <img
                   src={avatars[1]}
                   alt="kitty"
-                  className="w-[100px] rounded-xl shadow-custom"
+                  className="w-[100px] rounded-xl shadow-custom transition-transform duration-300 hover:scale-110"
                 />
               </Link>
 
@@ -124,7 +126,7 @@ export const RightsPage: React.FC = () => {
                 <img
                   src={avatars[3]}
                   alt="kitty"
-                  className="w-[100px] rounded-xl shadow-custom"
+                  className="w-[100px] rounded-xl shadow-custom transition-transform duration-300 hover:scale-110"
                 />
               </Link>
             </div>

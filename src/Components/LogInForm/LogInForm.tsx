@@ -5,6 +5,7 @@ import { AuthContext } from '../../Context/AuthContext';
 import { client } from '../../Utils/httpClient';
 import cn from 'classnames';
 import { useLocalStorage } from '../../Shared/CustomHooks/useLocalStorage';
+import { button, logInForm } from '../../Utils/Lang';
 
 export const LogInForm = () => {
   const navigate = useNavigate();
@@ -36,7 +37,7 @@ export const LogInForm = () => {
       .post('auth/login', { email: email.trim(), password: password.trim() })
       .then((response: any) => {
         if (response.status === 'BAD_REQUEST') {
-          throw new Error('Електронна пошта або пароль неправильні');
+          throw new Error("Email or password is incorrect");
         }
 
         if (checked) {
@@ -54,10 +55,10 @@ export const LogInForm = () => {
   return (
     <>
       <form className="form">
-        <div className="form__title">Ласкаво просимо до Kidty</div>
+        <div className="form__title">{logInForm.header.ua}</div>
         <div className="form__input">
           <label htmlFor="exampleInputEmail1" className="form__label">
-            Адреса електронної пошти
+            {logInForm.email.ua}
           </label>
           <input
             type="email"
@@ -72,7 +73,7 @@ export const LogInForm = () => {
         </div>
         <div className="form__input">
           <label htmlFor="exampleInputPassword1" className="form__label">
-            Пароль
+          {logInForm.password.ua}
           </label>
           <input
             type="password"
@@ -86,7 +87,7 @@ export const LogInForm = () => {
         </div>
         {errowMessage && (
           <div className="form__error">
-            Помилка при виконанні запиту: {errowMessage}
+            {errowMessage}
           </div>
         )}
         <div className="form__options">
@@ -100,11 +101,11 @@ export const LogInForm = () => {
               onClick={handleCheckedButton}
             />
             <label className="form__check--label" htmlFor="exampleCheck1">
-              Запам'ятати мене
+            {logInForm.remember.ua}
             </label>
           </div>
           <Link to="/recovery" className="form__link">
-            Забули пароль?
+          {logInForm.forgot.ua}
           </Link>
         </div>
         <button
@@ -112,11 +113,11 @@ export const LogInForm = () => {
           className="form__button form__button-big"
           onClick={(e) => handleSubmit(e)}
         >
-          Увійти
+          {button.logIn.ua}
         </button>
 
         <button type="button" className="form__button-social">
-          <i className="icons icons--google"></i> Увійдіть з Google
+          <i className="icons icons--google"></i> {button.logIn.ua} з Google
         </button>
       </form>
     </>

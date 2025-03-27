@@ -10,9 +10,10 @@ export const Sketch = (p) => {
   let initialAnimation = true;
   let firstRender = true;
 
-    p.preload = () => {
-      images = avatars.map((url) => p.loadImage(url));
-    };
+
+  p.preload = () => {
+    images = avatars.map((url) => p.loadImage(url));
+  };
 
     const calculateGrid = () => {
       if (p.width < 768) { 
@@ -63,7 +64,7 @@ export const Sketch = (p) => {
     });
     };
 
-    p.draw = () => {
+  p.draw = () => {
       p.background("#F6F7F8");
 
       if (animationProgress < 1) {

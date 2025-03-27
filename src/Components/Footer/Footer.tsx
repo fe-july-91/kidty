@@ -8,6 +8,9 @@ export const Footer: React.FC = () => {
         <Link to="/about" className="footer__navbar--link">
           About Us
         </Link>
+        <Link to="/" className="footer__navbar--link">
+          Home
+        </Link>
       </div>
     </footer>
   );

@@ -41,7 +41,7 @@ export const Header: React.FC = () => {
                   Log In
                 </Link>
               </div>
-              <div className="pb-1">or</div>
+              <div>or</div>
               <div className="hover:border-b-1 transition-border duration-100">
                 <Link to="signup" className="text-gray-100 pb-1">
                   Sign Up

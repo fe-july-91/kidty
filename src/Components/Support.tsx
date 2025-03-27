@@ -1,6 +1,7 @@
 import { Button, Form, Input, Textarea } from '@heroui/react';
 import { mailToSupport } from '../api/support';
 import { useState } from 'react';
+import { button, support } from '../Utils/Lang';
 
 export const Support = () => {
 
@@ -30,11 +31,13 @@ export const Support = () => {
   return (
     <div className="flex flex-col justify-start w-full">
             <span className=" text-2xl lg:text-4xl text-white font-bold mb-8">
-              Contact Us
+              {support.header.ua}
             </span>
 
             {isSend ? (
-              <div className="text-2xl lg:text-xl text-white p-6 border-small rounded-lg">Your message has been sent, please wait for a response from our support team. Thank you! </div>
+        <div className="text-2xl lg:text-xl text-white p-6 border-small rounded-lg">
+          {support.success.ua}
+        </div>
             ) : (
               <Form
               className="w-full max-w-2xl flex flex-col space-y-6 font-sans"
@@ -47,7 +50,7 @@ export const Support = () => {
                 isRequired
                 errorMessage="Please enter your name"
                 name="name"
-                placeholder="Enter your name"
+                placeholder={support.name.ua}
               type="text"
               classNames={{ errorMessage: "text-warning-500 min-h-[20px]"}}
 
@@ -57,7 +60,7 @@ export const Support = () => {
                 isRequired
                 errorMessage="Please enter a valid email"
                 name="email"
-                placeholder="Enter your email"
+                placeholder={support.email.ua}
                 type="email"
                 classNames={{ errorMessage: "text-warning-500 min-h-[20px]"}}
               />
@@ -65,7 +68,7 @@ export const Support = () => {
               <Textarea 
               name="message" 
               className=" max-w-2xl" 
-              placeholder="Enter your message"
+              placeholder={support.message.ua}
             />
 
               <div className="flex w-full flex-col md:flex-row gap-2 ">
@@ -74,7 +77,7 @@ export const Support = () => {
                   type="reset"
                   color="warning"
                   variant="ghost">
-                    Reset
+                    {button.reset.ua}
                 </Button>
                 
                 <Button
@@ -82,7 +85,7 @@ export const Support = () => {
                   color='primary'
                   type="submit"
                 >
-                  Submit
+                  {button.send.ua}
                 </Button>
               </div>
             </Form>
