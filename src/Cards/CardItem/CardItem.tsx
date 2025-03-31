@@ -11,8 +11,8 @@ import { cardSize, months, sliderRange } from '../../Utils/kit';
 import { findTodayMonth } from '../../Shared/servises/findTodayMonth';
 import { SliderElement } from '../../Components/SliderElement/SliderElement';
 import { SelectionCardBlock } from '../../Components/SelectionCardBlock/SelectionCardBlock';
-import { TitleCardBlock } from '../../Components/CardTitleBlock/TitleCardBlock';
-import { ButtonsCardBlock } from '../../Components/ButtonsCardBlock/ButtonsCardBlock';
+import { TitleCardBlock } from '../../Components/TitleCardBlock';
+import { ButtonsCardBlock } from '../../Components/ButtonsCardBlock';
 import { reduser } from '../../Shared/servises/reduser';
 import { CardTitleTypes, Data } from '../../Shared/types/types';
 import { findCardImage } from '../../Shared/servises/findCardImage';
@@ -20,6 +20,7 @@ import { WeightLineChart } from '../../Charts/WeightLineChart/WeightLineChart';
 import { FootChart } from '../../Charts/FootLineChart/FootChart';
 import { client } from '../../Utils/httpClient';
 import { findKeyByValue } from '../../Shared/hendlers/findKeyByValue';
+import { PressEvent } from '@heroui/react';
 
 type Props = {
   years: string[];
@@ -67,8 +68,8 @@ export const CardItem: React.FC<Props> = ({ years, cardType, childId }) => {
   }, [state.selectedMonth, filteredData]);
 
   const saveData = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-      if (e) {
+    (e: PressEvent | React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      if ('preventDefault' in e) {
         e.preventDefault();
       }
 
@@ -97,7 +98,7 @@ export const CardItem: React.FC<Props> = ({ years, cardType, childId }) => {
             dispatch({ type: 'data', payload: [...state.data, response] });
           });
       }
-      setSliderValue({ x: 0 });
+      //setSliderValue({ x: 0 });
     },
     [
       sliderValue.x,
@@ -129,16 +130,10 @@ export const CardItem: React.FC<Props> = ({ years, cardType, childId }) => {
 
   return (
     <>
-      <div className="card">
+      <div className="card flex felex-col gap-4 p-6 items-center justify-center w-full">
         <div className="card__top">
           <div className="card__leftBlock">
-            <TitleCardBlock
-              activeSlider={activeSlider}
-              currentData={currentData}
-              sliderValue={sliderValue}
-              image={findCardImage(cardType)}
-              title={cardType}
-            />
+            <TitleCardBlock image={findCardImage(cardType)} title={cardType} />
 
             <SelectionCardBlock
               selectedYear={state.selectedYear}
@@ -160,9 +155,9 @@ export const CardItem: React.FC<Props> = ({ years, cardType, childId }) => {
                 setSliderValue={(value) => setSliderValue(value)}
                 sliderValue={sliderValue}
                 range={sliderRange[typeOfValue]}
+                title={cardType}
               />
             )}
-
             <ButtonsCardBlock
               handleData={saveData}
               activeSlider={activeSlider}
@@ -178,7 +173,6 @@ export const CardItem: React.FC<Props> = ({ years, cardType, childId }) => {
               height={cardSize.height}
               data={filteredData}
               selectedMonth={state.selectedMonth}
-              slider={sliderValue.x}
               HandleGraph={HandleGraph}
             />
           )}
@@ -189,7 +183,6 @@ export const CardItem: React.FC<Props> = ({ years, cardType, childId }) => {
               height={cardSize.height}
               data={filteredData}
               selectedMonth={state.selectedMonth}
-              slider={sliderValue.x}
               HandleGraph={HandleGraph}
             />
           )}
@@ -200,7 +193,6 @@ export const CardItem: React.FC<Props> = ({ years, cardType, childId }) => {
               height={cardSize.height}
               data={filteredData}
               selectedMonth={state.selectedMonth}
-              slider={sliderValue.x}
               HandleGraph={HandleGraph}
             />
           )}

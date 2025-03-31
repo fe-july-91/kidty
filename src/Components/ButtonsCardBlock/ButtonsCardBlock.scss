@@ -1,8 +1,0 @@
-@import './../../styles/main';
-
-.button {
-  @include button-card;
-  &--container {
-    justify-content: end;
-  }
-}

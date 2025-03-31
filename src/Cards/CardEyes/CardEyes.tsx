@@ -4,10 +4,11 @@ import './CardEyes.scss';
 import { CardTitleTypes } from '../../Shared/types/types';
 import { cardSize, eye, sliderRange } from '../../Utils/kit';
 import { EyesChart } from '../../Charts/EyesChart/EyesChart';
-import { TitleCardBlock } from '../../Components/CardTitleBlock/TitleCardBlock';
+import { TitleCardBlock } from '../../Components/TitleCardBlock';
 import { SliderElement } from '../../Components/SliderElement/SliderElement';
-import { ButtonsCardBlock } from '../../Components/ButtonsCardBlock/ButtonsCardBlock';
+import { ButtonsCardBlock } from '../../Components/ButtonsCardBlock';
 import { client } from '../../Utils/httpClient';
+import { PressEvent } from '@heroui/react';
 
 type Props = {
   childId: number;
@@ -47,8 +48,10 @@ export const CardEyes: React.FC<Props> = ({ childId }) => {
       .catch((err) => setErrowmessage(err.message || 'Щось пішло не так'));
   }, [childId]);
 
-  const saveData = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    if (e) {
+  const saveData = (
+    e: PressEvent | React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    if ('preventDefault' in e) {
       e.preventDefault();
     }
     const newParametrs = {

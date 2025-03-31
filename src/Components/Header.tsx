@@ -73,7 +73,7 @@ export const Header: React.FC = () => {
           )}
         </div>
 
-        <div className="flex items-center justify-center px-2 md:hidden">
+        <div className="flex items-center justify-center md:hidden">
           <button
             type="button"
             className="flex items-center justify-center bg-transparent border-transparent cursor-pointer shadow-medium"

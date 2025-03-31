@@ -8,7 +8,7 @@ interface GraphProps {
   height: number;
   data: Data[];
   selectedMonth: string;
-  slider: number;
+  slider?: number;
   HandleGraph: (d: Data) => void;
 }
 

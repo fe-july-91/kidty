@@ -106,7 +106,7 @@ export const HomePage: React.FC = () => {
           <Support />
         </div>
 
-        <div className='flex-1 flex rounded-3xl overflow-hidden lg:mr-10'>
+        <div className='flex-1 mb-8 flex rounded-3xl overflow-hidden lg:mr-10'>
           <img className='w-full' src={giff} alt="gif" />
         </div>
       </div>

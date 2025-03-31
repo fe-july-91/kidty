@@ -46,7 +46,7 @@ import bg from '../assets/images/bg.webp';
 //carousel
 
 import one from '../assets/images/notebook2.png'
-import two from '../assets/images/weight.png'
+import two from '../assets/images/weight2.png'
 import three from '../assets/images/vaccination.png'
 import forr from '../assets/images/screen.png'
 import fife from '../assets/images/phone.png'

@@ -8,7 +8,7 @@ export const FootChart = ({
   height,
   data,
   selectedMonth,
-  slider,
+  slider = 0,
   HandleGraph,
 }) => {
   

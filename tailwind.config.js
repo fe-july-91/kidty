@@ -6,7 +6,16 @@ module.exports = {
     './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
     './node_modules/@heroui/theme/dist/components/(button|ripple|spinner).js',
   ],
+  
   theme: {
+    screens: {
+      xs: '480px', // Добавили новый брейкпоинт для очень маленьких экранов
+      sm: '600px', // Изменили стандартный sm (обычно 640px)
+      md: '768px', // Оставили md без изменений
+      lg: '1024px', // Оставили lg без изменений
+      xl: '1280px', // Оставили xl без изменений
+      '2xl': '1440px', // Уменьшили стандартный 2xl (обычно 1536px)
+    },
     gridTemplateColumns: {
       4: 'repeat(4, 1fr)',
       24: 'repeat(24, 1fr)',

@@ -5,7 +5,7 @@ import './CardVaccines.scss';
 import { CardTitleTypes, Child, VaccineData } from '../../Shared/types/types';
 import { VaccinesChart } from '../../Charts/VaccinesChart/VaccinesChart';
 import { VaccinesMobile } from '../../Charts/VaccinesChartMobile/VaccinesMobile';
-import { TitleCardBlock } from '../../Components/CardTitleBlock/TitleCardBlock';
+import { TitleCardBlock } from '../../Components/TitleCardBlock';
 import { VaccineEditBlock } from '../../Components/VaccineEditBlock/VaccineEditBlock';
 import { client } from '../../Utils/httpClient';
 import { Loader } from '../../Components/Loader/Loader';

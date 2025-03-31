@@ -30,17 +30,17 @@ export const Support = () => {
   
   return (
     <div className="flex flex-col justify-start w-full">
-            <span className=" text-2xl lg:text-4xl text-white font-bold mb-8">
+            <span className=" text-2xl pt-8 md:pt-0 lg:text-4xl text-white font-bold mb-6 md:mb-8">
               {support.header.ua}
             </span>
 
             {isSend ? (
-        <div className="text-2xl lg:text-xl text-white p-6 border-small rounded-lg">
+        <div className="text-2xl lg:text-xl text-white p-4 border-small rounded-lg">
           {support.success.ua}
         </div>
             ) : (
               <Form
-              className="w-full max-w-2xl flex flex-col space-y-6 font-sans"
+              className="w-full max-w-2xl flex flex-col space-y-4 md:space-y-6 font-sans"
               validationBehavior="native"
               onSubmit={(e) => handleSubmit(e)}
               onReset={handleReset}

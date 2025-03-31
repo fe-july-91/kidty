@@ -1,4 +1,4 @@
-import { eye, foot, height, weight } from '../../Utils/kit';
+import { eye, foot, height, weight,vaccine } from '../../Utils/kit';
 import { CardTitleTypes } from '../types/types';
 
 export const findCardImage = (name: string): string => {
@@ -11,6 +11,8 @@ export const findCardImage = (name: string): string => {
       return eye;
     case CardTitleTypes.foot:
       return foot;
+      case CardTitleTypes.vactination:
+        return vaccine;
     default:
       return '';
   }

@@ -10,7 +10,9 @@ export const RightsPage: React.FC = () => {
     <div className=" h-full py-8 md:py-12 z-50 relative bg-[#F6F7F8] min-h-[calc(100vh-96px)] md:min-h-[calc(100vh-128px)]">
       <div className='absolute top-44 w-[1500px] h-[1500px] rounded-full bg-info z-0'>
       </div>
-      <div className=" grid gap-4 grid-cols-4 justify-center px-4 sm:px-8 sm:grid-cols-24 lg:grid-cols-24 xl:grid-cols-32px grid-rows-[auto,auto]">
+      <div
+        className="grid gap-4 grid-cols-4 justify-center px-4 sm:px-8 sm:grid-cols-24 lg:grid-cols-24 xl:grid-cols-32px grid-rows-[auto,auto]"
+      >
         <div className="z-20 col-span-full h-fit flex flex-col gap-4 items-start  mb-4">
           <header className="text-5xl text-secondary-500 font-medium">
             {currentLang === 'UA' ? 'Вітаємо!' : 'Hi!'}

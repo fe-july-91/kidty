@@ -22,7 +22,7 @@ export const SelectionCardBlock: React.FC<Props> = React.memo(
   }) => {
     const handleMonthChenge = (event: React.ChangeEvent<HTMLSelectElement>) => {
       setSelectedMonth(event.target.value);
-      setActiveSlider(false);
+      //setActiveSlider(false);
     };
 
     const handleYearChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
