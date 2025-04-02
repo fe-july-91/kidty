@@ -24,11 +24,11 @@ export const HomePage: React.FC = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F6F7F8] items-center px-4 py-10 md:py-16 lg:px-10">
-      <div className="text-3xl text-center sm:text-3xl md:text-4xl font-medium text-primary-600 animate-floatUp snap-start">
+      <div className="text-3xl text-center sm:text-3xl md:text-4xl font-medium text-secondary-500 animate-floatUp snap-start">
       {homePage.header.ua}
       </div>
       {/* banner */}
-      <div className=''>
+      <div className='my-8'>
         <BannerWrapper sketch={Sketch} />
       </div>
        {/* buttons */}
@@ -60,8 +60,11 @@ export const HomePage: React.FC = () => {
       <div className='relative snap-start'>
         {/* bg-circle */}
 
-        <div className='absolute top-56 w-[1500px] h-[1500px] rounded-full bg-info'>
-        </div>
+        {/* <div
+          className='absolute top-56 w-[1500px] h-[1500px] rounded-full bg-info'
+        >
+        </div> */}
+
         <div
           ref={aboutRef}
           className={`flex flex-col gap-8 lg:flex-row mt-10 md:mt-20 md:pt-10  bg-primary-700 rounded-3xl px-10 pb-8 z-50
@@ -106,7 +109,7 @@ export const HomePage: React.FC = () => {
           <Support />
         </div>
 
-        <div className='flex-1 mb-8 flex rounded-3xl overflow-hidden lg:mr-10'>
+        <div className='flex-1 mb-8 lg:my-8 flex rounded-3xl overflow-hidden lg:mr-10'>
           <img className='w-full' src={giff} alt="gif" />
         </div>
       </div>

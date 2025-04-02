@@ -29,8 +29,8 @@ export const support =
 export const homePage =
   {
     header: {
-      en: "KIDTY – сaring for your little ones, together with you",
-      ua: "KIDTY - надійний cервіс для турботливих батьків"
+      en: "KIDTY – сaring for your little ones, together with you!",
+      ua: "KIDTY - надійний cервіс для турботливих батьків!"
     },
   list: [
     {

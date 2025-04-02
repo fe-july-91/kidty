@@ -80,7 +80,7 @@ export const AccountPage: React.FC = () => {
     : { years: 0, months: 0 };
 
   return (
-    <div className="relative flex flex-col bg-[#ffffffAA]">
+    <div className="relative flex flex-col bg-[#ffffffAA] min-h-[calc(100vh-96px)] md:min-h-[calc(100vh-128px)]">
       {errowMessage && <div className="form__error">{errowMessage}</div>}
       {child && (
         <>

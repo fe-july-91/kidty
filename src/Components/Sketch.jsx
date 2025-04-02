@@ -1,15 +1,14 @@
 import { avatars } from '../Utils/kit';
 
 export const Sketch = (p) => {
-    let images = []; 
+  let images = []; 
   let positions = [];
-    let canvasheight = 500
-    let size, step, gap, padding;
+  let canvasheight = 500
+  let size, step, gap, padding;
   let hoverSize = 2;
   let animationProgress = 0;
   let initialAnimation = true;
   let firstRender = true;
-
 
   p.preload = () => {
     images = avatars.map((url) => p.loadImage(url));
@@ -65,7 +64,7 @@ export const Sketch = (p) => {
     };
 
   p.draw = () => {
-      p.background("#F6F7F8");
+    p.background("#F6F7F8");
 
       if (animationProgress < 1) {
         animationProgress += 0.02; 
