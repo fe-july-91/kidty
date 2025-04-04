@@ -8,10 +8,12 @@ type Props = {
   ) => void;
   setActiveSlider: (value: boolean) => void;
   activeSlider: boolean;
+  deleteData?: (value: number) => void;
+  dataId?:number
 };
 
 export const ButtonsCardBlock: React.FC<Props> = React.memo(
-  ({ activeSlider, handleData, setActiveSlider }) => {
+  ({ activeSlider, handleData, setActiveSlider, deleteData, dataId }) => {
     const handleEditClick = () => {
       setActiveSlider(true);
     };
@@ -34,16 +36,30 @@ export const ButtonsCardBlock: React.FC<Props> = React.memo(
             className="buttons-block opacity-0 group-hover:opacity-100 transition-opacity duration-300"
             variant="solid"
             color="primary"
-            type="submit"
             onPress={handleEditClick}
           >
             {button.eddit.ua}
           </Button>
         ) : (
-          <div className="button--container">
-            <Button
+            <div className="w-full flex flex-col md:flex-row gap-2">
+                <Button
+                variant="solid"
+                color="secondary"
+                type="submit"
+                onPress={() => {
+                  if (deleteData && dataId) {
+                    deleteData(dataId)
+                    setActiveSlider(false);                    
+                    }
+                }}
+              >
+                X
+              </Button>
+                
+              <Button
+              className='text-white'
               variant="solid"
-              color="secondary"
+              color="success"
               type="submit"
               onPress={handleCanсelClick}
             >

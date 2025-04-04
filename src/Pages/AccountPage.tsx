@@ -1,7 +1,7 @@
 import { Dashboard } from '../Components/Dashboard';
 import { avatars, colors } from '../Utils/kit';
 import { useEffect, useState } from 'react';
-import { CardTitleTypes, Child, Data } from '../Shared/types/types';
+import { CardTitleTypes, Child, Data, EyeResponce, VaccineData } from '../Shared/types/types';
 import { calculateFullChildAge } from '../Shared/hendlers/generateYearArray';
 import { AddModal } from '../Components/AddModal';
 import { EditModal } from '../Components/EditModal';
@@ -9,6 +9,7 @@ import { client } from '../Utils/httpClient';
 import { Button } from '@heroui/react';
 import { TitleCardBlock } from '../Components/TitleCardBlock';
 import { findCardImage } from '../Shared/servises/findCardImage';
+import { getChildData } from '../api/DataUpdate';
 
 export const AccountPage: React.FC = () => {  
   const [children, setChildren] = useState<Child[]>([]);
@@ -16,6 +17,14 @@ export const AccountPage: React.FC = () => {
   const [isAddmodal, setIsAddModal] = useState(false);
   const [additingModal, setAdditingModal] = useState(false);
   const [errowMessage, setErrowmessage] = useState('');
+  const [lastDataValues, setLastDataValues] = useState({
+    weight: { name: "Вага", value: 0, unit: "" },
+    height: { name: "Зріст", value: 0, unit: "" },
+    foot: { name: "Стопа", value: 0, unit: "" },
+    yeys: { name: "Зір", value: "", unit: "" },
+    vaccination: { name: "Щеплення", value: "", unit: "" }
+  });
+  
 
   useEffect(() => {
     client
@@ -56,15 +65,25 @@ export const AccountPage: React.FC = () => {
     }
   }, [child]);
 
-  // useEffect(() => {
-  //   client
-  //     .get<Data[]>(`children/${child?.id}/height`)
-  //     .then((response) => {
-  //       setData(response);
-  //     })
-  //     .catch((err) => setErrorMessage(err.message || 'Щось пішло не так'))
-
-  // }, [ child]);
+  useEffect(() => {
+    if (child) {
+      Promise.all([
+        getChildData("weight", child.id),
+        getChildData("height", child.id),
+        getChildData("foot", child.id),
+        client.get<EyeResponce>(`children/${child.id}/eye`),
+        client.get<VaccineData[]>(`children/${child.id}/vaccination`)
+      ]).then(([weightData, heightData, footData, eyeData,vaccineDate]) => {
+        setLastDataValues({
+          weight: { name: "Вага", value: Math.max(...weightData.map(obj => obj.value)) || 0, unit: "кг" },
+          height: { name: "Зріст", value: Math.max(...heightData.map(obj => obj.value)) || 0, unit: "см" },
+          foot: { name: "Стопа", value: Math.max(...footData.map(obj => obj.value)) || 0, unit: "см" },
+          yeys: {name: "Зір", value: `L${eyeData.leftEye} R${eyeData.rightEye}`, unit: ""}, 
+          vaccination: {name:"Щеплення" , value: `${vaccineDate[vaccineDate.length-1]?.date || ""} ${vaccineDate[vaccineDate.length-1]?.type || ""}`, unit: ""}
+        });
+      }).catch(err => setErrowmessage(err.message || "Помилка при завантаженні даних"));
+    }
+  }, [child]);
 
   const handleChildChange = (index: number) => {
     const currentChild = children.find((ch) => ch.id === index)!;
@@ -84,16 +103,16 @@ export const AccountPage: React.FC = () => {
       {errowMessage && <div className="form__error">{errowMessage}</div>}
       {child && (
         <>
-          <div className="px-4 h-full lg:px-10 flex flex-row flex-wrap gap-6 justify-between items-end py-4 shadow-custom">
+          <div className="px-4 h-full lg:px-10 flex flex-row flex-wrap gap-6 justify-between items-end py-4 shadow-custom ">
             {/* Child's info */}
-            <div className='flex flex-row items-end flex-wrap gap-4 lg:gap-8'>
+            <div className='flex flex-row items-center flex-wrap gap-4 lg:gap-8'>
               {/* child photo */}
               <div className="flex">
-                <div className='flex flex-row justify-start gap-4 p-4 bg-background rounded-2xl shadow-custom'>
+                <div className='flex flex-row justify-start gap-4 p-4 bg-background rounded-2xl shadow-custom lg:min-w-[480px]'>
                   <img
                     src={avatars[+child.image]}
                     alt="avatar"
-                    className="cursor-pointer max-h-[160px] w-[120px] md:w-[140px] lg:w-[160px] object-cover rounded-2xl transition-transform duration-300 hover:scale-95"
+                    className="cursor-pointer max-h-[160px] w-[120px] md:w-[140px] lg:w-[145px] object-cover rounded-2xl transition-transform duration-300 hover:scale-95"
                     onClick={() => setAdditingModal(true)}
                     loading="lazy"
                   />
@@ -116,12 +135,13 @@ export const AccountPage: React.FC = () => {
                 {/* child data */}
               <div className='flex flex-col gap-4 flex-shrink-[2] lg:max-w-[400px]'>
                 <div className='flex flex-row flex-wrap gap-3 flex-shrink-[2]'>
-                  {Object.values(CardTitleTypes).map(cardType => (
+                  {Object.values(lastDataValues).map(cardType => (
                     <div className='px-4 py-2 bg-background rounded-2xl shadow-custom'>
                       <TitleCardBlock
-                        value={"100 unit"}
-                        image={findCardImage(cardType)}
-                        title={cardType}
+                        value={cardType.value.toString()}
+                        image={findCardImage(cardType.name)}
+                        title={cardType.name}
+                        unit={cardType.unit}
                       />
                     </div>
                   ))}
@@ -133,10 +153,10 @@ export const AccountPage: React.FC = () => {
             <div className="flex flex-row flex-wrap items-center gap-6">
               <div className=" flex flex-row gap-4 items-center flex-wrap  max-w-[420px]">
                 {children.map((childItem) => (
-                  <div className="flex flex-col">
+                  <div className="flex flex-col cursor-pointer transition-transform duration-300 hover:scale-125">
                     <div
                       key={childItem.id}
-                      className={`w-[50px] h-[50px] md:w-[70px] md:h-[70px] cursor-pointer rounded-full overflow-hidden shadow-custom transition-transform duration-300 hover:scale-125 ${
+                      className={`w-[50px] h-[50px] md:w-[70px] md:h-[70px] rounded-full overflow-hidden shadow-custom  ${
                         child.id === childItem.id
                           ? 'outline outline-4 outline-white'
                           : 'outline-none'

@@ -21,6 +21,7 @@ import { FootChart } from '../../Charts/FootLineChart/FootChart';
 import { client } from '../../Utils/httpClient';
 import { findKeyByValue } from '../../Shared/hendlers/findKeyByValue';
 import { PressEvent } from '@heroui/react';
+import { deleteChildData } from '../../api/DataUpdate';
 
 type Props = {
   years: string[];
@@ -111,6 +112,22 @@ export const CardItem: React.FC<Props> = ({ years, cardType, childId }) => {
     ]
   );
 
+  const deleteData = useCallback((dataId: number) => {
+    deleteChildData(childId, typeOfValue, dataId)
+      .then(() => {
+        // После успешного удаления запрашиваем свежие данные с сервера
+        return client.get<Data[]>(`children/${childId}/${typeOfValue}`);
+      })
+      .then((response) => {
+        setData(response);
+        dispatch({ type: 'data', payload: response });
+      })
+      .catch((error) => {
+        setErrorMessage(error.message || 'Не вдалося видалити дані');
+      });
+  }, [childId, typeOfValue]);
+
+
   useEffect(() => {
     dispatch({ type: 'data', payload: data });
   }, [data]);
@@ -150,7 +167,7 @@ export const CardItem: React.FC<Props> = ({ years, cardType, childId }) => {
           </div>
 
           <div className="card__rightBlock">
-            {activeSlider && (
+            {activeSlider &&  (
               <SliderElement
                 setSliderValue={(value) => setSliderValue(value)}
                 sliderValue={sliderValue}
@@ -162,6 +179,8 @@ export const CardItem: React.FC<Props> = ({ years, cardType, childId }) => {
               handleData={saveData}
               activeSlider={activeSlider}
               setActiveSlider={setActiveSlider}
+              deleteData={deleteData}
+              dataId={currentData?.id}
             />
           </div>
         </div>

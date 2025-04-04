@@ -5,7 +5,7 @@ export const Sketch = (p) => {
   let positions = [];
   let canvasheight = 500
   let size, step, gap, padding;
-  let hoverSize = 2;
+  let hoverSize = 1.8;
   let animationProgress = 0;
   let initialAnimation = true;
   let firstRender = true;
@@ -67,7 +67,7 @@ export const Sketch = (p) => {
     p.background("#F6F7F8");
 
       if (animationProgress < 1) {
-        animationProgress += 0.02; 
+        animationProgress += 0.2; 
       } else {
         initialAnimation = false; 
       }

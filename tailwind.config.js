@@ -1,10 +1,9 @@
-const { heroui } = require('@heroui/theme');
+import { heroui } from "@heroui/react";
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
     './src/**/*.{html,js,jsx,ts,tsx,scss,css}',
-    './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
-    './node_modules/@heroui/theme/dist/components/(button|ripple|spinner).js',
+    "./node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   
   theme: {
@@ -92,16 +91,16 @@ module.exports = {
           900: '#7A1165',
         },
         success: {
-          DEFAULT: '#55E855',
-          100: '#E8FDDD',
-          200: '#CDFCBC',
-          300: '#AAF899',
-          400: '#88F17E',
-          500: '#55E855',
-          600: '#3EC74A',
-          700: '#2AA740',
-          800: '#1B8637',
-          900: '#106F31',
+          DEFAULT: '#0AA5DB',
+          100: '#CFFFF9',
+          200: '#9FFFFA',
+          300: '#6FFAFF',
+          400: '#4BEBFF',
+          500: '#0FD3FF',
+          600: '#0AA5DB',
+          700: '#077CB7',
+          800: '#045993',
+          900: '#02407A',
         },
         gray: {
           DEFAULT: '#586F7C',

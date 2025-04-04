@@ -5,6 +5,13 @@ export type Data = {
   value: number;
 };
 
+export type EyeResponce = {
+  id: number;
+  childId: number;
+  leftEye: number;
+  rightEye: number;
+};
+
 export interface YearlyMeasurementData {
   type: 'weight' | 'height' | 'foot';
   data: Data[];

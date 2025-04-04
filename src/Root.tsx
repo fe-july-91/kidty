@@ -10,6 +10,8 @@ import { SettingsPage } from './Pages/SettingsPage/SettingsPage';
 import { Recovery } from './Pages/PasswordRecovery/Recovery';
 import { RightsPage } from './Pages/RightsPage';
 import { LangProvider } from './Context/LangContext';
+import {HeroUIProvider} from "@heroui/react";
+
 
 const router = createHashRouter([
   {
@@ -37,7 +39,9 @@ const Root = () => {
   return (
     <AuthProvider>
       <LangProvider>
-        <RouterProvider router={router} />
+        <HeroUIProvider>
+          <RouterProvider router={router} />
+        </HeroUIProvider>
       </LangProvider>
     </AuthProvider>
   );

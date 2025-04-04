@@ -1,4 +1,5 @@
 import { scaleBand, axisBottom, axisLeft, scalePoint } from 'd3';
+import * as d3 from 'd3';
 import { vaccinTypes } from '../../Utils/kit';
 import { getAgeAtVaccination } from '../../Shared/hendlers/VactinationAge';
 
@@ -18,6 +19,19 @@ export function DrawVaccinesChart(
 ) {
   const marginLeft = margin + 145;
   const marginGrahp = margin;
+  const tooltip = d3.select("body")
+  .append("div")
+  .attr("class", "tooltip")
+  .style("position", "absolute")
+  .style("visibility", "hidden")
+  .style("background", "#fff")
+  .style("border", "1px solid #ddd")
+  .style("border-radius", "5px")
+  .style("padding", "10px")
+  .style("box-shadow", "2px 2px 5px rgba(0,0,0,0.2)")
+  .style("font-size", "14px")
+  .style("color", "#333B9F")
+  .style("pointer-events", "none");
 
   let age = "";
 
@@ -155,7 +169,42 @@ points.enter()
   .attr('fill', d => d === targeVaccine ? '#FF5C9D' : '#C88CF8')
   .style('cursor', 'pointer')
   .on('click', (event, d) => {
+    tooltip.style("visibility", "hidden");
     HandleGraph(d);
+  })
+  .on('mouseover', function(event, d) {
+    d3.select(this).attr('r', 20); 
+    
+    const orderNumber = data
+      .filter(v => v.type === d.type)
+      .map(d => d.date)
+      .sort((a, b) => {
+        const [dayA, monthA, yearA] = a.split('-');
+        const [dayB, monthB, yearB] = b.split('-');
+        const dateA = new Date(`${yearA}-${monthA}-${dayA}`);
+        const dateB = new Date(`${yearB}-${monthB}-${dayB}`);
+        return dateA - dateB;
+      })
+      .findIndex(i => i === d.date) + 1;
+    
+    tooltip
+      .html(`
+        <div><strong>Дата:</strong> ${d.date}</div>
+        <div><strong>Тип щеплення:</strong> ${d.type}</div>
+        <div><strong>N:</strong> ${orderNumber}</div>
+      `)
+      .style("visibility", "visible")
+      .style("left", (event.pageX + 10) + "px")
+      .style("top", (event.pageY - 10) + "px");
+  })
+  .on('mouseout', function() {
+    d3.select(this).attr('r', 16); 
+    tooltip.style("visibility", "hidden");
+  })
+  .on('mousemove', function(event) {
+    tooltip
+      .style("left", (event.pageX + 10) + "px")
+      .style("top", (event.pageY - 10) + "px");
   })
   .transition()
   .duration(600)

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import cn from 'classnames';
 import './CardEyes.scss';
-import { CardTitleTypes } from '../../Shared/types/types';
+import { CardTitleTypes, EyeResponce } from '../../Shared/types/types';
 import { cardSize, eye, sliderRange } from '../../Utils/kit';
 import { EyesChart } from '../../Charts/EyesChart/EyesChart';
 import { TitleCardBlock } from '../../Components/TitleCardBlock';
@@ -12,13 +12,6 @@ import { PressEvent } from '@heroui/react';
 
 type Props = {
   childId: number;
-};
-
-type EyeResponce = {
-  id: number;
-  childId: number;
-  leftEye: number;
-  rightEye: number;
 };
 
 export const CardEyes: React.FC<Props> = ({ childId }) => {
@@ -68,8 +61,12 @@ export const CardEyes: React.FC<Props> = ({ childId }) => {
   };
 
   return (
-    <div className="eyes">
-      <div className="eyes__top">
+    <div
+      className="card flex felex-col gap-2 md:gap-0 p-6 items-center justify-center w-full"
+    >
+      <div
+        className="w-full flex flex-col justify-center md:flex-row md:justify-between md:items-top "
+      >
         {errowMessage && <div className="form__error">{errowMessage}</div>}
         <TitleCardBlock image={eye} title={CardTitleTypes.eyes} />
 
@@ -82,47 +79,51 @@ export const CardEyes: React.FC<Props> = ({ childId }) => {
         </div>
       </div>
 
-      <div className="eyes__eye">
+      <div
+        className="w-full flex flex-col md:h-[55px] md:flex-row justify-between items-center"
+      >
         <div className="eyes__values">
           <p className="eyes__sign">Ліве око:</p>
           <p
-            className={cn('eyes__value', {
-              'eyes__value--activeLeft': activeSlider,
-            })}
+            className="eyes__value"
           >
-            {activeSlider ? leftSliderValue.x : data.leftEye}
+            {data.leftEye}
           </p>
         </div>
 
         {activeSlider && (
-          <SliderElement
-            setSliderValue={setLeftSliderValue}
-            sliderValue={leftSliderValue}
-            sliderWidth="50%"
-            range={sliderRange.eye}
-          />
+          <div className='w-[60%]'>
+            <SliderElement
+              setSliderValue={setLeftSliderValue}
+              sliderValue={leftSliderValue}
+              sliderWidth="100%"
+              range={sliderRange.eye}
+            />
+          </div>
         )}
       </div>
 
-      <div className="eyes__eye">
+      <div
+        className="w-full flex flex-col md:h-[55px] md:flex-row justify-between items-center"
+      >
         <div className="eyes__values">
           <p className="eyes__sign">Праве око:</p>
           <p
-            className={cn('eyes__value', {
-              'eyes__value--activeRight': activeSlider,
-            })}
+            className="eyes__value"
           >
-            {activeSlider ? rightSliderValue.x : data.rightEye}
+            { data.rightEye}
           </p>
         </div>
 
         {activeSlider && (
-          <SliderElement
-            setSliderValue={setRightSliderValue}
-            sliderValue={rightSliderValue}
-            sliderWidth="50%"
-            range={sliderRange.eye}
-          />
+          <div className='w-[60%]'>
+            <SliderElement
+              setSliderValue={setRightSliderValue}
+              sliderValue={rightSliderValue}
+              sliderWidth="100%"
+              range={sliderRange.eye}
+            />
+          </div>
         )}
       </div>
 
