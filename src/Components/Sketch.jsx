@@ -1,27 +1,38 @@
-import { avatars } from '../Utils/kit';
+import { avatars, bakground } from '../Utils/kit';
 
 export const Sketch = (p) => {
-  let images = []; 
+  let images = [];
+  let bgImage
   let positions = [];
-  let canvasheight = 500
+  let canvasheight = 750
   let size, step, gap, padding;
-  let hoverSize = 1.8;
+  let hoverSize = 1.6;
   let animationProgress = 0;
   let initialAnimation = true;
   let firstRender = true;
 
   p.preload = () => {
     images = avatars.map((url) => p.loadImage(url));
+    bgImage=p.loadImage(bakground)
   };
 
     const calculateGrid = () => {
-      if (p.width < 768) { 
+      if (p.width < 500) { 
+        size = p.width / 4;
+        step = p.width / 3;
+      } else if (p.width < 768) {
         size = p.width / 6;
         step = p.width / 4;
-      } else if (p.width < 1040) {
-        size = p.width / 10;
+      }else if (p.width < 1040) {
+        size = p.width / 8;
         step = p.width / 6;
-      }else if (p.width >= 1040) {
+      }else if (p.width >= 1040 && p.width <1280) {
+        size = p.width / 11;
+        step = p.width / 7;
+      }else if (p.width >= 1280 && p.width <1440) {
+        size = p.width / 12;
+        step = p.width / 8;
+      }else if (p.width >= 1440) {
         size = p.width / 15;
         step = p.width / 10;
       }
@@ -32,7 +43,7 @@ export const Sketch = (p) => {
       let newPositions = [];
 
       for (let i = padding; i < p.width - gap; i += step) {
-        for (let j = size; j < canvasheight - gap; j += step) {
+        for (let j = size; j < (size + gap)*3 ; j += step) {
           let imgIndex = Math.floor(p.random(images.length));
           newPositions.push({
             x: i,
@@ -64,8 +75,14 @@ export const Sketch = (p) => {
     };
 
   p.draw = () => {
-    p.background("#F6F7F8");
-
+    p.background("#F6F6F6");
+    let desiredWidth = p.windowWidth * 1.4;
+    let newHeight = (desiredWidth / bgImage.width) * bgImage.height;
+    if (p.width > 1040) { 
+      p.image(bgImage, 0, 0, p.windowWidth, newHeight)
+    }
+     
+    p.translate(0,90)
       if (animationProgress < 1) {
         animationProgress += 0.2; 
       } else {
@@ -99,6 +116,7 @@ export const Sketch = (p) => {
       if (!isAnimating && !initialAnimation) {
         p.noLoop();
       }
+
     };
 
     p.mouseMoved = () => {

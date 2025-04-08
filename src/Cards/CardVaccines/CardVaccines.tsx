@@ -9,6 +9,7 @@ import { TitleCardBlock } from '../../Components/TitleCardBlock';
 import { VaccineEditBlock } from '../../Components/VaccineEditBlock/VaccineEditBlock';
 import { client } from '../../Utils/httpClient';
 import { Loader } from '../../Components/Loader/Loader';
+import { PressEvent } from '@heroui/react';
 
 type Props = {
   years: string[];
@@ -48,8 +49,8 @@ export const CardVaccines: React.FC<Props> = ({ child }) => {
     })
     .replace(/\./g, '-');
 
-  const saveData = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    if (e) {
+  const saveData = (e: PressEvent | React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    if ('preventDefault' in e) {
       e.preventDefault();
     }
     const newParametr: Omit<VaccineData, 'id'> = {
@@ -93,7 +94,7 @@ export const CardVaccines: React.FC<Props> = ({ child }) => {
     setSelectedDate(new Date());
   };
 
-  const removeData = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const removeData = (e: PressEvent | React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const updatedData = data.filter((d) => d.id !== activeVaccine?.id);
     setData(updatedData);
     console.log('delete');
@@ -108,7 +109,6 @@ export const CardVaccines: React.FC<Props> = ({ child }) => {
 
   const HandleGraph = (v: VaccineData) => {
     if (v === activeVaccine) {
-      setActiveButton(false);
       setActiveVaccine(null);
     } else {
       setActiveVaccine(v);
@@ -129,9 +129,9 @@ export const CardVaccines: React.FC<Props> = ({ child }) => {
   };
 
   return (
-    <div className="vaccine">
+    <div className="flex w-full flex-col gap-2 items-center justify-center p-6">
       {errowMessage && <div className="form__error">{errowMessage}</div>}
-      <div className="vaccine__top">
+      <div className="flex flex-col justify-start items-start w-full gap-4 md:h-20 md:justify-between md:flex-row">
         <TitleCardBlock image={vaccine} title={CardTitleTypes.vactination} />
 
         <div className="vaccine--chart-mobile">
@@ -163,6 +163,7 @@ export const CardVaccines: React.FC<Props> = ({ child }) => {
           setSelectedVaccine={setSelectedVaccine}
           handleData={saveData}
           handleRemoveData={removeData}
+          setActiveVaccine={setActiveVaccine}
         />
       </div>
 

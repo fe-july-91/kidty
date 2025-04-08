@@ -31,15 +31,21 @@ function request<T>(
 
   return wait(0)
     .then(() => fetch(BASE_URL + url, options))
-    .then((response) => {
+    .then(async (response) => {
       if (response.status === 401) {
         window.location.href = 'kidty#/login';
         throw new Error('Неавторизований. Будь ласка, увійдіть до системи');
       }
 
       if (!response.ok) {
-        return response.json().then((error) => {
-          throw new Error(error.message || error.error || 'Помилка на сервері');
+        const errorData = await response.json();
+        if (Array.isArray(errorData.errors)) {
+          throw new Error(errorData.errors.join('\n'), {
+            cause: { status: response.status, details: errorData }
+          });
+        }
+        throw new Error(errorData.message || errorData.error || 'Помилка на сервері', {
+          cause: { status: response.status, details: errorData }
         });
       }
 
@@ -48,11 +54,15 @@ function request<T>(
       }
 
       const contentType = response.headers.get('Content-Type');
-      if (!contentType || !contentType.includes('application/json')) {
-        return null as T;
+      if (contentType?.includes('application/json')) {
+        return response.json();
       }
-
+      
+      if (contentType?.includes('text/plain')) {
+        return response.text();
+      }
       return response.json();
+
     });
 }
 

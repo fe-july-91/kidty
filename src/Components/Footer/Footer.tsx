@@ -3,8 +3,8 @@ import './Footer.scss';
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="footer">
-      <div className="footer__navbar">
+    <footer className="flex items-center justify-between h-[48px] lg:h-[64px] g-4 bg-primary-800">
+      <div className="w-full flex flex-row gap-6 justify-center items-center">
         <Link to="/about" className="footer__navbar--link">
           About Us
         </Link>

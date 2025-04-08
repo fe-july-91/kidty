@@ -1,7 +1,7 @@
 import { Dashboard } from '../Components/Dashboard';
 import { avatars, colors } from '../Utils/kit';
 import { useEffect, useState } from 'react';
-import { CardTitleTypes, Child, Data, EyeResponce, VaccineData } from '../Shared/types/types';
+import { Child, EyeResponce, VaccineData } from '../Shared/types/types';
 import { calculateFullChildAge } from '../Shared/hendlers/generateYearArray';
 import { AddModal } from '../Components/AddModal';
 import { EditModal } from '../Components/EditModal';
@@ -99,7 +99,7 @@ export const AccountPage: React.FC = () => {
     : { years: 0, months: 0 };
 
   return (
-    <div className="relative flex flex-col bg-[#ffffffAA] min-h-[calc(100vh-96px)] md:min-h-[calc(100vh-128px)]">
+    <div className="relative flex flex-col bg-[#ffffffAA] min-h-[calc(100vh-96px)] lg:min-h-[calc(100vh-128px)]">
       {errowMessage && <div className="form__error">{errowMessage}</div>}
       {child && (
         <>

@@ -19,7 +19,10 @@ export const Recovery = () => {
           'Посилання для зміни пароля надіслано на вашу електронну адресу!'
         )
       )
-      .catch((respond) => setErrowmessage(respond.errors[0]));
+      .catch((error) => {
+        const serverError = error.response?.error || error.message;
+        setErrowmessage(serverError);
+      });
   };
 
   return (
@@ -42,7 +45,7 @@ export const Recovery = () => {
                 onChange={(event) => setEmail(event.target.value)}
               />
             </div>
-            {errowMessage && <div className="form__error">{errowMessage}</div>}
+           <div className="text-md text-primary-600 bg-secondary-100 px-2">{errowMessage}</div>
             <button
               type="submit"
               className="form__button"

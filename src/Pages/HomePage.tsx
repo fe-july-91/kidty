@@ -23,37 +23,43 @@ export const HomePage: React.FC = () => {
   });
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F6F7F8] items-center px-4 py-10 md:py-16 lg:px-10">
-      <div className="text-3xl text-center sm:text-3xl md:text-4xl font-medium text-secondary-500 animate-floatUp snap-start">
-      {homePage.header.ua}
-      </div>
-      {/* banner */}
-      <div className='my-8'>
-        <BannerWrapper sketch={Sketch} />
-      </div>
-       {/* buttons */}
-      <div
-        className="flex flex-col justify-center opacity-0 gap-4 md:flex-row animate-floatUp w-full"
-        style={{ animationDelay: `1.2s` }}
-      >
-        <Button
-          onPress={() => navigate('account')}
-          size='lg'
-          variant="solid"
-          color='primary'
-        >
-          {button.logIn.ua}
-        </Button>
+    <div className="flex flex-col min-h-screen bg-[#F6F7F8] items-center px-4 pb-10 md:pb-16 lg:px-10">
 
-        <Button
-          onPress={() => navigate('signup')}
-          size='lg'
-          variant="solid"
-          
-          color='secondary'
+      {/* banner */}
+      <div className='relative mb-8 flex flex-col items-center justify-center'>
+        <div
+          className="absolute top-10 lg:top-14 text-3xl text-center sm:text-3xl md:text-4xl font-medium text-primary-800 animate-floatUp snap-start"
         >
-          {button.signUp.ua}
-        </Button>
+          {homePage.header.ua}
+        </div>
+        <BannerWrapper sketch={Sketch} />
+
+        {/* buttons */}
+        <div className=' w-full flex flex-col items-center'>
+          <div
+            className="w-full px-6 absolute bottom-20 md:bottom-14 xl:bottom-6 flex flex-col justify-center opacity-0 gap-4 md:flex-row animate-floatUp"
+            style={{ animationDelay: `1.2s` }}
+          >
+            <Button
+              onPress={() => navigate('account')}
+              size='lg'
+              variant="solid"
+              color='primary'
+            >
+              {button.logIn.ua}
+            </Button>
+
+            <Button
+              onPress={() => navigate('signup')}
+              size='lg'
+              variant="solid"
+              
+              color='secondary'
+            >
+              {button.signUp.ua}
+            </Button>
+          </div>
+        </div>
       </div>
 
       {/* about */}
@@ -67,9 +73,11 @@ export const HomePage: React.FC = () => {
 
         <div
           ref={aboutRef}
-          className={`flex flex-col gap-8 lg:flex-row mt-10 md:mt-20 md:pt-10  bg-primary-700 rounded-3xl px-10 pb-8 z-50
+          className={
+            `flex flex-col gap-8 lg:flex-row mt-10 md:mt-20 md:pt-10  bg-primary-700 rounded-3xl px-10 pb-8 z-50
             transition-all duration-700 ease-out
-            ${aboutInView ? 'opacity-100 -translate-y-4' : 'opacity-0 translate-y-4'}`}
+            ${aboutInView ? 'opacity-100 -translate-y-4' : 'opacity-0 translate-y-4'}`
+          }
           style={{ animationDelay: `1.5s` }}
         >
           {/* list of blocks */}

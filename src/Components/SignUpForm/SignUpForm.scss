@@ -211,27 +211,3 @@
     }
   }
 }
-
-.notification {
-  padding-inline: 16px;
-  &__header {
-    text-align: left;
-    color: $colorIndigo;
-    font-family: Rubik, sans-serif;
-    font-size: 28px;
-    font-weight: 400;
-    line-height: 120%;
-    text-align: left;
-    padding-bottom: 16px;
-  }
-
-  &__text {
-    text-align: left;
-    color: $colorIndigo;
-    max-width: 800px;
-    font-family: Rubik, sans-serif;
-    font-size: 18px;
-    line-height: 120%;
-    padding-bottom: 16px;
-  }
-}

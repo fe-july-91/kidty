@@ -57,17 +57,7 @@ export const SignUpForm = () => {
         repeatPassword: password2.trim(),
         name: name.trim(),
       })
-      .then((response: any) => {
-        if (response.status === 500) {
-          throw new Error(
-            'Користувач з даною адресою електронної пошти вже зареєстрований'
-          );
-        }
-
-        if (response.status === 'BAD_REQUEST') {
-          throw new Error('Перевірте наявність та правильність введених даних');
-        }
-
+      .then(() => {
         setIsRegistered(true);
       })
       .catch((error) => setErrowmessage(error.message));
@@ -172,15 +162,9 @@ export const SignUpForm = () => {
           </button>
         </form>
       ) : (
-        <div className="notification">
-          <div className="notification__header">{signUpForm.success.header.ua}</div>
-          <p className="notification__text">{signUpForm.success.text.ua}</p>
-          <button
-            className="homePage__button homePage__button--logIn"
-            onClick={() => navigate('/login')}
-          >
-            {button.logIn.ua}
-          </button>
+        <div className="mx-4 p-8 bg-background  rounded-2xl shadow-custom">
+          <div className="text-2xl text-primary-700 pb-2">{signUpForm.success.header.ua}</div>
+          <p className="text-md text-primary-600">{signUpForm.success.text.ua}</p>
         </div>
       )}
     </>

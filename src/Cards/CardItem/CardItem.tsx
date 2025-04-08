@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useReducer,
-  useState,
-} from 'react';
+import React, { useCallback,useEffect,useMemo,useReducer,useState} from 'react';
 import { BarChart } from '../../Charts/HeightBarChart/BarChart';
 import './CardItem.scss';
 import { cardSize, months, sliderRange } from '../../Utils/kit';

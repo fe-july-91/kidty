@@ -1,17 +1,6 @@
 @import './../../styles/main';
 
 .footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: $colorIndigoDark;
-  height: 48px;
-  gap: 16px;
-
-  @include on-desktop {
-    gap: 24px;
-    height: 64px;
-  }
 
   &__navbar {
     width: 100%;
