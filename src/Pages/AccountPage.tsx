@@ -99,14 +99,14 @@ export const AccountPage: React.FC = () => {
     : { years: 0, months: 0 };
 
   return (
-    <div className="flex flex-col min-h-[calc(100vh-96px)] lg:min-h-[calc(100vh-128px)] overflow-hidden">
+    <div className="flex flex-col min-h-[calc(100vh-96px)] lg:min-h-[calc(100vh-128px)] overflow-hidden opacity-0 animate-fadeIn">
       {errowMessage && <div className="form__error">{errowMessage}</div>}
         <div className="absolute w-full h-full bg-black opacity-0 animate-fadeIn -z-10">
           <img className="w-full h-full object-cover" src={bakground} alt="bg" />
         </div>
       {child && (
         <div>
-          <div className=" px-4 h-full lg:px-10 bg-[#ffffffaa] flex flex-row flex-wrap gap-6 justify-between items-end py-4 shadow-custom opacity-0 animate-fadeIn">
+          <div className=" px-4 h-full lg:px-10 bg-[#ffffffaa] flex flex-row flex-wrap gap-6 justify-between items-end py-4 shadow-custom ">
 
             {/* Child's info */}
             <div className='flex flex-row items-center flex-wrap gap-4 lg:gap-8'>

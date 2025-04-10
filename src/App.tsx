@@ -21,7 +21,7 @@ export const App: React.FC = () => {
   }
 
   return (
-    <div className="app">
+    <div className="app -mb-6">
       <Header />
       <div className="app__container relative">
         <Outlet />
