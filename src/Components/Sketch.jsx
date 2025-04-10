@@ -21,6 +21,11 @@ export const Sketch = (p) => {
     p.color(50, 255, 255)
   ];
 
+  const isMobile = () => {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+           window.innerWidth < 768;
+  };
+
   p.preload = () => {
     images = avatars.map((url) => p.loadImage(url));
   };
@@ -169,8 +174,10 @@ export const Sketch = (p) => {
     let isAnimating = false;
 
     positions.forEach((avatar) => {
-      let d = p.dist(p.mouseX, p.mouseY, avatar.x, avatar.y);
-      let targetSize = d < size ? size * hoverSize : size; 
+      let targetSize = isMobile()
+        ? size
+        : (p.dist(p.mouseX, p.mouseY, avatar.x, avatar.y) < size ? size * hoverSize : size);
+
 
       if (initialAnimation) {
         avatar.size = p.lerp(avatar.size, targetSize * animationProgress, 0.1);
@@ -195,13 +202,15 @@ export const Sketch = (p) => {
     }
   };
 
-  p.mouseMoved = () => {
-    p.loop();
-  };
+  if (!isMobile()) {
+    p.mouseMoved = () => {
+      p.loop();
+    };
 
-  p.mouseOut = () => {
-    p.noLoop();
-  };
+    p.mouseOut = () => {
+      p.noLoop();
+    };
+  }
 };
 
 export default Sketch;
