@@ -56,13 +56,13 @@ export const Dashboard: React.FC<Props> = ({ child }) => {
   ];
 
   return (
-    <div className="w-full px-4 sm:pl-6 md:pl-8">
+    <div className="w-full px-4 sm:pl-6 md:pl-8 pt-8 overflow-hidden">
       <div className="w-full flex flex-wrap gap-5 pb-8">
         {items.map((item, index) => (
           <div
             key={index}
             className={`
-              relative bg-white rounded-[25px] opacity-0 hover:shadow-lg animate-floatUp
+              relative bg-white rounded-[25px] hover:shadow-lg  opacity-0 animate-floatUp
               group ${
                 item.big
                   ? 'w-full md:w-full xl:w-[calc(66.666%-20px)]'
@@ -71,7 +71,7 @@ export const Dashboard: React.FC<Props> = ({ child }) => {
             `}
             style={{ animationDelay: item.delay }}
           >
-            <div className="relative h-full">
+            <div className=" ">
               {item.component}
             </div>
           </div>

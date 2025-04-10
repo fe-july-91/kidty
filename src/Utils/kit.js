@@ -4,6 +4,7 @@ import logInimage from '../assets/icons/logIn.svg'
 import gear from '../assets/icons/gear.svg'
 import plusImage from '../assets/icons/plus.svg'
 import plusImageHover from '../assets/icons/plusHover.svg'
+import staticPreviewImage from '../assets/gif/static.jpeg'
 
 
 import image from '../assets/images/Bunner_kitty.png'
@@ -41,7 +42,7 @@ import background from '../assets/images/bg.webp'
 
 
 
-import bg from '../assets/images/bg.webp';
+import bg from '../assets/images/bg_phone.jpg';
 
 //carousel
 
@@ -63,6 +64,9 @@ export const vaccination = three;
 export const screen = forr;
 export const phone = fife;
 export const giff = kidtygif;
+export const staticPreview = staticPreviewImage;
+
+
 
 
 export const carouselImages = [

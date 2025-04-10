@@ -61,8 +61,8 @@ module.exports = {
       animation: {
         wiggle: 'wiggle 4s ease-in-out infinite',
         floatUp: 'floatUp 0.8s ease-out forwards',
-        fadeIn: 'fadeIn 1s ease-in-out',
-        floatIn: 'floatIn 1s ease-out forwards',
+        fadeIn: 'fadeIn 1s ease-in-out forwards',
+        floatIn: 'floatIn 0.8s ease-out forwards',
         spinDelay: 'spinDelay 1s ease-in-out infinite',
       },
       colors: {

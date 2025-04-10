@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Sketch from '../Components/Sketch';
 import BannerWrapper from '../Components/Banner/Wrapper';
 import { Button} from '@heroui/react';
-import { carouselImages, giff } from '../Utils/kit';
+import { carouselImages, giff, staticPreview } from '../Utils/kit';
 import { Carousel } from '../Components/Carousel';
 import { Support } from '../Components/Support';
 import { button, homePage } from '../Utils/Lang';
@@ -14,7 +14,7 @@ export const HomePage: React.FC = () => {
 
   const [aboutRef, aboutInView] = useInView({
     triggerOnce: true,
-    threshold: 0.5,
+    threshold: 0.3,
   });
 
   const [contactsRef, contactsInView] = useInView({
@@ -23,12 +23,12 @@ export const HomePage: React.FC = () => {
   });
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F6F7F8] items-center px-4 pb-10 md:pb-16 lg:px-10">
+    <div className=" flex flex-col min-h-screen bg-[#F6F7F8] items-center px-4 pb-10 md:pb-16 lg:px-10">
 
       {/* banner */}
-      <div className='relative mb-8 flex flex-col items-center justify-center'>
+      <div className='relative w-full mb-8 flex flex-col items-center justify-center'>
         <div
-          className="absolute top-10 lg:top-14 text-3xl text-center sm:text-3xl md:text-4xl font-medium text-primary-800 animate-floatUp snap-start"
+          className="absolute top-10 text-2xl text-center sm:text-3xl md:text-4xl font-medium text-secondary-500 animate-floatUp snap-start"
         >
           {homePage.header.ua}
         </div>
@@ -63,30 +63,23 @@ export const HomePage: React.FC = () => {
       </div>
 
       {/* about */}
-      <div className='relative snap-start'>
-        {/* bg-circle */}
-
-        {/* <div
-          className='absolute top-56 w-[1500px] h-[1500px] rounded-full bg-info'
-        >
-        </div> */}
-
+      <div className=' snap-start'>
         <div
           ref={aboutRef}
           className={
-            `flex flex-col gap-8 lg:flex-row mt-10 md:mt-20 md:pt-10  bg-primary-700 rounded-3xl px-10 pb-8 z-50
+            `flex flex-col gap-8 lg:flex-row  mt-10 md:mt-20 md:pt-10  bg-primary-800 rounded-3xl px-6 md:px-10 pb-8
             transition-all duration-700 ease-out
             ${aboutInView ? 'opacity-100 -translate-y-4' : 'opacity-0 translate-y-4'}`
           }
           style={{ animationDelay: `1.5s` }}
         >
           {/* list of blocks */}
-          <div className="flex flex-col gap-4 md:gap-6 text-lg text-primary-800 min-w-[330px] pt-6 z-20">
+          <div className="flex flex-col gap-4 md:gap-6 text-lg text-primary-800 min-w-[280px] pt-6 z-20">
             <span className=" text-2xl lg:text-4xl text-white font-bold pb-2">
             Усі дані під рукою:
             </span>
                 {homePage.list.map(l => (
-              <div className="flex flex-row items-start gap-2 bg-white shadow-custom rounded-3xl p-6  transition-transform duration-300 hover:scale-110">
+              <div className="flex flex-row items-start gap-2 bg-white shadow-custom rounded-3xl p-4 md:p-6  transition-transform duration-300 hover:scale-110">
                 <div className="flex-shrink-0 mt-2 w-3 h-3 bg-info rounded-full"></div>
                   <div>
                     {l.ua}
@@ -108,7 +101,7 @@ export const HomePage: React.FC = () => {
       {/* Contacts */}
       <div
         ref={contactsRef}
-        className={`snap-start flex flex-col min-h-[480px] w-full px-10 justify-around items-center md:flex-row gap-8 mt-10 md:mt-32 bg-secondary rounded-3xl py-8'
+        className={`snap-start flex flex-col min-h-[480px] w-full px-6 md:px-10 justify-around items-center md:flex-row gap-8 mt-10 md:mt-32 bg-secondary-600 rounded-3xl py-8'
       transition-all duration-700 ease-out
           ${contactsInView ? 'opacity-100 -translate-y-4' : 'opacity-0 translate-y-4'}`}
         style={{ animationDelay: `1s` }}
@@ -117,9 +110,19 @@ export const HomePage: React.FC = () => {
           <Support />
         </div>
 
-        <div className='flex-1 mb-8 lg:my-8 flex rounded-3xl overflow-hidden lg:mr-10'>
-          <img className='w-full' src={giff} alt="gif" />
+        <div className='flex-1 mb-8 lg:my-8 flex rounded-3xl overflow-hidden lg:mr-10 relative group'>
+          <img
+            className='w-full absolute top-0 left-0 transition-opacity duration-600 opacity-100 group-hover:opacity-0'
+            src={staticPreview}
+            alt="preview"
+          />
+          <img
+            className='w-full transition-opacity duration-600 opacity-0 group-hover:opacity-100'
+            src={giff}
+            alt="gif"
+          />
         </div>
+
       </div>
       
     </div>

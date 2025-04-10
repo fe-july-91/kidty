@@ -3,7 +3,6 @@ import { Header } from './Components/Header';
 import { Outlet } from 'react-router-dom';
 import { Footer } from './Components/Footer/Footer';
 import { useEffect, useState } from 'react';
-import { back } from './Utils/kit';
 import LoadingScreen from './Components/LoadingScreen';
 
 export const App: React.FC = () => {
@@ -22,12 +21,9 @@ export const App: React.FC = () => {
   }
 
   return (
-    <div className="relative app">
-      <div className="absolute inset-0 -z-10">
-        <img className="w-full h-full object-cover" src={back} alt="bg" />
-      </div>
+    <div className="app">
       <Header />
-      <div className="app__container">
+      <div className="app__container relative">
         <Outlet />
       </div>
       <Footer />

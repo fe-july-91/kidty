@@ -93,7 +93,6 @@ export const CardItem: React.FC<Props> = ({ years, cardType, childId }) => {
             dispatch({ type: 'data', payload: [...state.data, response] });
           });
       }
-      //setSliderValue({ x: 0 });
     },
     [
       sliderValue.x,
@@ -109,7 +108,6 @@ export const CardItem: React.FC<Props> = ({ years, cardType, childId }) => {
   const deleteData = useCallback((dataId: number) => {
     deleteChildData(childId, typeOfValue, dataId)
       .then(() => {
-        // После успешного удаления запрашиваем свежие данные с сервера
         return client.get<Data[]>(`children/${childId}/${typeOfValue}`);
       })
       .then((response) => {

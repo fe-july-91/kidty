@@ -8,8 +8,7 @@ export const RightsPage: React.FC = () => {
 
   return (
     <div className=" h-full py-8 md:py-12 z-50 relative bg-[#F6F7F8] min-h-[calc(100vh-96px)] md:min-h-[calc(100vh-128px)]">
-      <div className='absolute top-44 w-[1500px] h-[1500px] rounded-full bg-info z-0'>
-      </div>
+     
       <div
         className="grid gap-4 grid-cols-4 justify-center px-4 sm:px-8 sm:grid-cols-24 lg:grid-cols-24 xl:grid-cols-32px grid-rows-[auto,auto]"
       >
@@ -26,7 +25,7 @@ export const RightsPage: React.FC = () => {
 
         <div className="col-span-full mb-4">
           <div className="flex flex-col md:flex-row gap-6">
-            <div className="flex flex-col gap-4 p-8 rounded-3xl bg-secondary-500 animate-floatUp shadow-custom">
+            <div className="flex flex-col gap-4 p-8 rounded-3xl bg-secondary-600 animate-floatUp shadow-custom">
               <div className="flex flex-row justify-start items-center gap-4 ">
                 <div className="w-[100px] h-[100px] rounded-full overflow-hidden flex-shrink-0 border-2">
                   <img className="object-cover" src={Maria} alt="Maria" />
@@ -63,7 +62,7 @@ export const RightsPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex flex-col gap-4 p-8 rounded-3xl bg-secondary-500 animate-floatUp shadow-custom">
+            <div className="flex flex-col gap-4 p-8 rounded-3xl bg-secondary-600 animate-floatUp shadow-custom">
               <div className="flex flex-row gap-4">
                 <div className="w-[100px] h-[100px] rounded-full overflow-hidden flex-shrink-0 border-2">
                   <img className="object-cover" src={Yana} alt="Maria" />

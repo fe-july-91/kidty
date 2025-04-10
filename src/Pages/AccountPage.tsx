@@ -1,5 +1,5 @@
 import { Dashboard } from '../Components/Dashboard';
-import { avatars, colors } from '../Utils/kit';
+import { avatars, bakground, colors } from '../Utils/kit';
 import { useEffect, useState } from 'react';
 import { Child, EyeResponce, VaccineData } from '../Shared/types/types';
 import { calculateFullChildAge } from '../Shared/hendlers/generateYearArray';
@@ -99,11 +99,15 @@ export const AccountPage: React.FC = () => {
     : { years: 0, months: 0 };
 
   return (
-    <div className="relative flex flex-col bg-[#ffffffAA] min-h-[calc(100vh-96px)] lg:min-h-[calc(100vh-128px)]">
+    <div className="flex flex-col min-h-[calc(100vh-96px)] lg:min-h-[calc(100vh-128px)] overflow-hidden">
       {errowMessage && <div className="form__error">{errowMessage}</div>}
+        <div className="absolute w-full h-full bg-black opacity-0 animate-fadeIn -z-10">
+          <img className="w-full h-full object-cover" src={bakground} alt="bg" />
+        </div>
       {child && (
-        <>
-          <div className="px-4 h-full lg:px-10 flex flex-row flex-wrap gap-6 justify-between items-end py-4 shadow-custom ">
+        <div>
+          <div className=" px-4 h-full lg:px-10 bg-[#ffffffaa] flex flex-row flex-wrap gap-6 justify-between items-end py-4 shadow-custom opacity-0 animate-fadeIn">
+
             {/* Child's info */}
             <div className='flex flex-row items-center flex-wrap gap-4 lg:gap-8'>
               {/* child photo */}
@@ -191,12 +195,12 @@ export const AccountPage: React.FC = () => {
 
           {/* Dashboard */}
           <div
-            className="pt-8 w-full"
+            className="w-full"
             style={{ backgroundColor: colors[child.id] }}
           >
             {child && <Dashboard child={child} />}
           </div>
-        </>
+        </div>
       )}
 
       {isAddmodal && (
