@@ -1,15 +1,17 @@
 {
   "files": {
-    "main.css": "/static/css/main.4ddd58ca.css",
-    "main.js": "/static/js/main.f0a24eba.js",
+    "main.css": "/static/css/main.915fdc93.css",
+    "main.js": "/static/js/main.77ec337d.js",
     "static/js/57.ec1f6ccc.chunk.js": "/static/js/57.ec1f6ccc.chunk.js",
     "static/media/kidty.gif": "/static/media/kidty.7ad02d7c7d71e3f4dec5.gif",
+    "static/media/bg_phone.jpg": "/static/media/bg_phone.a820b4915a4e5fca32c9.jpg",
     "static/media/Maria.jpg": "/static/media/Maria.ec01603e8922bc349290.jpg",
     "static/media/Bunner_kitty.png": "/static/media/Bunner_kitty.7d50be91e7a00268ec2b.png",
     "static/media/phone.png": "/static/media/phone.91ee287e4aca49fdef60.png",
     "static/media/notebook2.png": "/static/media/notebook2.a67a6924c272654fb90f.png",
     "static/media/screen.png": "/static/media/screen.757b64321dad4df66460.png",
     "static/media/vaccination.png": "/static/media/vaccination.9ee10b9d66c026761cbe.png",
+    "static/media/static.jpeg": "/static/media/static.ffc86657777d425766c3.jpeg",
     "static/media/weight2.png": "/static/media/weight2.344d91b2e33c048e5ab3.png",
     "static/media/bg.webp": "/static/media/bg.3a6850043cdd48294e07.webp",
     "static/media/Rubik-Bold.ttf": "/static/media/Rubik-Bold.c934eb22c2c69992b34c.ttf",
@@ -51,12 +53,12 @@
     "static/media/menu.svg": "/static/media/menu.34118b66bb2b56119104.svg",
     "static/media/plus.svg": "/static/media/plus.7dc9baccea663fd1fb9f100963e4813d.svg",
     "static/media/plusHover.svg": "/static/media/plusHover.522c64c0fd29ff310ab771e4c6ddeeca.svg",
-    "main.4ddd58ca.css.map": "/static/css/main.4ddd58ca.css.map",
-    "main.f0a24eba.js.map": "/static/js/main.f0a24eba.js.map",
+    "main.915fdc93.css.map": "/static/css/main.915fdc93.css.map",
+    "main.77ec337d.js.map": "/static/js/main.77ec337d.js.map",
     "57.ec1f6ccc.chunk.js.map": "/static/js/57.ec1f6ccc.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.4ddd58ca.css",
-    "static/js/main.f0a24eba.js"
+    "static/css/main.915fdc93.css",
+    "static/js/main.77ec337d.js"
   ]
 }
