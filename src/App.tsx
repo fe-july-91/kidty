@@ -4,15 +4,27 @@ import { Outlet } from 'react-router-dom';
 import { Footer } from './Components/Footer/Footer';
 import { useEffect, useState } from 'react';
 import LoadingScreen from './Components/LoadingScreen';
+import PullToRefresh from 'react-pull-to-refresh';
 
 export const App: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   useEffect(() => {
-    setTimeout(() => setIsLoading(false), 2000);
+    setTimeout(() => setIsInitialLoading(false), 2000);
   }, []);
 
-  if (isLoading) {
+  const handleRefresh = () => {
+    setIsRefreshing(true);
+    return new Promise<void>((resolve) => {
+      setTimeout(() => {
+        setIsRefreshing(false);
+        resolve();
+      }, 1500); 
+    });
+  };
+
+  if (isInitialLoading) {
     return (
       <div className="app">
         <LoadingScreen />
@@ -21,12 +33,17 @@ export const App: React.FC = () => {
   }
 
   return (
-    <div className="app -mb-6">
-      <Header />
-      <div className="app__container relative">
-        <Outlet />
+    <PullToRefresh
+      onRefresh={handleRefresh}
+    >
+      <div className="app -mb-6">
+        {isRefreshing && <LoadingScreen />}
+        <Header />
+        <div className="app__container relative">
+          <Outlet />
+        </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
+    </PullToRefresh>
   );
 };
