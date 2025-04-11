@@ -5,12 +5,14 @@ type Props = {
   message: string;
   handleApplyClick: () => void;
   handleCanсelClick: (value: boolean) => void;
+  isLoading?: boolean;
 };
 
 export const PopUpWindow: React.FC<Props> = ({
   message,
   handleApplyClick,
   handleCanсelClick,
+  isLoading = false,
 }) => {
   return (
     <div className="flex flex-col gap-6 w-[375px] mx-auto bg-white rounded-3xl p-8">

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { AvatarSelector } from './AvatarSelector/AvatarSelector';
 import { client } from '../Utils/httpClient';
 import { Child } from '../Shared/types/types';
-import { Button } from '@heroui/react';
+import { Button, Input, Select, SelectItem } from '@heroui/react';
 import { Icon } from '@iconify/react';
 
 type Props = {
@@ -24,6 +24,7 @@ export const AddModal: React.FC<Props> = ({
     avatarIndex: 0,
   });
   const [errorMessage, setErrorMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const days = Array.from({ length: 31 }, (_, i) => i + 1);
   const months = Array.from({ length: 12 }, (_, i) => i + 1);
@@ -32,24 +33,22 @@ export const AddModal: React.FC<Props> = ({
     (_, i) => new Date().getFullYear() - i
   );
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    if (name in formData.birth) {
-      setFormData((prev) => ({
-        ...prev,
-        birth: {
-          ...prev.birth,
-          [name]: value,
-        },
-      }));
-    } else {
-      setFormData((prev) => ({
+  const handleChange = (name: string, value: string) => {
+    setFormData(prev => {
+      if (name in prev.birth) {
+        return {
+          ...prev,
+          birth: {
+            ...prev.birth,
+            [name]: value,
+          },
+        };
+      }
+      return {
         ...prev,
         [name]: value,
-      }));
-    }
+      };
+    });
   };
 
   const handleAvatarChange = (index: number) => {
@@ -64,152 +63,153 @@ export const AddModal: React.FC<Props> = ({
     formData.birth.month &&
     formData.birth.year;
 
-  const handleSubmit = () => {
-    client
-      .post<Child>('children', {
+  const handleSubmit = async () => {
+    setIsLoading(true);
+    setErrorMessage('');
+
+    try {
+      const response = await client.post<Child>('children', {
         birth: `${formData.birth.day}-${formData.birth.month}-${formData.birth.year}`,
         genderName: formData.gender,
         image: formData.avatarIndex,
         name: formData.name,
         surname: formData.surname,
-      })
-      .then((response) => {
-        setCurrentChild(response);
-        setModal(false);
-      })
-      .catch(() => setErrorMessage('Помилка при сохраненні даних'));
+      });
+      
+      setCurrentChild(response);
+      setModal(false);
+    } catch (error) {
+      setErrorMessage('Помилка при сохраненні даних');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <div className="pt-6 animate-floatUp">
-      <form className="mx-auto flex flex-col gap-2 w-[375px] md:w-[400px] bg-primary-100 px-6 py-4 rounded-3xl">
+      <div className="mx-auto flex flex-col gap-4 w-[375px] md:w-[400px] bg-primary-100 px-6 py-4 rounded-3xl">
         {children.length > 0 && (
           <div className="text-right">
             <Button
               isIconOnly
-              variant="flat"
+              variant="light"
               color="primary"
-              className="w-10 rounded-full"
+              className="w-10 rounded-full self-end"
               onPress={() => setModal(false)}
             >
-              <Icon
-                className="text-gray-700"
-                icon="lucide:x"
-                width={24}
-                height={24}
-              />
+              <Icon icon="lucide:x" width={24} height={24} />
             </Button>
           </div>
         )}
 
-        <div className="text-2xl font-medium text-primary-700 text-center">
+        <h2 className="text-2xl font-medium text-primary-700 text-center">
           Введіть дані дитини
-        </div>
+        </h2>
+        
         <AvatarSelector
           setAvatarIndex={handleAvatarChange}
           avatarIndex={formData.avatarIndex}
         />
 
-        <div className="flex flex-col gap-1">
-          <label htmlFor="name" className="text-sm text-primary-500">
-            Ім'я
-          </label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            className="form__control"
-            onChange={handleChange}
-          />
-        </div>
+        <Input
+          label="Ім'я"
+          type="text"
+          name="name"
+          value={formData.name}
+          onChange={(e) => handleChange('name', e.target.value)}
+          className="w-full"
+        />
 
-        <div className="flex flex-col gap-1">
-          <label htmlFor="surname" className="text-sm text-primary-500">
-            Прізвище
-          </label>
-          <input
-            type="text"
-            name="surname"
-            value={formData.surname}
-            className="form__control"
-            onChange={handleChange}
-          />
-        </div>
+        <Input
+          label="Прізвище"
+          type="text"
+          name="surname"
+          value={formData.surname}
+          onChange={(e) => handleChange('surname', e.target.value)}
+          className="w-full"
+        />
 
-        <div className="flex flex-col gap-1">
-          <label htmlFor="gender" className="text-sm text-primary-500">
-            Стать
-          </label>
-          <select
-            name="gender"
-            className="form__control"
-            value={formData.gender}
-            onChange={handleChange}
-          >
-            <option value="">Виберіть стать</option>
-            <option value="Хлопчик">Хлопчик</option>
-            <option value="Дівчинка">Дівчинка</option>
-          </select>
-        </div>
+        <Select
+          label="Стать"
+          name="gender"
+          selectedKeys={formData.gender ? [formData.gender] : []}
+          onChange={(e) => handleChange('gender', e.target.value)}
+          className="w-full"
+        >
+          <SelectItem key="">Виберіть стать</SelectItem>
+          <SelectItem key="Хлопчик">Хлопчик</SelectItem>
+          <SelectItem key="Дівчинка">Дівчинка</SelectItem>
+        </Select>
 
         <div className="flex flex-col gap-1">
           <label className="text-sm text-primary-500">Дата народження</label>
-          <div className="flex flex-row justify-between text-gray-700">
-            <select
-              name="day"
-              className="w-24 p-2 rounded-md cursor-pointer "
-              value={formData.birth.day}
-              onChange={handleChange}
-            >
-              <option value="">День</option>
-              {days.map((day) => (
-                <option key={day} value={day}>
-                  {day}
-                </option>
-              ))}
-            </select>
-            <select
-              name="month"
-              className="w-24 p-2 rounded-md cursor-pointer"
-              value={formData.birth.month}
-              onChange={handleChange}
-            >
-              <option value="">Місяць</option>
-              {months.map((month) => (
-                <option key={month} value={month}>
-                  {month}
-                </option>
-              ))}
-            </select>
-            <select
-              name="year"
-              className="w-24 p-2 rounded-md cursor-pointer"
-              value={formData.birth.year}
-              onChange={handleChange}
-            >
-              <option value="">Рік</option>
-              {years.map((year) => (
-                <option key={year} value={year}>
-                  {year}
-                </option>
-              ))}
-            </select>
+          <div className="flex gap-2">
+          <Select
+            label="День"
+            selectedKeys={formData.birth.day ? [formData.birth.day] : []}
+            onSelectionChange={(keys) => {
+              const day = Array.from(keys)[0]?.toString() || '';
+              handleChange('day', day);
+            }}
+            className="flex-1"
+          >
+            {days.map((day) => (
+              <SelectItem key={day.toString()} textValue={day.toString()}>
+                {day}
+              </SelectItem>
+            ))}
+          </Select>
+
+          <Select
+            label="Місяць"
+            selectedKeys={formData.birth.month ? [formData.birth.month] : []}
+            onSelectionChange={(keys) => {
+              const month = Array.from(keys)[0]?.toString() || '';
+              handleChange('month', month);
+            }}
+            className="flex-1"
+          >
+            {months.map((month) => (
+              <SelectItem key={month.toString()} textValue={month.toString()}>
+                {month}
+              </SelectItem>
+            ))}
+          </Select>
+
+          <Select
+            label="Рік"
+            selectedKeys={formData.birth.year ? [formData.birth.year] : []}
+            onSelectionChange={(keys) => {
+              const year = Array.from(keys)[0]?.toString() || '';
+              handleChange('year', year);
+            }}
+            className="flex-1"
+          >
+            {years.map((year) => (
+              <SelectItem key={year.toString()} textValue={year.toString()}>
+                {year}
+              </SelectItem>
+            ))}
+          </Select>
           </div>
         </div>
 
         {errorMessage && (
-          <div className="w-full text-danger">{errorMessage}</div>
+          <div className="text-danger text-sm p-2 bg-danger-100 rounded-md">
+            {errorMessage}
+          </div>
         )}
 
         <Button
           color="primary"
-          className="text-white rounded-xl disabled:bg-primary-300 my-2"
+          className="w-full mt-2"
           onPress={handleSubmit}
-          disabled={!isSaveValid}
+          isDisabled={!isSaveValid}
+          isLoading={isLoading}
         >
           Зберегти
         </Button>
-      </form>
+      </div>
     </div>
   );
 };
