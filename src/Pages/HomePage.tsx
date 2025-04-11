@@ -53,7 +53,6 @@ export const HomePage: React.FC = () => {
               onPress={() => navigate('signup')}
               size='lg'
               variant="solid"
-              
               color='secondary'
             >
               {button.signUp.ua}

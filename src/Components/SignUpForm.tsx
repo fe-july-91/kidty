@@ -137,7 +137,7 @@ export const SignUpForm = () => {
             />
 
             {errowMessage && (
-              <div className="text-gray-700 bg-secondary-300 p-4">
+              <div className="p-4 text-danger-700 bg-danger-100 rounded-lg">
                 {errowMessage}
               </div>
             )}

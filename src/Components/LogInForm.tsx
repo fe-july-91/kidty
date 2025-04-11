@@ -35,20 +35,18 @@ export const LogInForm = () => {
     client
       .post('auth/login', { email: email.trim(), password: password.trim() })
       .then((response: any) => {
-        if (response.status === 'BAD_REQUEST') {
-          throw new Error('Email or password is incorrect');
-        }
+          logIn();
+          navigate('/account');
+          setToken(response.token);
 
         if (checked) {
           setSavedEmail(email);
           setSavedPassword(password);
         }
-
-        setToken(response.token);
-        logIn();
-        navigate('/account');
       })
-      .catch((error) => setErrowmessage(error.message));
+      .catch((error) => {
+        setErrowmessage(error.message)
+      });
   };
 
   return (
@@ -75,7 +73,7 @@ export const LogInForm = () => {
         />
 
         {errowMessage && (
-          <div className="text-gray-700 bg-secondary-300 p-4">
+          <div className="p-4 text-danger-700 bg-danger-100 rounded-lg">
             {errowMessage}
           </div>
         )}

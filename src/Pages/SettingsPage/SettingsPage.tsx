@@ -162,7 +162,7 @@ export const SettingsPage = () => {
             </div>
           )}
           {errorMessage && (
-            <div className="p-4 text-red-700 bg-red-100 rounded-lg">
+            <div className="p-4 text-danger-700 bg-danger-100 rounded-lg">
               {errorMessage}
             </div>
           )}
