@@ -1,6 +1,5 @@
 import React from 'react';
-import { months } from '../../Utils/kit';
-import './SelectionCardBlock.scss';
+import { months } from '../Utils/kit';
 
 type Props = {
   selectedYear: string;
@@ -31,9 +30,9 @@ export const SelectionCardBlock: React.FC<Props> = React.memo(
     };
 
     return (
-      <div className="SelectionCardBlock">
+      <div className="flex flex-col gap-2">
         <select
-          className="SelectionCardBlock__select"
+          className="text-primary-900 bg-none w-[100px] border-b-1 border-gray-400"
           value={selectedYear}
           onChange={handleYearChange}
         >
@@ -45,7 +44,7 @@ export const SelectionCardBlock: React.FC<Props> = React.memo(
         </select>
 
         <select
-          className="SelectionCardBlock__select"
+          className="text-primary-900 bg-none w-[100px] border-b-1 border-gray-400"
           value={selectedMonth}
           onChange={handleMonthChenge}
         >

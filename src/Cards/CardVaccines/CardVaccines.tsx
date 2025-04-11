@@ -6,7 +6,7 @@ import { CardTitleTypes, Child, VaccineData } from '../../Shared/types/types';
 import { VaccinesChart } from '../../Charts/VaccinesChart/VaccinesChart';
 import { VaccinesMobile } from '../../Charts/VaccinesChartMobile/VaccinesMobile';
 import { TitleCardBlock } from '../../Components/TitleCardBlock';
-import { VaccineEditBlock } from '../../Components/VaccineEditBlock/VaccineEditBlock';
+import { VaccineEditBlock } from '../../Components/VaccineEditBlock';
 import { client } from '../../Utils/httpClient';
 import { Loader } from '../../Components/Loader/Loader';
 import { PressEvent } from '@heroui/react';
@@ -49,7 +49,9 @@ export const CardVaccines: React.FC<Props> = ({ child }) => {
     })
     .replace(/\./g, '-');
 
-  const saveData = (e: PressEvent | React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const saveData = (
+    e: PressEvent | React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     if ('preventDefault' in e) {
       e.preventDefault();
     }
@@ -94,7 +96,9 @@ export const CardVaccines: React.FC<Props> = ({ child }) => {
     setSelectedDate(new Date());
   };
 
-  const removeData = (e: PressEvent | React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const removeData = (
+    e: PressEvent | React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     const updatedData = data.filter((d) => d.id !== activeVaccine?.id);
     setData(updatedData);
     console.log('delete');

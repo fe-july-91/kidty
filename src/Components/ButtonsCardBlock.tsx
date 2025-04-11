@@ -58,8 +58,6 @@ export const ButtonsCardBlock: React.FC<Props> = React.memo(
                 Видалити
               </Button>
                 
-
-
             <Button
               variant="solid"
               color="primary"

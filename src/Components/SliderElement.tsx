@@ -1,8 +1,7 @@
 import Slider from 'react-input-slider';
-import './SliderElement.scss';
 import React from 'react';
-import { setUnits } from '../../Shared/servises/setUnits';
-import { CardTitleTypes } from '../../Shared/types/types';
+import { setUnits } from '../Shared/servises/setUnits';
+import { CardTitleTypes } from '../Shared/types/types';
 
 type Props = {
   setSliderValue: React.Dispatch<React.SetStateAction<{ x: number }>>;
@@ -13,16 +12,22 @@ type Props = {
 };
 
 export const SliderElement: React.FC<Props> = React.memo(
-  ({ setSliderValue, sliderValue, sliderWidth = '100%', range, title = "" }) => {
-        const units = setUnits(title);
+  ({
+    setSliderValue,
+    sliderValue,
+    sliderWidth = '100%',
+    range,
+    title = '',
+  }) => {
+    const units = setUnits(title);
     return (
-      <div className='w-full'>
+      <div className="w-full">
         {title !== CardTitleTypes.eyes &&
           title !== CardTitleTypes.vactination && (
-        <p className='text-xl font-medium text-secondary '>
-              { sliderValue.x } {units}
-        </p>
-        )}
+            <p className="text-xl font-medium text-secondary ">
+              {sliderValue.x} {units}
+            </p>
+          )}
         <Slider
           axis="x"
           xmin={range.min}

@@ -29,48 +29,52 @@ export const Menu: React.FC<Props> = ({
   const { currentLang } = useContext(LangContext);
 
   return (
+
     <div
       className={classNames('menu', {
         'menu--visible': isMenuOpen,
       })}
     >
-      {!authorized ? (
-        <nav className="menu__nav">
-          <NavLink to="/" className={getStylelink} onClick={toggleMenu}>
-            {currentLang === 'UA' ? 'Головна сторінка' : 'Main Page'}
-          </NavLink>
-          <NavLink to="login" className={getStylelink} onClick={toggleMenu}>
-            {currentLang === 'UA' ? 'Увійти в додаток' : 'Log In'}
-          </NavLink>
-          <NavLink to="signup" className={getStylelink} onClick={toggleMenu}>
-            {currentLang === 'UA' ? 'Зареєструватися' : 'Sign Up'}
-          </NavLink>
-        </nav>
-      ) : (
-        <nav className="menu__nav">
-          <NavLink to="#" className={getStylelink} onClick={toggleMenu}>
-            {currentLang === 'UA' ? 'Головна сторінка' : 'Main Page'}
-          </NavLink>
+      <div className='flex items-center justify-center -translate-y-12'>
+        {!authorized ? (
+          <nav className="menu__nav">
+            <NavLink to="/" className={getStylelink} onClick={toggleMenu}>
+              {currentLang === 'UA' ? 'Головна сторінка' : 'Main Page'}
+            </NavLink>
+            <NavLink to="login" className={getStylelink} onClick={toggleMenu}>
+              {currentLang === 'UA' ? 'Увійти в додаток' : 'Log In'}
+            </NavLink>
+            <NavLink to="signup" className={getStylelink} onClick={toggleMenu}>
+              {currentLang === 'UA' ? 'Зареєструватися' : 'Sign Up'}
+            </NavLink>
+          </nav>
+        ) : (
+          <nav className="menu__nav">
+            <NavLink to="#" className={getStylelink} onClick={toggleMenu}>
+              {currentLang === 'UA' ? 'Головна сторінка' : 'Main Page'}
+            </NavLink>
 
-          <NavLink
-            to="account/settings"
-            className={getStylelink}
-            onClick={toggleMenu}
-          >
-            {currentLang === 'UA' ? 'Налаштування' : 'Settings'}
-          </NavLink>
-          <NavLink
-            to="/"
-            className={getStylelink}
-            onClick={() => {
-              logOut();
-              toggleMenu();
-            }}
-          >
-            {currentLang === 'UA' ? 'Вийти з додатку' : 'Log Out'}
-          </NavLink>
-        </nav>
-      )}
+            <NavLink
+              to="account/settings"
+              className={getStylelink}
+              onClick={toggleMenu}
+            >
+              {currentLang === 'UA' ? 'Налаштування' : 'Settings'}
+            </NavLink>
+            <NavLink
+              to="/"
+              className={getStylelink}
+              onClick={() => {
+                logOut();
+                toggleMenu();
+              }}
+            >
+              {currentLang === 'UA' ? 'Вийти з додатку' : 'Log Out'}
+            </NavLink>
+          </nav>
+        )}
+
+      </div>
     </div>
   );
 };

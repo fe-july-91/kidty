@@ -5,13 +5,13 @@ import { AccountPage } from './Pages/AccountPage';
 import { LogInPage } from './Pages/LogInPage';
 import { SignUpPage } from './Pages/SignUpPage';
 import { AuthProvider } from './Context/AuthContext';
-import { RequireAuth } from './Components/RequireAuth/RequireAuth';
+import { RequireAuth } from './Components/RequireAuth';
 import { SettingsPage } from './Pages/SettingsPage/SettingsPage';
 import { Recovery } from './Pages/PasswordRecovery/Recovery';
 import { RightsPage } from './Pages/RightsPage';
 import { LangProvider } from './Context/LangContext';
-import {HeroUIProvider} from "@heroui/react";
-
+import { HeroUIProvider } from '@heroui/react';
+import { SuccessPage } from './Pages/SuccessPage';
 
 const router = createHashRouter([
   {
@@ -23,6 +23,7 @@ const router = createHashRouter([
       { path: 'recovery', element: <Recovery /> },
       { path: 'signup', element: <SignUpPage /> },
       { path: 'about', element: <RightsPage /> },
+      { path: 'success', element: <SuccessPage /> },
       {
         path: 'account',
         element: <RequireAuth />,

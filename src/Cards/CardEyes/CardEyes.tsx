@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import cn from 'classnames';
 import './CardEyes.scss';
 import { CardTitleTypes, EyeResponce } from '../../Shared/types/types';
 import { cardSize, eye, sliderRange } from '../../Utils/kit';
 import { EyesChart } from '../../Charts/EyesChart/EyesChart';
 import { TitleCardBlock } from '../../Components/TitleCardBlock';
-import { SliderElement } from '../../Components/SliderElement/SliderElement';
+import { SliderElement } from '../../Components/SliderElement';
 import { ButtonsCardBlock } from '../../Components/ButtonsCardBlock';
 import { client } from '../../Utils/httpClient';
 import { PressEvent } from '@heroui/react';
@@ -61,12 +60,8 @@ export const CardEyes: React.FC<Props> = ({ childId }) => {
   };
 
   return (
-    <div
-      className="card flex felex-col gap-2 md:gap-0 p-6 items-center justify-center w-full"
-    >
-      <div
-        className="w-full flex flex-col justify-center md:flex-row md:justify-between md:items-top "
-      >
+    <div className="card flex felex-col gap-2 md:gap-0 p-6 items-center justify-center w-full">
+      <div className="w-full flex flex-col justify-center md:flex-row md:justify-between md:items-top ">
         {errowMessage && <div className="form__error">{errowMessage}</div>}
         <TitleCardBlock image={eye} title={CardTitleTypes.eyes} />
 
@@ -79,20 +74,14 @@ export const CardEyes: React.FC<Props> = ({ childId }) => {
         </div>
       </div>
 
-      <div
-        className="w-full flex flex-col md:h-[55px] md:flex-row justify-between items-center"
-      >
+      <div className="w-full flex flex-col md:h-[55px] md:flex-row justify-between items-center">
         <div className="eyes__values">
           <p className="eyes__sign">Ліве око:</p>
-          <p
-            className="eyes__value"
-          >
-            {data.leftEye}
-          </p>
+          <p className="eyes__value">{data.leftEye}</p>
         </div>
 
         {activeSlider && (
-          <div className='w-[60%]'>
+          <div className="w-[60%]">
             <SliderElement
               setSliderValue={setLeftSliderValue}
               sliderValue={leftSliderValue}
@@ -103,20 +92,14 @@ export const CardEyes: React.FC<Props> = ({ childId }) => {
         )}
       </div>
 
-      <div
-        className="w-full flex flex-col md:h-[55px] md:flex-row justify-between items-center"
-      >
+      <div className="w-full flex flex-col md:h-[55px] md:flex-row justify-between items-center">
         <div className="eyes__values">
           <p className="eyes__sign">Праве око:</p>
-          <p
-            className="eyes__value"
-          >
-            { data.rightEye}
-          </p>
+          <p className="eyes__value">{data.rightEye}</p>
         </div>
 
         {activeSlider && (
-          <div className='w-[60%]'>
+          <div className="w-[60%]">
             <SliderElement
               setSliderValue={setRightSliderValue}
               sliderValue={rightSliderValue}

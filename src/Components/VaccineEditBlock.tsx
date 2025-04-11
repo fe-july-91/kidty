@@ -1,5 +1,5 @@
-import { VaccineData } from '../../Shared/types/types';
-import { vaccinesSelect } from '../../Utils/kit';
+import { VaccineData } from '../Shared/types/types';
+import { vaccinesSelect } from '../Utils/kit';
 import { Button, PressEvent, Select, SelectItem, Tooltip } from '@heroui/react';
 
 type Props = {
@@ -10,7 +10,9 @@ type Props = {
   startDate: Date;
   setActiveButton: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedVaccine: React.Dispatch<React.SetStateAction<string>>;
-  handleData: (e: PressEvent | React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  handleData: (
+    e: PressEvent | React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => void;
   handleRemoveData: (
     e: PressEvent | React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => void;
@@ -27,7 +29,7 @@ export const VaccineEditBlock: React.FC<Props> = ({
   setSelectedVaccine,
   handleData,
   handleRemoveData,
-  setActiveVaccine
+  setActiveVaccine,
 }) => {
   const handleEditClick = (
     e: PressEvent | React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -51,77 +53,69 @@ export const VaccineEditBlock: React.FC<Props> = ({
     setActiveButton(false);
   };
 
-  const handleVaccineChange = (keys:"all" | Set<React.Key>) => {
-    const selected = keys instanceof Set ? Array.from(keys)[0] as string : vaccinesSelect[0];
+  const handleVaccineChange = (keys: 'all' | Set<React.Key>) => {
+    const selected =
+      keys instanceof Set ? (Array.from(keys)[0] as string) : vaccinesSelect[0];
     setSelectedVaccine(selected || vaccinesSelect[0]);
   };
 
   return (
     <div className="w-full flex flex-col items-start justify-start md:flex md:items-end">
       {!activeBatton ? (
-        <div className='w-full flex flex-col md:flex-row md:items-end md:justify-end' >
-          <Button
-          variant="solid"
-          color="primary"
-          onPress={handleEditClick}
-        >
-          Редагувати
+        <div className="w-full flex flex-col md:flex-row md:items-end md:justify-end">
+          <Button variant="solid" color="primary" onPress={handleEditClick}>
+            Редагувати
           </Button>
         </div>
-
       ) : (
         <>
-            <div className="w-full flex flex-col gap-4  md:flex-row my-4 md:my-0 md:justify-end md:items-start md:text-right ">
-              {!activeVaccine ? (
+          <div className="w-full flex flex-col gap-4  md:flex-row my-4 md:my-0 md:justify-end md:items-start md:text-right ">
+            {!activeVaccine ? (
               <Select
                 className="md:w-[250px] -translate-y-2"
-                color='secondary'
+                color="secondary"
                 labelPlacement="outside-left"
                 label="Щеплення"
                 selectedKeys={new Set([selectedVaccine || vaccinesSelect[0]])}
                 onSelectionChange={handleVaccineChange}
               >
                 {vaccinesSelect.map((vaccine) => (
-                  <SelectItem key={vaccine} >
-                    {vaccine}
-                  </SelectItem>
+                  <SelectItem key={vaccine}>{vaccine}</SelectItem>
                 ))}
               </Select>
             ) : (
-              <span className="text-secondary text-3xl md:text-xl md:h-10">{selectedVaccine}</span>
-              )}
-              <input
-                type="date"
-                value={startDate.toISOString().split('T')[0]} // yyyy-mm-dd
-                onChange={(e) => {
-                  const newDate = new Date(e.target.value);
-                  setStartDate(newDate);
-                }}
-              />
-            </div>
-            <div className="w-full flex flex-col md:flex-row md:flex-nowrap lg:flex-wrap 2xl:flex-nowrap md:justify-end md:items-end gap-2">
-              {activeVaccine && (
-                <Button
-                  variant="solid"
-                  color="secondary"
-                  type="submit"
-                  onPress={handleRemoveClick}
-                >
-                  Видалити
-                </Button>
-              )}
-
-            <Button
-              variant="solid"
-              color="primary"
-              onPress={handleApplyClick}
-            >
-              {activeVaccine ? `Зминити` : `Додати`}
+              <span className="text-secondary text-3xl md:text-xl md:h-10">
+                {selectedVaccine}
+              </span>
+            )}
+            <input
+              type="date"
+              value={startDate.toISOString().split('T')[0]} // yyyy-mm-dd
+              onChange={(e) => {
+                const newDate = new Date(e.target.value);
+                setStartDate(newDate);
+              }}
+            />
+          </div>
+          <div className="w-full flex flex-col md:flex-row md:flex-nowrap lg:flex-wrap 2xl:flex-nowrap md:justify-end md:items-end gap-2">
+            {activeVaccine && (
+              <Button
+                variant="solid"
+                color="secondary"
+                type="submit"
+                onPress={handleRemoveClick}
+              >
+                Видалити
               </Button>
+            )}
 
-              <Tooltip   className="font-sans" content="Скасувати">
-                <Button
-                className='text-white md:min-w-10'
+            <Button variant="solid" color="primary" onPress={handleApplyClick}>
+              {activeVaccine ? `Зминити` : `Додати`}
+            </Button>
+
+            <Tooltip className="font-sans" content="Скасувати">
+              <Button
+                className="text-white md:min-w-10"
                 variant="solid"
                 color="success"
                 onPress={() => {
@@ -133,7 +127,7 @@ export const VaccineEditBlock: React.FC<Props> = ({
               >
                 x
               </Button>
-              </Tooltip>
+            </Tooltip>
           </div>
         </>
       )}

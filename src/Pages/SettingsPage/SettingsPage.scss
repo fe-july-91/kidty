@@ -1,40 +1,7 @@
 @import './../../styles/main';
 
 .settings {
-  display: flex;
-  justify-content: center;
-  min-height: 100vh;
-  
-  @include on-tablet {
-    min-height: calc(100vh - 48px * 2);
-  }
-  
-  @include on-desktop {
-    min-height: calc(100vh - 64px * 2);
-  }
 
-  &__container {
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
-    box-sizing: border-box;
-    display: flex;
-    background-color: #fff;
-    box-shadow: 0px 0px 8px rgba(34, 2, 73, 0.2);
-
-    min-width: 345px;
-    margin-top: 32px;
-    border-radius: 15px;
-    height:fit-content;
-    padding: 24px;
-    height: fit-content;
-
-    @include on-tablet {
-      margin-top: 50px;
-      padding: 32px;
-      width: 480px;
-    }
-  }
 
   &__form {
     display: flex;
@@ -61,24 +28,6 @@
       opacity: 1;
       transform: translateY(0);
     }
-  }
-
-  &__header {
-    @include h2;
-    color: $colorIndigo;
-  }
-
-  &__link {
-    cursor: pointer;
-  }
-
-  &__links {
-    padding-inline: 10px;
-    cursor: pointer;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
   }
 }
 

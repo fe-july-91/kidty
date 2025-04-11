@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { AvatarSelector } from './AvatarSelector/AvatarSelector';
 import { client } from '../Utils/httpClient';
 import { Child } from '../Shared/types/types';
-import { PopUpWindow } from './PopUpWindow/PopUpWindow';
+import { PopUpWindow } from './PopUpWindow';
 import { Button } from '@heroui/react';
 import { Icon } from '@iconify/react';
 

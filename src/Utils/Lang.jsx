@@ -122,8 +122,8 @@ export const signUpForm = {
   
   export const logInForm = {
     header: {
-      en: "Welcome to the Kidti",
-      ua: "Ласкаво просимо до Kidti"
+      en: "Welcome to the Kidty",
+      ua: "Ласкаво просимо до Kidty"
     },
     email: {
       en: "Enter your email",

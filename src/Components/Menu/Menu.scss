@@ -2,7 +2,10 @@
 
 .menu {
   position: fixed;
-  padding-top: 23px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
   top: 49px;
   left: 0;
   right: 0;

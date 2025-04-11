@@ -1,10 +1,16 @@
-import React, { useCallback,useEffect,useMemo,useReducer,useState} from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useState,
+} from 'react';
 import { BarChart } from '../../Charts/HeightBarChart/BarChart';
 import './CardItem.scss';
 import { cardSize, months, sliderRange } from '../../Utils/kit';
 import { findTodayMonth } from '../../Shared/servises/findTodayMonth';
-import { SliderElement } from '../../Components/SliderElement/SliderElement';
-import { SelectionCardBlock } from '../../Components/SelectionCardBlock/SelectionCardBlock';
+import { SliderElement } from '../../Components/SliderElement';
+import { SelectionCardBlock } from '../../Components/SelectionCardBlock';
 import { TitleCardBlock } from '../../Components/TitleCardBlock';
 import { ButtonsCardBlock } from '../../Components/ButtonsCardBlock';
 import { reduser } from '../../Shared/servises/reduser';
@@ -105,20 +111,22 @@ export const CardItem: React.FC<Props> = ({ years, cardType, childId }) => {
     ]
   );
 
-  const deleteData = useCallback((dataId: number) => {
-    deleteChildData(childId, typeOfValue, dataId)
-      .then(() => {
-        return client.get<Data[]>(`children/${childId}/${typeOfValue}`);
-      })
-      .then((response) => {
-        setData(response);
-        dispatch({ type: 'data', payload: response });
-      })
-      .catch((error) => {
-        setErrorMessage(error.message || 'Не вдалося видалити дані');
-      });
-  }, [childId, typeOfValue]);
-
+  const deleteData = useCallback(
+    (dataId: number) => {
+      deleteChildData(childId, typeOfValue, dataId)
+        .then(() => {
+          return client.get<Data[]>(`children/${childId}/${typeOfValue}`);
+        })
+        .then((response) => {
+          setData(response);
+          dispatch({ type: 'data', payload: response });
+        })
+        .catch((error) => {
+          setErrorMessage(error.message || 'Не вдалося видалити дані');
+        });
+    },
+    [childId, typeOfValue]
+  );
 
   useEffect(() => {
     dispatch({ type: 'data', payload: data });
@@ -159,7 +167,7 @@ export const CardItem: React.FC<Props> = ({ years, cardType, childId }) => {
           </div>
 
           <div className="card__rightBlock">
-            {activeSlider &&  (
+            {activeSlider && (
               <SliderElement
                 setSliderValue={(value) => setSliderValue(value)}
                 sliderValue={sliderValue}

@@ -1,18 +1,16 @@
-import './SignUpForm.scss';
 import { useState } from 'react';
-import { client } from '../../Utils/httpClient';
-import cn from 'classnames';
-import { useNavigate } from 'react-router-dom';
-import { button, signUpForm } from '../../Utils/Lang';
+import { client } from '../Utils/httpClient';
+import { button, signUpForm } from '../Utils/Lang';
+import { Button, Input, PressEvent } from '@heroui/react';
 
 export const SignUpForm = () => {
-  const navigate = useNavigate();
   const [errowMessage, setErrowmessage] = useState('');
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [password1, setPassword1] = useState('');
   const [password2, setPassword2] = useState('');
   const [isRegistered, setIsRegistered] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({
     name: false,
     email: false,
@@ -40,13 +38,17 @@ export const SignUpForm = () => {
     password2.trim() === password1.trim();
 
   const handleSubmit = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    e: PressEvent | React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    event.preventDefault();
+    if ('preventDefault' in e) {
+      e.preventDefault();
+    }
     setErrowmessage('');
+    setIsLoading(true); 
 
     if (!validateFields()) {
       setErrowmessage('Будь ласка, перевірте правильність введених даних.');
+      setIsLoading(false); 
       return;
     }
 
@@ -60,43 +62,41 @@ export const SignUpForm = () => {
       .then(() => {
         setIsRegistered(true);
       })
-      .catch((error) => setErrowmessage(error.message));
+      .catch((error) => {
+        setErrowmessage(error.message);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   return (
     <>
       {!isRegistered ? (
-        <form className="form">
-          <div className="form__title">{signUpForm.header.ua}</div>
-          <div className="form__input">
-            <label htmlFor="name" className="form__label">
-            {signUpForm.name.ua}
-            </label>
-            <input
+        <div className="flex max-w-[400px] bg-background px-4 md:px-10 py-10 mx-4 my-12 rounded-3xl shadow-custom">
+          <form className="flex flex-col gap-4">
+            <div className="text-xl md:text-2xl text-primary-700">
+              {signUpForm.header.ua}
+            </div>
+
+            <Input
+              label={signUpForm.name.ua}
               type="text"
               value={name}
-              className={cn('form__control', {
-                'form__control--invalid': errors.name,
-              })}
+              isInvalid={errors.name}
               id="name"
               onChange={(event) => setName(event.target.value)}
               onBlur={() =>
                 setErrors((prev) => ({ ...prev, name: name.trim() === '' }))
               }
             />
-          </div>
-          <div className="form__input">
-            <label htmlFor="exampleInputEmail1" className="form__label">
-            {signUpForm.email.ua}
-            </label>
-            <input
+
+            <Input
+              label={signUpForm.email.ua}
               type="email"
               value={email}
-              className={cn('form__control', {
-                'form__control--invalid': errors.email,
-              })}
+              isInvalid={errors.email}
               id="exampleInputEmail1"
-              aria-describedby="emailHelp"
               onChange={(event) => setEmail(event.target.value)}
               onBlur={() =>
                 setErrors((prev) => ({
@@ -105,17 +105,12 @@ export const SignUpForm = () => {
                 }))
               }
             />
-          </div>
-          <div className="form__input">
-            <label htmlFor="exampleInputPassword1" className="form__label">
-            {signUpForm.password.ua}
-            </label>
-            <input
+
+            <Input
+              label={signUpForm.password.ua}
               type="password"
               value={password1}
-              className={cn('form__control', {
-                'form__control--invalid': errors.password1,
-              })}
+              isInvalid={errors.password1}
               id="exampleInputPassword1"
               onChange={(event) => setPassword1(event.target.value)}
               onBlur={() =>
@@ -125,46 +120,56 @@ export const SignUpForm = () => {
                 }))
               }
             />
-          </div>
-          <div className="form__input">
-            <label htmlFor="exampleInputPassword2" className="form__label">
-            {signUpForm.repeatPassword.ua}
-            </label>
-            <input
+
+            <Input
+              label={signUpForm.repeatPassword.ua}
               type="password"
               value={password2}
-              className={cn('form__control', {
-                'form__control--invalid': errors.password2,
-              })}
+              isInvalid={errors.password2}
               id="exampleInputPassword2"
               onChange={(event) => setPassword2(event.target.value)}
               onBlur={() =>
                 setErrors((prev) => ({
                   ...prev,
-                  password2: password2.trim() === '',
+                  password2: password2.trim() !== password1.trim(),
                 }))
               }
             />
-          </div>
 
-          {errowMessage && <div className="form__error">{errowMessage}</div>}
-          <button
-            type="submit"
-            className="form__button"
-            onClick={(e) => handleSubmit(e)}
-            disabled={!isFormValid}
-          >
-            {button.signUp.ua}
-          </button>
+            {errowMessage && (
+              <div className="text-gray-700 bg-secondary-300 p-4">
+                {errowMessage}
+              </div>
+            )}
 
-          <button type="button" className="form__button-social">
-            <i className="icons icons--google"></i> {button.signUp.ua} з Google
-          </button>
-        </form>
+            <Button
+              variant="solid"
+              color="primary"
+              onPress={handleSubmit}
+              isDisabled={!isFormValid || isLoading} 
+              isLoading={isLoading} 
+            >
+              {button.signUp.ua}
+            </Button>
+
+            <Button
+              color='primary'
+              variant='light'
+              className="flex flex-row gap-2 justify-center items-center border-1 border-primary bg-white"
+            >
+              <i className="icons icons--google"></i> {button.signUp.ua} з
+              Google
+            </Button>
+          </form>
+        </div>
       ) : (
-        <div className="mx-4 p-8 bg-background  rounded-2xl shadow-custom">
-          <div className="text-2xl text-primary-700 pb-2">{signUpForm.success.header.ua}</div>
-          <p className="text-md text-primary-600">{signUpForm.success.text.ua}</p>
+        <div className="mx-4 p-8 bg-background rounded-2xl shadow-custom max-w-[400px]">
+          <div className="text-2xl text-primary-700 pb-2">
+            {signUpForm.success.header.ua}
+          </div>
+          <p className="text-md text-primary-600">
+            {signUpForm.success.text.ua} {email}
+          </p>
         </div>
       )}
     </>

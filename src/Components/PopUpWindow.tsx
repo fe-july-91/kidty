@@ -1,5 +1,4 @@
 import React from 'react';
-import './PopUpWindow.scss';
 import { Button } from '@heroui/react';
 
 type Props = {
