@@ -145,9 +145,8 @@ export const Sketch = (p) => {
     p.background("#202680");
 
     if (isMobile()) {
-      canvas.elt.style.touchAction = 'auto';
-      canvas.elt.style.position = 'fixed'; 
-      canvas.elt.style.zIndex = '-1';
+      canvas.elt.style.touchAction = 'pan-y';
+      canvas.elt.style.pointerEvents = 'none';
     }
   };
 
