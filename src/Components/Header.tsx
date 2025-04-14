@@ -53,7 +53,7 @@ export const Header: React.FC = () => {
               <div className="hover:border-b-1 transition-border duration-100">
                 <Link
                   to="/"
-                  className="text-gray-100 pb-1 hover:border-b-1 transition-border duration-100"
+                  className="text-gray-100 pb-1 hover:border-b-1 transition-all duration-100"
                   onClick={() => logOut()}
                 >
                   Log out

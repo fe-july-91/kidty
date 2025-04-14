@@ -86,8 +86,8 @@ export const AddModal: React.FC<Props> = ({
   };
 
   return (
-    <div className="pt-6 animate-floatUp">
-      <div className="mx-auto flex flex-col gap-4 w-[375px] md:w-[400px] bg-primary-100 px-6 py-4 rounded-3xl">
+    <div className="pt-4 animate-floatUp z-10">
+      <div className="mx-auto flex flex-col gap-2 w-[375px] md:w-[400px] bg-primary-100 px-6 py-4 rounded-3xl">
         {children.length > 0 && (
           <div className="text-right">
             <Button

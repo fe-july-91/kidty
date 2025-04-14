@@ -148,8 +148,8 @@ export const CardItem: React.FC<Props> = ({ years, cardType, childId }) => {
   return (
     <>
       <div className="card flex felex-col gap-4 p-6 items-center justify-center w-full">
-        <div className="card__top">
-          <div className="card__leftBlock">
+        <div className="flex flex-col gap-2 justify-center items-start w-full md:flex-row md:justify-between">
+          <div className="w-full flex flex-row md:flex-col justify-between gap-2">
             <TitleCardBlock image={findCardImage(cardType)} title={cardType} />
 
             <SelectionCardBlock
@@ -166,7 +166,7 @@ export const CardItem: React.FC<Props> = ({ years, cardType, childId }) => {
             />
           </div>
 
-          <div className="card__rightBlock">
+          <div className="w-full flex flex-col gap-4 items-end">
             {activeSlider && (
               <SliderElement
                 setSliderValue={(value) => setSliderValue(value)}
@@ -181,6 +181,7 @@ export const CardItem: React.FC<Props> = ({ years, cardType, childId }) => {
               setActiveSlider={setActiveSlider}
               deleteData={deleteData}
               dataId={currentData?.id}
+              sliderValue={sliderValue.x}
             />
           </div>
         </div>

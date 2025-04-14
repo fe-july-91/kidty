@@ -32,7 +32,7 @@ export const SelectionCardBlock: React.FC<Props> = React.memo(
     return (
       <div className="flex flex-col gap-2">
         <select
-          className="text-primary-900 bg-none w-[100px] border-b-1 border-gray-400"
+          className="text-primary-900 text-sm bg-none w-[90px] border-b-1 border-gray-400"
           value={selectedYear}
           onChange={handleYearChange}
         >
@@ -44,7 +44,7 @@ export const SelectionCardBlock: React.FC<Props> = React.memo(
         </select>
 
         <select
-          className="text-primary-900 bg-none w-[100px] border-b-1 border-gray-400"
+          className="text-primary-900 text-sm bg-none w-[90px] border-b-1 border-gray-400"
           value={selectedMonth}
           onChange={handleMonthChenge}
         >

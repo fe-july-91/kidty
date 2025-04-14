@@ -116,21 +116,21 @@ export const AccountPage: React.FC = () => {
                   <img
                     src={avatars[+child.image]}
                     alt="avatar"
-                    className="cursor-pointer max-h-[160px] w-[120px] md:w-[140px] lg:w-[145px] object-cover rounded-2xl transition-transform duration-300 hover:scale-95"
+                    className="cursor-pointer max-h-[150px] w-[120px] md:w-[130px] object-cover rounded-2xl transition-transform duration-300 hover:scale-95"
                     onClick={() => setAdditingModal(true)}
                     loading="lazy"
                   />
                   {/* child Name */}
                   <div className="flex flex-col ">
                     <header className="text-2xl text-primary py-2">{`${child.name} ${child.surname}`}</header>
-                    <p className="text-[18px] text-gray-600 ">
+                    <p className="text-md text-gray-600 ">
                       Вік: {fullAge.years}p. {fullAge.months}м.
                     </p>
-                    <p className="text-[18px] text-gray-600 ">
+                    <p className="text-md text-gray-600 ">
                       Рік народження:{' '}
                       <span className="whitespace-nowrap">{child.birth}</span>
                     </p>
-                    <p className="text-[18px] text-gray-600 ">
+                    <p className="text-md text-gray-600 ">
                       Стать: {child.genderName}
                     </p>
                   </div>
@@ -140,7 +140,7 @@ export const AccountPage: React.FC = () => {
               <div className='flex flex-col gap-4 flex-shrink-[2] lg:max-w-[400px]'>
                 <div className='flex flex-row flex-wrap gap-3 flex-shrink-[2]'>
                   {Object.values(lastDataValues).map(cardType => (
-                    <div className='px-4 py-2 bg-background rounded-2xl shadow-custom'>
+                    <div className='px-4 py-[6px] bg-background rounded-2xl shadow-custom'>
                       <TitleCardBlock
                         value={cardType.value.toString()}
                         image={findCardImage(cardType.name)}

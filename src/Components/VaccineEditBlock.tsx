@@ -103,19 +103,21 @@ export const VaccineEditBlock: React.FC<Props> = ({
                 variant="solid"
                 color="secondary"
                 type="submit"
+                size='sm'
                 onPress={handleRemoveClick}
               >
                 Видалити
               </Button>
             )}
 
-            <Button variant="solid" color="primary" onPress={handleApplyClick}>
+            <Button variant="solid" color="primary" onPress={handleApplyClick} size='sm'>
               {activeVaccine ? `Зминити` : `Додати`}
             </Button>
 
             <Tooltip className="font-sans" content="Скасувати">
               <Button
                 className="text-white md:min-w-10"
+                size='sm'
                 variant="solid"
                 color="success"
                 onPress={() => {
@@ -125,7 +127,7 @@ export const VaccineEditBlock: React.FC<Props> = ({
                   setStartDate(new Date());
                 }}
               >
-                x
+                Скасувати
               </Button>
             </Tooltip>
           </div>

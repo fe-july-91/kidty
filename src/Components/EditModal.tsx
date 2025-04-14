@@ -88,7 +88,7 @@ export const EditModal: React.FC<Props> = ({
   const isFormValid = name.trim() && surname.trim() && selectedDay && selectedMonth && selectedYear;
 
   return (
-    <div className="pt-6 animate-floatUp">
+    <div className="pt-4 animate-floatUp">
       {isPopUp ? (
         <PopUpWindow
           message={`Ви дійсно хочете видалити дані про дитину (${currentChild.name})?`}
@@ -97,7 +97,7 @@ export const EditModal: React.FC<Props> = ({
           isLoading={isLoading.delete}
         />
       ) : (
-        <div className="mx-auto flex flex-col gap-4 w-[375px] md:w-[400px] bg-primary-100 px-6 py-8 rounded-3xl">
+        <div className="mx-auto flex flex-col gap-2 w-[375px] md:w-[400px] bg-primary-100 px-6 py-4 rounded-3xl z-100">
           <div className="text-right">
             <Button
               isIconOnly

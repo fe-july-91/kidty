@@ -5,12 +5,16 @@ export const Footer: React.FC = () => {
   return (
     <footer className="flex items-center justify-between h-[48px] lg:h-[64px] g-4 bg-primary-800">
       <div className="w-full flex flex-row gap-6 justify-center items-center">
-        <Link to="/about" className="footer__navbar--link">
+      <div className="hover:border-b-1 transition-all duration-100">
+        <Link to="/about" className="text-gray-100">
           About Us
-        </Link>
-        <Link to="/" className="footer__navbar--link">
-          Home
-        </Link>
+          </Link>
+        </div>
+        <div className="hover:border-b-1 transition-all duration-100">
+          <Link to="/" className="text-gray-100">
+            Home
+          </Link>
+        </div>
       </div>
     </footer>
   );

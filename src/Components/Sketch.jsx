@@ -138,11 +138,17 @@ export const Sketch = (p) => {
   };
 
   p.setup = () => {
-    p.createCanvas(window.innerWidth, canvasheight);
+    const canvas = p.createCanvas(window.innerWidth, canvasheight);
     calculateGrid();
     initConfetti();
     p.loop();
     p.background("#202680");
+
+    if (isMobile()) {
+      canvas.elt.style.touchAction = 'auto';
+      canvas.elt.style.position = 'fixed'; 
+      canvas.elt.style.zIndex = '-1';
+    }
   };
 
   p.windowResized = () => {
@@ -177,7 +183,6 @@ export const Sketch = (p) => {
       let targetSize = isMobile()
         ? size
         : (p.dist(p.mouseX, p.mouseY, avatar.x, avatar.y) < size ? size * hoverSize : size);
-
 
       if (initialAnimation) {
         avatar.size = p.lerp(avatar.size, targetSize * animationProgress, 0.1);

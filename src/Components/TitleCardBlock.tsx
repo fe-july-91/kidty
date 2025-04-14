@@ -13,14 +13,14 @@ type Props = {
 export const TitleCardBlock: React.FC<Props> = React.memo(
   ({ image, title, value, unit }) => {
     return (
-      <div className="flex flex-row gap-3 items-start">
+      <div className="flex flex-row gap-2 items-start">
         <img
           src={image}
           alt="foot"
-          className="w-8 object-contain items-start"
+          className="w-6 object-contain items-start"
         />
-        <div className='flex flex-row items-center justify-center gap-2  text-gray-800'>
-          <p className="text-xl font-medium">{title}</p>
+        <div className='flex flex-row items-center justify-center gap-2 text-gray-800'>
+          <p className="text-lg font-medium">{title}</p>
           <p className='text-md'> {value ? value : ""} {unit}</p>
         </div>
       </div>
