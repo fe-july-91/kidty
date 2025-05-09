@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-current-admin
+      author: yana_stepanova
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: 'admin@example.com'
+              - column:
+                  name: password
+                  value: 'admin1234'
+              - column:
+                  name: first_name
+                  value: 'Some admin'
+              - column:
+                  name: last_name
+                  value: 'Default'
+  - changeSet:
+      id: insert-default-parent
+      author: yana_stepanova
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: 'maria@example.com'
+              - column:
+                  name: password
+                  value: 'maria1234'
+              - column:
+                  name: first_name
+                  value: 'Марія'
+              - column:
+                  name: last_name
+                  value: 'Шмакова'

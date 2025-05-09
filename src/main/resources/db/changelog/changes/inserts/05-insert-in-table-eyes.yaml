@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-values-of-eyes-for-first-child
+      author: yana_stepanova
+      changes:
+        - insert:
+            tableName: eyes
+            columns:
+              - column:
+                  name: child_id
+                  valueNumeric: 1
+              - column:
+                  name: left
+                  valueNumeric: -1.5
+              - column:
+                  name: right
+                  valueNumeric: 1

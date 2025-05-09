@@ -1,0 +1,45 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-first-child-of-default-user
+      author: yana_stepanova
+      changes:
+        - insert:
+            tableName: childs
+            columns:
+              - column:
+                  name: name
+                  value: "Злата"
+              - column:
+                  name: surname
+                  value: "Прокоп'єва"
+              - column:
+                  name: user_id
+                  valueNumeric: 2
+              - column:
+                  name: birth
+                  valueDate: "2019-08-19"
+              - column:
+                  name: gender
+                  value: "Дівчинка"
+  - changeSet:
+      id: insert-second-child-of-default-user
+      author: yana_stepanova
+      changes:
+        - insert:
+            tableName: childs
+            columns:
+              - column:
+                  name: name
+                  value: "Маргарита"
+              - column:
+                  name: surname
+                  value: "Прокоп'єва"
+              - column:
+                  name: user_id
+                  valueNumeric: 2
+              - column:
+                  name: birth
+                  valueDate: "2021-01-05"
+              - column:
+                  name: gender
+                  value: "Дівчинка"

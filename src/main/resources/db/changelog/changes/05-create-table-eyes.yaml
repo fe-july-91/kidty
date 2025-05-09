@@ -1,0 +1,29 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-table-eyes
+      author: yana_stepanova
+      changes:
+        - createTable:
+            tableName: eyes
+            columns:
+              - column:
+                  name: child_id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    foreignKeyName: fk_eyes_childs
+                    referencedTableName: childs
+                    referencedColumnNames: id
+              - column:
+                  name: left
+                  type: float
+              - column:
+                  name: right
+                  type: float
+              - column:
+                  name: is_deleted
+                  type: bit
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false

@@ -1,0 +1,115 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-foot1-of-first-child
+      author: yana_stepanova
+      changes:
+        - insert:
+            tableName: foots
+            columns:
+              - column:
+                  name: year
+                  valueNumeric: 2023
+              - column:
+                  name: month
+                  valueNumeric: 1
+              - column:
+                  name: value
+                  valueNumeric: 15
+              - column:
+                  name: child_id
+                  valueNumeric: 1
+  - changeSet:
+      id: insert-foot2-of-first-child
+      author: yana_stepanova
+      changes:
+        - insert:
+            tableName: foots
+            columns:
+              - column:
+                  name: year
+                  valueNumeric: 2023
+              - column:
+                  name: month
+                  valueNumeric: 7
+              - column:
+                  name: value
+                  valueNumeric: 16
+              - column:
+                  name: child_id
+                  valueNumeric: 1
+  - changeSet:
+      id: insert-foot3-of-first-child
+      author: yana_stepanova
+      changes:
+        - insert:
+            tableName: foots
+            columns:
+              - column:
+                  name: year
+                  valueNumeric: 2023
+              - column:
+                  name: month
+                  valueNumeric: 12
+              - column:
+                  name: value
+                  valueNumeric: 16
+              - column:
+                  name: child_id
+                  valueNumeric: 1
+  - changeSet:
+      id: insert-foot4-of-first-child
+      author: yana_stepanova
+      changes:
+        - insert:
+            tableName: foots
+            columns:
+              - column:
+                  name: year
+                  valueNumeric: 2024
+              - column:
+                  name: month
+                  valueNumeric: 3
+              - column:
+                  name: value
+                  valueNumeric: 16
+              - column:
+                  name: child_id
+                  valueNumeric: 1
+  - changeSet:
+      id: insert-foot5-of-first-child
+      author: yana_stepanova
+      changes:
+        - insert:
+            tableName: foots
+            columns:
+              - column:
+                  name: year
+                  valueNumeric: 2024
+              - column:
+                  name: month
+                  valueNumeric: 4
+              - column:
+                  name: value
+                  valueNumeric: 17
+              - column:
+                  name: child_id
+                  valueNumeric: 1
+  - changeSet:
+      id: insert-foot6-of-first-child
+      author: yana_stepanova
+      changes:
+        - insert:
+            tableName: foots
+            columns:
+              - column:
+                  name: year
+                  valueNumeric: 2024
+              - column:
+                  name: month
+                  valueNumeric: 7
+              - column:
+                  name: value
+                  valueNumeric: 18
+              - column:
+                  name: child_id
+                  valueNumeric: 1

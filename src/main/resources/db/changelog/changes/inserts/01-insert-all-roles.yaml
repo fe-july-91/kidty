@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-admin-role
+      author: yana_stepanova
+      changes:
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: name
+                  value: 'ADMIN'
+  - changeSet:
+      id: insert-parent-role
+      author: yana_stepanova
+      changes:
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: name
+                  value: 'PARENT'

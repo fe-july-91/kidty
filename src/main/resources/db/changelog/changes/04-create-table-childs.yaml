@@ -1,0 +1,52 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-table-childs
+      author: yana_stepanova
+      changes:
+        - createTable:
+            tableName: childs
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: surname
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_childs_users
+                    referencedTableName: users
+                    referencedColumnNames: id
+              - column:
+                  name: birth
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: gender
+                  type: enum ("Дівчинка", "Хлопчик")
+                  constraints:
+                    nullable: false
+              - column:
+                  name: image
+                  type: varchar(255)
+              - column:
+                  name: is_deleted
+                  type: bit
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false

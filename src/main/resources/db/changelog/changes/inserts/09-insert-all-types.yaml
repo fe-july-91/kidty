@@ -1,0 +1,98 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-TUBERCULOSIS-type
+      author: yana_stepanova
+      changes:
+        - insert:
+            tableName: types
+            columns:
+              - column:
+                  name: type_name
+                  value: 'TUBERCULOSIS'
+              - column:
+                  name: description
+                  value: 'Туберкулез'
+
+  - changeSet:
+      id: insert-HEPATITIS_B-type
+      author: yana_stepanova
+      changes:
+        - insert:
+            tableName: types
+            columns:
+              - column:
+                  name: type_name
+                  value: 'HEPATITIS_B'
+              - column:
+                  name: description
+                  value: 'Гепатіт Б'
+
+  - changeSet:
+      id: insert-DIPHTHERIA_TETANUS-type
+      author: yana_stepanova
+      changes:
+        - insert:
+            tableName: types
+            columns:
+              - column:
+                  name: type_name
+                  value: 'DIPHTHERIA_TETANUS'
+              - column:
+                  name: description
+                  value: 'Дифтерія-Правець'
+
+  - changeSet:
+      id: insert-WHOOPING_COUGH-type
+      author: yana_stepanova
+      changes:
+        - insert:
+            tableName: types
+            columns:
+              - column:
+                  name: type_name
+                  value: 'WHOOPING_COUGH'
+              - column:
+                  name: description
+                  value: 'Кашлюк'
+
+  - changeSet:
+      id: insert-POLIOMYELITIS-type
+      author: yana_stepanova
+      changes:
+        - insert:
+            tableName: types
+            columns:
+              - column:
+                  name: type_name
+                  value: 'POLIOMYELITIS'
+              - column:
+                  name: description
+                  value: 'Поліоміеліт'
+
+  - changeSet:
+      id: insert-HIB_INFECTION-type
+      author: yana_stepanova
+      changes:
+        - insert:
+            tableName: types
+            columns:
+              - column:
+                  name: type_name
+                  value: 'HIB_INFECTION'
+              - column:
+                  name: description
+                  value: 'Хіб-інфекція'
+
+  - changeSet:
+      id: insert-MMR-type
+      author: yana_stepanova
+      changes:
+        - insert:
+            tableName: types
+            columns:
+              - column:
+                  name: type_name
+                  value: 'MMR'
+              - column:
+                  name: description
+                  value: 'Кір-Краснуха-Паротит'

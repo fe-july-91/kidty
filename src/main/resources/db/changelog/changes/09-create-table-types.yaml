@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-table-types
+      author: yana_stepanova
+      changes:
+        - createTable:
+            tableName: types
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: type_name
+                  type: enum ('TUBERCULOSIS', 'HEPATITIS_B', 'DIPHTHERIA_TETANUS', 'WHOOPING_COUGH', 'POLIOMYELITIS', 'HIB_INFECTION', 'MMR')
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: description
+                  type: varchar(255)
+                  constraints:
+                    nullable: false

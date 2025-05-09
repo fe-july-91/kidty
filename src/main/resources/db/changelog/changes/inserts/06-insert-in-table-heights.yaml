@@ -1,0 +1,172 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-height1-of-first-child
+      author: yana_stepanova
+      changes:
+        - insert:
+            tableName: heights
+            columns:
+              - column:
+                  name: year
+                  valueNumeric: 2023
+              - column:
+                  name: month
+                  valueNumeric: 1
+              - column:
+                  name: value
+                  valueNumeric: 100
+              - column:
+                  name: child_id
+                  valueNumeric: 1
+  - changeSet:
+      id: insert-height2-of-first-child
+      author: yana_stepanova
+      changes:
+        - insert:
+            tableName: heights
+            columns:
+              - column:
+                  name: year
+                  valueNumeric: 2023
+              - column:
+                  name: month
+                  valueNumeric: 2
+              - column:
+                  name: value
+                  valueNumeric: 100
+              - column:
+                  name: child_id
+                  valueNumeric: 1
+  - changeSet:
+      id: insert-height3-of-first-child
+      author: yana_stepanova
+      changes:
+        - insert:
+            tableName: heights
+            columns:
+              - column:
+                  name: year
+                  valueNumeric: 2023
+              - column:
+                  name: month
+                  valueNumeric: 3
+              - column:
+                  name: value
+                  valueNumeric: 102
+              - column:
+                  name: child_id
+                  valueNumeric: 1
+  - changeSet:
+      id: insert-height4-of-first-child
+      author: yana_stepanova
+      changes:
+        - insert:
+            tableName: heights
+            columns:
+              - column:
+                  name: year
+                  valueNumeric: 2023
+              - column:
+                  name: month
+                  valueNumeric: 7
+              - column:
+                  name: value
+                  valueNumeric: 105
+              - column:
+                  name: child_id
+                  valueNumeric: 1
+  - changeSet:
+      id: insert-height5-of-first-child
+      author: yana_stepanova
+      changes:
+        - insert:
+            tableName: heights
+            columns:
+              - column:
+                  name: year
+                  valueNumeric: 2023
+              - column:
+                  name: month
+                  valueNumeric: 12
+              - column:
+                  name: value
+                  valueNumeric: 110
+              - column:
+                  name: child_id
+                  valueNumeric: 1
+  - changeSet:
+      id: insert-height6-of-first-child
+      author: yana_stepanova
+      changes:
+        - insert:
+            tableName: heights
+            columns:
+              - column:
+                  name: year
+                  valueNumeric: 2024
+              - column:
+                  name: month
+                  valueNumeric: 3
+              - column:
+                  name: value
+                  valueNumeric: 112
+              - column:
+                  name: child_id
+                  valueNumeric: 1
+  - changeSet:
+      id: insert-height7-of-first-child
+      author: yana_stepanova
+      changes:
+        - insert:
+            tableName: heights
+            columns:
+              - column:
+                  name: year
+                  valueNumeric: 2024
+              - column:
+                  name: month
+                  valueNumeric: 4
+              - column:
+                  name: value
+                  valueNumeric: 112
+              - column:
+                  name: child_id
+                  valueNumeric: 1
+  - changeSet:
+      id: insert-height8-of-first-child
+      author: yana_stepanova
+      changes:
+        - insert:
+            tableName: heights
+            columns:
+              - column:
+                  name: year
+                  valueNumeric: 2024
+              - column:
+                  name: month
+                  valueNumeric: 7
+              - column:
+                  name: value
+                  valueNumeric: 115
+              - column:
+                  name: child_id
+                  valueNumeric: 1
+  - changeSet:
+      id: insert-height9-of-first-child
+      author: yana_stepanova
+      changes:
+        - insert:
+            tableName: heights
+            columns:
+              - column:
+                  name: year
+                  valueNumeric: 2024
+              - column:
+                  name: month
+                  valueNumeric: 8
+              - column:
+                  name: value
+                  valueNumeric: 116
+              - column:
+                  name: child_id
+                  valueNumeric: 1

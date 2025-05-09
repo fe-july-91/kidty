@@ -1,0 +1,362 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-TUBERCULOSIS1-for-child1
+      author: yanna_stepanova
+      changes:
+        - insert:
+            tableName: vaccines
+            columns:
+              - column:
+                  name: type_id
+                  valueNumeric: 1
+              - column:
+                  name: order_number
+                  valueNumeric: 1
+              - column:
+                  name: date
+                  valueDate: 2022-06-14
+              - column:
+                  name: child_id
+                  valueNumeric: 1
+  - changeSet:
+      id: insert-HEPATITIS_B1-for-child1
+      author: yanna_stepanova
+      changes:
+        - insert:
+            tableName: vaccines
+            columns:
+              - column:
+                  name: type_id
+                  valueNumeric: 2
+              - column:
+                  name: order_number
+                  valueNumeric: 1
+              - column:
+                  name: date
+                  valueDate: 2022-08-25
+              - column:
+                  name: child_id
+                  valueNumeric: 1
+  - changeSet:
+      id: insert-DIPHTHERIA_TETANUS1-for-child1
+      author: yanna_stepanova
+      changes:
+        - insert:
+            tableName: vaccines
+            columns:
+              - column:
+                  name: type_id
+                  valueNumeric: 3
+              - column:
+                  name: order_number
+                  valueNumeric: 1
+              - column:
+                  name: date
+                  valueDate: 2022-08-25
+              - column:
+                  name: child_id
+                  valueNumeric: 1
+  - changeSet:
+      id: insert-WHOOPING_COUGH1-for-child1
+      author: yanna_stepanova
+      changes:
+        - insert:
+            tableName: vaccines
+            columns:
+              - column:
+                  name: type_id
+                  valueNumeric: 4
+              - column:
+                  name: order_number
+                  valueNumeric: 1
+              - column:
+                  name: date
+                  valueDate: 2022-08-25
+              - column:
+                  name: child_id
+                  valueNumeric: 1
+  - changeSet:
+      id: insert-POLIOMYELITIS1-for-child1
+      author: yanna_stepanova
+      changes:
+        - insert:
+            tableName: vaccines
+            columns:
+              - column:
+                  name: type_id
+                  valueNumeric: 5
+              - column:
+                  name: order_number
+                  valueNumeric: 1
+              - column:
+                  name: date
+                  valueDate: 2022-08-25
+              - column:
+                  name: child_id
+                  valueNumeric: 1
+  - changeSet:
+      id: insert-HIB_INFECTION1-for-child1
+      author: yanna_stepanova
+      changes:
+        - insert:
+            tableName: vaccines
+            columns:
+              - column:
+                  name: type_id
+                  valueNumeric: 6
+              - column:
+                  name: order_number
+                  valueNumeric: 1
+              - column:
+                  name: date
+                  valueDate: 2022-08-25
+              - column:
+                  name: child_id
+                  valueNumeric: 1
+  - changeSet:
+      id: insert-HEPATITIS_B2-for-child1
+      author: yanna_stepanova
+      changes:
+        - insert:
+            tableName: vaccines
+            columns:
+              - column:
+                  name: type_id
+                  valueNumeric: 2
+              - column:
+                  name: order_number
+                  valueNumeric: 2
+              - column:
+                  name: date
+                  valueDate: 2022-11-01
+              - column:
+                  name: child_id
+                  valueNumeric: 1
+  - changeSet:
+      id: insert-DIPHTHERIA_TETANUS2-for-child1
+      author: yanna_stepanova
+      changes:
+        - insert:
+            tableName: vaccines
+            columns:
+              - column:
+                  name: type_id
+                  valueNumeric: 3
+              - column:
+                  name: order_number
+                  valueNumeric: 2
+              - column:
+                  name: date
+                  valueDate: 2022-11-01
+              - column:
+                  name: child_id
+                  valueNumeric: 1
+  - changeSet:
+      id: insert-WHOOPING_COUGH2-for-child1
+      author: yanna_stepanova
+      changes:
+        - insert:
+            tableName: vaccines
+            columns:
+              - column:
+                  name: type_id
+                  valueNumeric: 4
+              - column:
+                  name: order_number
+                  valueNumeric: 2
+              - column:
+                  name: date
+                  valueDate: 2022-11-01
+              - column:
+                  name: child_id
+                  valueNumeric: 1
+  - changeSet:
+      id: insert-POLIOMYELITIS2-for-child1
+      author: yanna_stepanova
+      changes:
+        - insert:
+            tableName: vaccines
+            columns:
+              - column:
+                  name: type_id
+                  valueNumeric: 5
+              - column:
+                  name: order_number
+                  valueNumeric: 2
+              - column:
+                  name: date
+                  valueDate: 2022-11-01
+              - column:
+                  name: child_id
+                  valueNumeric: 1
+  - changeSet:
+      id: insert-HIB_INFECTION2-for-child1
+      author: yanna_stepanova
+      changes:
+        - insert:
+            tableName: vaccines
+            columns:
+              - column:
+                  name: type_id
+                  valueNumeric: 6
+              - column:
+                  name: order_number
+                  valueNumeric: 2
+              - column:
+                  name: date
+                  valueDate: 2022-11-01
+              - column:
+                  name: child_id
+                  valueNumeric: 1
+  - changeSet:
+      id: insert-DIPHTHERIA_TETANUS3-for-child1
+      author: yanna_stepanova
+      changes:
+        - insert:
+            tableName: vaccines
+            columns:
+              - column:
+                  name: type_id
+                  valueNumeric: 3
+              - column:
+                  name: order_number
+                  valueNumeric: 3
+              - column:
+                  name: date
+                  valueDate: 2023-02-28
+              - column:
+                  name: child_id
+                  valueNumeric: 1
+  - changeSet:
+      id: insert-WHOOPING_COUGH3-for-child1
+      author: yanna_stepanova
+      changes:
+        - insert:
+            tableName: vaccines
+            columns:
+              - column:
+                  name: type_id
+                  valueNumeric: 4
+              - column:
+                  name: order_number
+                  valueNumeric: 3
+              - column:
+                  name: date
+                  valueDate: 2023-02-28
+              - column:
+                  name: child_id
+                  valueNumeric: 1
+  - changeSet:
+      id: insert-POLIOMYELITIS3-for-child1
+      author: yanna_stepanova
+      changes:
+        - insert:
+            tableName: vaccines
+            columns:
+              - column:
+                  name: type_id
+                  valueNumeric: 5
+              - column:
+                  name: order_number
+                  valueNumeric: 3
+              - column:
+                  name: date
+                  valueDate: 2023-02-28
+              - column:
+                  name: child_id
+                  valueNumeric: 1
+  - changeSet:
+      id: insert-MMR1-for-child1
+      author: yanna_stepanova
+      changes:
+        - insert:
+            tableName: vaccines
+            columns:
+              - column:
+                  name: type_id
+                  valueNumeric: 7
+              - column:
+                  name: order_number
+                  valueNumeric: 1
+              - column:
+                  name: date
+                  valueDate: 2023-02-28
+              - column:
+                  name: child_id
+                  valueNumeric: 1
+  - changeSet:
+      id: insert-HEPATITIS_B3-for-child1
+      author: yanna_stepanova
+      changes:
+        - insert:
+            tableName: vaccines
+            columns:
+              - column:
+                  name: type_id
+                  valueNumeric: 2
+              - column:
+                  name: order_number
+                  valueNumeric: 3
+              - column:
+                  name: date
+                  valueDate: 2023-07-25
+              - column:
+                  name: child_id
+                  valueNumeric: 1
+  - changeSet:
+      id: insert-DIPHTHERIA_TETANUS4-for-child1
+      author: yanna_stepanova
+      changes:
+        - insert:
+            tableName: vaccines
+            columns:
+              - column:
+                  name: type_id
+                  valueNumeric: 3
+              - column:
+                  name: order_number
+                  valueNumeric: 4
+              - column:
+                  name: date
+                  valueDate: 2024-03-22
+              - column:
+                  name: child_id
+                  valueNumeric: 1
+  - changeSet:
+      id: insert-WHOOPING_COUGH4-for-child1
+      author: yanna_stepanova
+      changes:
+        - insert:
+            tableName: vaccines
+            columns:
+              - column:
+                  name: type_id
+                  valueNumeric: 4
+              - column:
+                  name: order_number
+                  valueNumeric: 4
+              - column:
+                  name: date
+                  valueDate: 2024-03-22
+              - column:
+                  name: child_id
+                  valueNumeric: 1
+  - changeSet:
+      id: insert-POLIOMYELITIS4-for-child1
+      author: yanna_stepanova
+      changes:
+        - insert:
+            tableName: vaccines
+            columns:
+              - column:
+                  name: type_id
+                  valueNumeric: 5
+              - column:
+                  name: order_number
+                  valueNumeric: 4
+              - column:
+                  name: date
+                  valueDate: 2024-03-22
+              - column:
+                  name: child_id
+                  valueNumeric: 1

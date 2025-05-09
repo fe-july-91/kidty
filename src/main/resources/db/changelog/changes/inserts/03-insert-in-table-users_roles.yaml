@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-role-for-user_admin
+      author: yana_stepanova
+      dbms: mysql
+      changes:
+        - sql:
+            sql: INSERT INTO users_roles (user_id, role_id) VALUES (1, 1);
+
+  - changeSet:
+      id: insert-role-for-user_parent
+      author: yana_stepanova
+      dbms: mysql
+      changes:
+        - sql:
+            sql: INSERT INTO users_roles (user_id, role_id) VALUES (2, 2);
