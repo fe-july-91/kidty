@@ -43,7 +43,6 @@ export const Header: React.FC = () => {
       </Link>
 
       <div className="flex items-center gap-4 px-4 lg:px-6">
-        <LanguageSwitcher className="hidden md:inline-flex" />
         <nav className="hidden md:flex items-center gap-6 text-sm">
           {authorized ? (
             <>
@@ -68,6 +67,7 @@ export const Header: React.FC = () => {
             </>
           )}
         </nav>
+        <LanguageSwitcher className="hidden md:inline-flex" />
 
         <button
           type="button"

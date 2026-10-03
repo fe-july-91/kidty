@@ -8,11 +8,12 @@ export type Language = (typeof LANGUAGES)[number];
 
 const STORAGE_KEY = 'kidty-lang';
 
+/** The visitor's saved choice; English by default. */
 function savedLanguage(): Language {
   try {
-    return localStorage.getItem(STORAGE_KEY) === 'en' ? 'en' : 'uk';
+    return localStorage.getItem(STORAGE_KEY) === 'uk' ? 'uk' : 'en';
   } catch {
-    return 'uk';
+    return 'en';
   }
 }
 
