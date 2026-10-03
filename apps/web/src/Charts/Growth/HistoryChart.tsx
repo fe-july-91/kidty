@@ -48,6 +48,8 @@ export const HistoryChart: React.FC<Props> = ({ points, currentAge, unit, onSele
   const years = range(minAge, maxAge + 1, 12);
   const path = line<AgedPoint>().x((p) => x(p.age)).y((p) => y(p.value))(points);
   const last = points[points.length - 1];
+  // With many measurements, individual dots would break up the line.
+  const dense = points.length > 24;
 
   const pick = (clientX: number, target: SVGRectElement) => {
     const box = target.ownerSVGElement!.getBoundingClientRect();
@@ -83,7 +85,7 @@ export const HistoryChart: React.FC<Props> = ({ points, currentAge, unit, onSele
 
         {hover && <line className="stroke-hairline" x1={x(hover.age)} x2={x(hover.age)} y1={M.top - 6} y2={HEIGHT - M.bottom} />}
         {path && <path d={path} className="fill-none stroke-primary" strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" />}
-        {points.map((p) => (
+        {points.filter((p) => !dense || p === hover || p === last).map((p) => (
           <circle
             key={p.id}
             className="fill-primary stroke-white"

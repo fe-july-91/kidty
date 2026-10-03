@@ -173,7 +173,7 @@ export const HomePage: React.FC = () => {
             <img
               src={notebook}
               alt={t('home.hero.laptopAlt')}
-              className="relative w-full drop-shadow-2xl"
+              className="relative w-full"
             />
 
             <div className="absolute -left-2 bottom-10 hidden items-center gap-3 rounded-2xl bg-white/90 px-4 py-3 shadow-xl ring-1 ring-primary-900/5 backdrop-blur sm:flex motion-safe:animate-floatY">
@@ -216,7 +216,7 @@ export const HomePage: React.FC = () => {
                 <img
                   src={weightCard}
                   alt=""
-                  className="w-full max-w-lg translate-y-[12%] drop-shadow-xl"
+                  className="w-full max-w-lg translate-y-[8%]"
                 />
               </div>
             </Card>
@@ -248,7 +248,7 @@ export const HomePage: React.FC = () => {
               <img
                 src={vaccination}
                 alt=""
-                className="w-full drop-shadow-xl"
+                className="w-full"
               />
             </Card>
           </Reveal>
@@ -292,7 +292,7 @@ export const HomePage: React.FC = () => {
       {/* Mobile */}
       <section className="mx-auto max-w-6xl px-4 py-20 md:px-8 md:py-28">
         <Reveal>
-          <div className="relative grid items-center gap-10 overflow-hidden rounded-[2.5rem] bg-primary-800 px-6 pt-12 md:px-14 lg:grid-cols-2 lg:py-6">
+          <div className="relative grid items-center gap-10 overflow-hidden rounded-[2.5rem] bg-primary-800 px-6 pt-12 md:px-14 lg:grid-cols-2 lg:pt-16">
             <div className="pointer-events-none absolute -right-24 -top-24 size-96 rounded-full bg-primary-500/40 blur-3xl" />
             <div className="pointer-events-none absolute -bottom-32 left-10 size-80 rounded-full bg-secondary-500/20 blur-3xl" />
 
@@ -316,7 +316,7 @@ export const HomePage: React.FC = () => {
             <img
               src={phone}
               alt={t('home.mobile.phoneAlt')}
-              className="relative mx-auto w-full max-w-md lg:max-w-none"
+              className="relative mx-auto -mb-28 w-[260px] sm:w-[300px] lg:-mb-36 lg:w-[320px]"
             />
           </div>
         </Reveal>

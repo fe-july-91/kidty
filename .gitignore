@@ -21,3 +21,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 apps/api/src/generated
+
+# screenshot tooling output
+scripts/screenshots/out

@@ -14,7 +14,8 @@
     "db:deploy": "prisma migrate deploy",
     "db:seed": "prisma db seed",
     "db:studio": "prisma studio",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "db:seed:showcase": "tsx prisma/seed-showcase.ts"
   },
   "dependencies": {
     "@fastify/cors": "^11.3.0",

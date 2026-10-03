@@ -73,6 +73,8 @@ export const YearChart: React.FC<Props> = ({
   );
   const hovered = hover !== null ? shown.find((p) => p.month === hover) : undefined;
   const bandWidth = x.step();
+  // On narrow charts label every other month so the labels don't collide.
+  const labelEvery = bandWidth < 30 ? 2 : 1;
 
   return (
     <div ref={ref} className="relative">
@@ -110,7 +112,7 @@ export const YearChart: React.FC<Props> = ({
         )}
 
         <line className="stroke-hairline" x1={M.left} x2={width - M.right} y1={HEIGHT - M.bottom} y2={HEIGHT - M.bottom} />
-        {MONTHS.map((m) => (
+        {MONTHS.filter((m) => (m - 1) % labelEvery === 0 || m === preview?.month).map((m) => (
           <text
             key={m}
             className={`text-xs ${m === preview?.month ? 'fill-ink font-semibold' : 'fill-muted'}`}
