@@ -21,5 +21,5 @@ export const getAgeAtVaccination = (vaccDate, birthDate) => {
     ageMonths += 12;
   }
 
-  return `${ageYears}p${ageMonths}м`;
+  return `${ageYears}р${ageMonths}м`;
 };
