@@ -19,9 +19,12 @@ export function DrawVaccinesChart(
 ) {
   const marginLeft = margin + 145;
   const marginGrahp = margin;
+  // One shared tooltip, reused on every redraw (removed in VaccinesChart on unmount).
   const tooltip = d3.select("body")
-  .append("div")
-  .attr("class", "tooltip")
+  .selectAll("div.vaccines-tooltip")
+  .data([null])
+  .join("div")
+  .attr("class", "vaccines-tooltip")
   .style("position", "absolute")
   .style("visibility", "hidden")
   .style("background", "#fff")
@@ -138,7 +141,7 @@ SVG.selectAll('.x-axis').remove();
     .selectAll('text')
     .style('font-size', '16px')
     .style('letter-spacing', '-0.5px')
-    .style('fill', d => d === selectedVaccine & activeBatton ? '#FF5C9D' :'#42456C')
+    .style('fill', d => d === selectedVaccine && activeBatton ? '#FF5C9D' :'#42456C')
     .style('font-weight', '400')
     .style('text-rendering', 'optimizeLegibility')
     .style('cursor', 'pointer')

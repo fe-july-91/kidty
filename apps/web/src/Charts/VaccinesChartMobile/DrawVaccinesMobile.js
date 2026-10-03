@@ -126,7 +126,7 @@ SVG.selectAll('.x-axis').remove();
     .selectAll('text')
     .style('font-size', '12px')
     .style('letter-spacing', '-0.6px')
-    .style('fill', d => d === selectedVaccine & activeBatton ? '#FF5C9D' :'#42456C')
+    .style('fill', d => d === selectedVaccine && activeBatton ? '#FF5C9D' :'#42456C')
     .style('font-weight', '400')
     .style('text-rendering', 'optimizeLegibility')
     .on('click', (event, d) => {

@@ -1,7 +1,7 @@
 import { scaleLinear,scaleBand, max, extent, area, axisBottom } from 'd3';
 import * as d3 from "d3";
 import { months } from '../../Utils/kit';
-import { sortDataByMonth } from '../../Shared/hendlers/sortDataByMoonth';
+import { sortDataByMonth, withSliderPreview } from '../../Shared/hendlers/sortDataByMoonth';
 
 export function DrowLineChart(
   SVG,
@@ -13,6 +13,7 @@ export function DrowLineChart(
   slider,
   HandleGraph,
 ) {
+  data = withSliderPreview(sortDataByMonth(data), targetMonth, slider);
 
   const xScale = scaleBand()
   .domain(months.map(m => m))
@@ -23,8 +24,6 @@ export function DrowLineChart(
     .domain(extent([0, max(data, d => d.value) + 3]))
     .nice()
     .range([height - margin, margin * 2]);
-
-  sortDataByMonth(data);
 
   // Create groups for area, line, and points
   const areaGroup = SVG.selectAll('.area-group');
@@ -79,9 +78,7 @@ export function DrowLineChart(
     .duration(700)
     .attr('cx', d => xScale(d.month) + xScale.bandwidth() / 2)
     .attr('cy', d =>
-      slider > 0 && d.month === targetMonth
-        ? yScale(slider)
-        : yScale(d.value)
+      yScale(d.value)
     )
     .attr('r', 8) // Radius of the points
     .attr('fill', d =>
@@ -110,9 +107,7 @@ export function DrowLineChart(
         : '#625F6C'
     )
     .text(d =>
-      slider > 0 && d.month === targetMonth
-        ? slider
-        : d.value);
+      d.value);
 
   // Update
   labels
@@ -126,9 +121,7 @@ export function DrowLineChart(
         : '#625F6C'
     )
     .text(d =>
-      slider > 0 && d.month === targetMonth
-        ? slider
-        : d.value);
+      d.value);
 
   // Exit
   labels.exit().remove();

@@ -21,6 +21,12 @@ export const VaccinesChart = ({
   const rectRef = useRef();
 
   useEffect(() => {
+    return () => {
+      select("body").selectAll("div.vaccines-tooltip").remove();
+    };
+  }, []);
+
+  useEffect(() => {
     const SVG = select(rectRef.current);
     DrawVaccinesChart(
       SVG,

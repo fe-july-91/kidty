@@ -1,6 +1,6 @@
 import { scaleLinear,scaleBand, max, extent,axisBottom} from 'd3';
 import { months } from "../../Utils/kit";
-import { sortDataByMonth } from '../../Shared/hendlers/sortDataByMoonth';
+import { sortDataByMonth, withSliderPreview } from '../../Shared/hendlers/sortDataByMoonth';
 
 export function DrawChart(
   SVG,
@@ -12,7 +12,7 @@ export function DrawChart(
   slider,
   HandleGraph,
 ) {
-  sortDataByMonth(data);
+  data = withSliderPreview(sortDataByMonth(data), selectedMonth, slider);
 
   const xScale = scaleBand()
   .domain(months.map((m) => m))
@@ -33,7 +33,7 @@ const barsEnter = bars.enter()
 .append('rect')
 .attr('class', 'bar')
 .attr('x', d => xScale(d.month))
-.attr('y', d => yScale(0)) // Start from the bottom of the chart
+.attr('y', () => yScale(0)) // Start from the bottom of the chart
 .attr('width', xScale.bandwidth())
 .attr('height', 0) // Start with height 0
 .attr('fill', d =>
@@ -59,15 +59,11 @@ bars.transition()
 .duration(0) // Remove transition to avoid animating all bars
 .attr('x', d => xScale(d.month))
 .attr('y', d =>
-  slider > 0 && d.month === selectedMonth
-    ? yScale(slider)
-    : yScale(d.value)
+  yScale(d.value)
 )
 .attr('width', xScale.bandwidth())
 .attr('height', d =>
-  slider > 0 && d.month === selectedMonth
-    ? height - margin - yScale(slider)
-    : height - margin - yScale(d.value)
+  height - margin - yScale(d.value)
 )
 .attr('fill', d =>
   d.month === selectedMonth
@@ -97,9 +93,7 @@ bars.transition()
         : '#625F6C'
     )
     .text(d =>
-      slider > 0 && d.month === selectedMonth
-        ? slider
-        : d.value);
+      d.value);
 
   // Update
   labels
@@ -107,9 +101,7 @@ bars.transition()
     .duration(100)
     .attr('x', d => xScale(d.month) + xScale.bandwidth() / 2)
     .attr('y', d =>
-      slider > 0 && d.month === selectedMonth
-        ? yScale(slider) - 5
-        : yScale(d.value) - 5
+      yScale(d.value) - 5
     )
     .attr('fill', d =>
       d.month.toLowerCase() === selectedMonth.toLowerCase()
@@ -117,9 +109,7 @@ bars.transition()
         : '#625F6C'
     )
     .text(d =>
-      slider > 0 && d.month === selectedMonth
-        ? slider
-        : d.value);
+      d.value);
 
   // Exit
   labels.exit().remove();

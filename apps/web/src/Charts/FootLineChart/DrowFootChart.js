@@ -1,7 +1,7 @@
-import { scaleLinear, scaleBand, axisBottom, axisLeft, line, extent, max, min } from 'd3';
+import { scaleLinear, scaleBand, axisBottom, axisLeft, line } from 'd3';
 import * as d3 from "d3";
 import { months } from '../../Utils/kit';
-import { sortDataByMonth } from '../../Shared/hendlers/sortDataByMoonth';
+import { sortDataByMonth, withSliderPreview } from '../../Shared/hendlers/sortDataByMoonth';
 
 export function DrowFootChart(
   SVG,
@@ -14,7 +14,7 @@ export function DrowFootChart(
   HandleGraph,
   
 ) {
-  sortDataByMonth(data);
+  data = withSliderPreview(sortDataByMonth(data), selectedMonth, slider);
 
   const xScale = scaleBand()
   .domain(months.map(m => m))
@@ -22,8 +22,9 @@ export function DrowFootChart(
   .padding(0.4);
 
 // Настройка шкалы Y
+const values = data.map(d => d.value);
 const yScale = scaleLinear()
-  .domain(extent([min(data, d => d.value) - 4, max(data, d => d.value) + 1]))
+  .domain(values.length ? [Math.min(...values) - 4, Math.max(...values) + 1] : [10, 25])
   .range([height - margin, margin * 2]);
 
   const currentData = data.find(d => d.month === selectedMonth);
@@ -36,6 +37,7 @@ const lineGenerator = line()
 
 // Удаляем старые элементы
 SVG.selectAll('.line').remove();
+SVG.selectAll('.guide-line').remove();
 SVG.selectAll('.point').remove();
 
 // Добавляем линию
@@ -79,12 +81,12 @@ labels
   labels.exit().remove();
   
   // Добавляем вертикальные линии
-const lines = SVG.selectAll('.line')
+const lines = SVG.selectAll('.guide-line')
 .data(data);
 
 lines.enter()
 .append('line')
-.attr('class', 'line')
+.attr('class', 'guide-line')
 .attr('x1', d => xScale(d.month) + xScale.bandwidth() / 2) 
 .attr('y1', d => yScale(d.value)) 
 .attr('x2', d => xScale(d.month) + xScale.bandwidth() / 2) 
@@ -128,9 +130,7 @@ points
   .duration(500)
   .attr('cx', d => xScale(d.month) + xScale.bandwidth() / 2)
   .attr('cy', d =>
-    slider > 0 && d.month === selectedMonth
-      ? yScale(slider)
-      : yScale(d.value)
+    yScale(d.value)
   )
   .attr('r', 8) // Радиус точки
   .attr('fill', d =>

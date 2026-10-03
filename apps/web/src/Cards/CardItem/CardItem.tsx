@@ -153,6 +153,9 @@ export const CardItem: React.FC<Props> = ({ years, cardType, childId }) => {
     [setActiveSlider, setSliderValue]
   );
 
+  // Lets the chart preview the value while the slider is being dragged.
+  const previewValue = activeSlider ? sliderValue.x : undefined;
+
   return (
     <>
       <div className="card flex felex-col gap-4 p-6 items-center justify-center w-full">
@@ -201,6 +204,7 @@ export const CardItem: React.FC<Props> = ({ years, cardType, childId }) => {
               height={cardSize.height}
               data={filteredData}
               selectedMonth={state.selectedMonth}
+              slider={previewValue}
               HandleGraph={HandleGraph}
             />
           )}
@@ -211,6 +215,7 @@ export const CardItem: React.FC<Props> = ({ years, cardType, childId }) => {
               height={cardSize.height}
               data={filteredData}
               selectedMonth={state.selectedMonth}
+              slider={previewValue}
               HandleGraph={HandleGraph}
             />
           )}
@@ -221,6 +226,7 @@ export const CardItem: React.FC<Props> = ({ years, cardType, childId }) => {
               height={cardSize.height}
               data={filteredData}
               selectedMonth={state.selectedMonth}
+              slider={previewValue}
               HandleGraph={HandleGraph}
             />
           )}
