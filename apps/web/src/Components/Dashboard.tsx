@@ -1,5 +1,5 @@
 import { Child } from '../Shared/types/types';
-import { CardEyes } from '../Cards/CardEyes/CardEyes';
+import { EyesCard } from '../Charts/Eyes/EyesCard';
 import {
   calculateChildAge,
   generateYearArray,
@@ -26,7 +26,7 @@ export const Dashboard: React.FC<Props> = ({ child }) => {
     {
       component: <GrowthCard key={`${child.id}-foot`} child={child} metric="foot" />,
     },
-    { component: <CardEyes childId={child.id} /> },
+    { component: <EyesCard key={`${child.id}-eyes`} childId={child.id} /> },
     {
       component: <CardVaccines years={years} age={age} child={child} />,
       big: true,
