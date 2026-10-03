@@ -4,7 +4,6 @@ import logInimage from '../assets/icons/logIn.svg'
 import gear from '../assets/icons/gear.svg'
 import plusImage from '../assets/icons/plus.svg'
 import plusImageHover from '../assets/icons/plusHover.svg'
-import staticPreviewImage from '../assets/gif/static.jpeg'
 
 
 import image from '../assets/images/Bunner_kitty.png'
@@ -44,38 +43,22 @@ import background from '../assets/images/bg.webp'
 
 import bg from '../assets/images/bg_phone.jpg';
 
-//carousel
-
-import one from '../assets/images/notebook2.png'
-import two from '../assets/images/weight2.png'
-import three from '../assets/images/vaccination.png'
-import forr from '../assets/images/screen.png'
-import fife from '../assets/images/phone.png'
-import kidtygif from '../assets/gif/kidty.gif'
+//home page
+import laptopImage from '../assets/images/laptop.webp'
+import phoneImage from '../assets/images/phone.webp'
+import vaccinationCardImage from '../assets/images/vaccination-card.webp'
+import weightCardImage from '../assets/images/weight-card.webp'
 
 
 //photos
 export const Maria = MariasPhoto;
 export const Yana = YanasPhoto;
 export const back = background;
-export const notebook = one;
-export const weightCard = two;
-export const vaccination = three;
-export const screen = forr;
-export const phone = fife;
-export const giff = kidtygif;
-export const staticPreview = staticPreviewImage;
+export const notebook = laptopImage;
+export const weightCard = weightCardImage;
+export const vaccination = vaccinationCardImage;
+export const phone = phoneImage;
 
-
-
-
-export const carouselImages = [
-  { src: one, alt: "kidty1" },
-  { src: fife, alt: "kidty5" },
-  { src: three, alt: "kidty3" },
-  { src: forr, alt: "kidty4" },
-  { src: two, alt: "kidty2" },
-]
 
 
 
@@ -304,5 +287,5 @@ export const vaccinesSelect = [
   'Кашлюк',
   'Поліоміеліт',
   'Хіб-інфекція',
-  'Кір-Kраснуха-Паротит'
+  'Кір-Краснуха-Паротит'
 ]

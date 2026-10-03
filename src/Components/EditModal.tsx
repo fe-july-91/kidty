@@ -93,7 +93,7 @@ export const EditModal: React.FC<Props> = ({
         <PopUpWindow
           message={`Ви дійсно хочете видалити дані про дитину (${currentChild.name})?`}
           handleApplyClick={deleteChild}
-          handleCanсelClick={() => setIsPopUp(false)}
+          handleCancelClick={() => setIsPopUp(false)}
           isLoading={isLoading.delete}
         />
       ) : (

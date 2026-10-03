@@ -19,7 +19,7 @@ export const ButtonsCardBlock: React.FC<Props> = React.memo(
       setActiveSlider(true);
     };
 
-    const handleCanсelClick = () => {
+    const handleCancelClick = () => {
       setActiveSlider(false);
     };
 
@@ -66,7 +66,7 @@ export const ButtonsCardBlock: React.FC<Props> = React.memo(
                 variant="solid"
                 color="success"
                 size='sm'
-                onPress={handleCanсelClick}
+                onPress={handleCancelClick}
               >
                 Скасувати
               </Button>

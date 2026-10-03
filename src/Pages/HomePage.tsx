@@ -1,129 +1,342 @@
 import React from 'react';
 import { useNavigate } from 'react-router';
-import { Banner } from '../Components/Banner/Banner';
-import { Button} from '@heroui/react';
-import { carouselImages, giff, staticPreview } from '../Utils/kit';
-import { Carousel } from '../Components/Carousel';
+import { Button } from '@heroui/react';
+import {
+  avatars,
+  eye,
+  foot,
+  height,
+  notebook,
+  phone,
+  vaccination,
+  vaccine,
+  weight,
+  weightCard,
+} from '../Utils/kit';
 import { Support } from '../Components/Support';
-import { button, homePage } from '../Utils/Lang';
-import { useInView } from 'react-intersection-observer';
+import { Reveal } from '../Components/Reveal';
+import { homePage } from '../Utils/Lang';
+
+const { hero, features, steps, mobile, contact } = homePage;
+
+const Eyebrow: React.FC<{ children: React.ReactNode; light?: boolean }> = ({
+  children,
+  light = false,
+}) => (
+  <span
+    className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-sm font-medium ${
+      light
+        ? 'bg-white/10 text-primary-100 ring-1 ring-white/15'
+        : 'bg-white text-primary-700 ring-1 ring-primary-200/70'
+    }`}
+  >
+    <span className="size-1.5 rounded-full bg-secondary-500" />
+    {children}
+  </span>
+);
+
+const SectionHeading: React.FC<{
+  eyebrow: string;
+  title: string;
+  text?: string;
+}> = ({ eyebrow, title, text }) => (
+  <Reveal className="mx-auto max-w-2xl text-center">
+    <Eyebrow>{eyebrow}</Eyebrow>
+    <h2 className="mt-4 text-3xl md:text-[2.75rem] md:leading-[1.15] font-bold tracking-tight text-primary-900">
+      {title}
+    </h2>
+    {text && <p className="mt-4 text-lg text-gray-500">{text}</p>}
+  </Reveal>
+);
+
+const Card: React.FC<{ children: React.ReactNode; className?: string }> = ({
+  children,
+  className = '',
+}) => (
+  <div
+    className={`h-full rounded-3xl bg-white p-6 md:p-8 ring-1 ring-primary-900/5 shadow-[0_1px_2px_rgba(19,24,106,0.04),0_8px_24px_-12px_rgba(19,24,106,0.12)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_1px_2px_rgba(19,24,106,0.04),0_20px_40px_-16px_rgba(19,24,106,0.22)] ${className}`}
+  >
+    {children}
+  </div>
+);
+
+const IconTile: React.FC<{ src: string; className?: string }> = ({
+  src,
+  className = 'bg-primary-100',
+}) => (
+  <span
+    className={`inline-flex size-12 items-center justify-center rounded-2xl ${className}`}
+  >
+    <img src={src} alt="" className="size-7" />
+  </span>
+);
+
+const AvatarStack: React.FC<{ count?: number; size?: string }> = ({
+  count = 5,
+  size = 'size-10',
+}) => (
+  <div className="flex -space-x-3">
+    {avatars.slice(0, count).map((src) => (
+      <img
+        key={src}
+        src={src}
+        alt=""
+        className={`${size} rounded-full object-cover ring-2 ring-white`}
+      />
+    ))}
+  </div>
+);
+
+const CheckIcon = () => (
+  <svg viewBox="0 0 20 20" fill="currentColor" className="size-5 shrink-0">
+    <path
+      fillRule="evenodd"
+      d="M16.7 5.3a1 1 0 0 1 0 1.4l-7.5 7.5a1 1 0 0 1-1.4 0L3.3 9.7a1 1 0 1 1 1.4-1.4l3.8 3.8 6.8-6.8a1 1 0 0 1 1.4 0Z"
+      clipRule="evenodd"
+    />
+  </svg>
+);
 
 export const HomePage: React.FC = () => {
   const navigate = useNavigate();
 
-  const [aboutRef, aboutInView] = useInView({
-    triggerOnce: true,
-    threshold: 0.3,
-  });
-
-  const [contactsRef, contactsInView] = useInView({
-    triggerOnce: true,
-    threshold: 0.5,
-  });
-
   return (
-    <div className=" flex flex-col min-h-screen bg-[#F6F7F8] items-center px-4 pb-10 md:pb-16 lg:px-10">
+    <div className="bg-[#F7F7FB] text-primary-900">
+      {/* Hero */}
+      <section className="relative overflow-hidden">
+        <div className="pointer-events-none absolute -top-40 -left-32 size-[520px] rounded-full bg-primary-200/60 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-40 right-[-10%] size-[520px] rounded-full bg-secondary-100/70 blur-3xl" />
 
-      {/* banner */}
-      <div className='relative w-full mb-8 flex flex-col items-center justify-center'>
-        <div
-          className="absolute z-10 top-10 text-2xl text-center sm:text-3xl md:text-4xl font-medium text-secondary-500 animate-floatUp snap-start"
-        >
-          {homePage.header.ua}
-        </div>
-        <Banner />
-
-        {/* buttons */}
-        <div className=' w-full flex flex-col items-center'>
-          <div
-            className="w-full px-6 absolute z-10 bottom-20 md:bottom-14 xl:bottom-6 flex flex-col justify-center opacity-0 gap-4 md:flex-row animate-floatUp"
-            style={{ animationDelay: `1.2s` }}
-          >
-            <Button
-              onPress={() => navigate('account')}
-              size='lg'
-              variant="solid"
-              color='primary'
-            >
-              {button.logIn.ua}
-            </Button>
-
-            <Button
-              onPress={() => navigate('signup')}
-              size='lg'
-              variant="solid"
-              color='secondary'
-            >
-              {button.signUp.ua}
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      {/* about */}
-      <div className=' snap-start'>
-        <div
-          ref={aboutRef}
-          className={
-            `flex flex-col gap-8 lg:flex-row  mt-10 md:mt-20 md:pt-10  bg-primary-800 rounded-3xl px-6 md:px-10 pb-8
-            transition-all duration-700 ease-out
-            ${aboutInView ? 'opacity-100 -translate-y-4' : 'opacity-0 translate-y-4'}`
-          }
-          style={{ animationDelay: `1.5s` }}
-        >
-          {/* list of blocks */}
-          <div className="flex flex-col gap-4 md:gap-6 text-lg text-primary-800 min-w-[280px] pt-6 z-20">
-            <span className=" text-2xl lg:text-4xl text-white font-bold pb-2">
-            Усі дані під рукою:
-            </span>
-                {homePage.list.map((l, i) => (
-              <div key={i} className="flex flex-row items-start gap-2 bg-white shadow-custom rounded-3xl p-4 md:p-6  transition-transform duration-300 hover:scale-110">
-                <div className="shrink-0 mt-2 w-3 h-3 bg-info rounded-full"></div>
-                  <div>
-                    {l.ua}
-                  </div>
-                </div>
-                ))}
+        <div className="relative mx-auto grid max-w-6xl items-center gap-14 px-4 pt-14 pb-20 md:px-8 md:pt-24 md:pb-28 lg:grid-cols-[1fr_1.1fr]">
+          <div className="text-center lg:text-left">
+            <div className="opacity-0 animate-floatUp">
+              <Eyebrow>{hero.eyebrow.ua}</Eyebrow>
             </div>
 
-          {/* Carousel */}
-          <div className=" ">
-            <Carousel
-              images={carouselImages}
+            <h1
+              className="mt-6 text-4xl sm:text-5xl lg:text-[3.6rem] font-bold leading-[1.08] tracking-tight opacity-0 animate-floatUp"
+              style={{ animationDelay: '100ms' }}
+            >
+              {hero.title.ua}{' '}
+              <span className="bg-gradient-to-r from-primary-500 to-secondary-500 bg-clip-text text-transparent">
+                {hero.titleAccent.ua}
+              </span>
+            </h1>
+
+            <p
+              className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-gray-500 lg:mx-0 opacity-0 animate-floatUp"
+              style={{ animationDelay: '200ms' }}
+            >
+              {hero.text.ua}
+            </p>
+
+            <div
+              className="mt-9 flex flex-col justify-center gap-3 sm:flex-row lg:justify-start opacity-0 animate-floatUp"
+              style={{ animationDelay: '300ms' }}
+            >
+              <Button
+                size="lg"
+                color="primary"
+                radius="full"
+                className="px-8 font-medium shadow-lg shadow-primary-500/30"
+                onPress={() => navigate('signup')}
+              >
+                {hero.primary.ua}
+              </Button>
+              <Button
+                size="lg"
+                variant="bordered"
+                radius="full"
+                className="border-primary-200 bg-white/70 px-8 font-medium text-primary-800"
+                onPress={() => navigate('account')}
+              >
+                {hero.secondary.ua}
+              </Button>
+            </div>
+
+            <div
+              className="mt-10 flex items-center justify-center gap-4 lg:justify-start opacity-0 animate-floatUp"
+              style={{ animationDelay: '400ms' }}
+            >
+              <AvatarStack />
+              <span className="text-sm text-gray-500">{hero.note.ua}</span>
+            </div>
+          </div>
+
+          <div
+            className="relative opacity-0 animate-fadeIn"
+            style={{ animationDelay: '250ms' }}
+          >
+            <div className="absolute inset-x-6 inset-y-10 rounded-[2.5rem] bg-gradient-to-br from-primary-200 via-primary-100 to-secondary-100" />
+            <img
+              src={notebook}
+              alt="Kidty на ноутбуці"
+              className="relative w-full drop-shadow-2xl"
             />
+
+            <div className="absolute -left-2 bottom-10 hidden items-center gap-3 rounded-2xl bg-white/90 px-4 py-3 shadow-xl ring-1 ring-primary-900/5 backdrop-blur sm:flex motion-safe:animate-floatY">
+              <IconTile src={height} className="bg-success-100 size-10" />
+              <div>
+                <div className="text-xs text-gray-500">{features.growth.title.ua}</div>
+                <div className="font-semibold">Зріст · Вага · Стопа</div>
+              </div>
+            </div>
+
+            <div className="absolute -right-2 top-6 hidden items-center gap-3 rounded-2xl bg-white/90 px-4 py-3 shadow-xl ring-1 ring-primary-900/5 backdrop-blur sm:flex motion-safe:animate-floatY"
+              style={{ animationDelay: '-3s' }}
+            >
+              <IconTile src={vaccine} className="bg-secondary-100 size-10" />
+              <div className="font-semibold">{features.vaccines.title.ua}</div>
+            </div>
           </div>
         </div>
+      </section>
 
-      </div>
+      {/* Features */}
+      <section className="mx-auto max-w-6xl px-4 py-20 md:px-8 md:py-28">
+        <SectionHeading
+          eyebrow={features.eyebrow.ua}
+          title={features.title.ua}
+          text={features.text.ua}
+        />
 
-      {/* Contacts */}
-      <div
-        ref={contactsRef}
-        className={`snap-start flex flex-col min-h-[480px] w-full px-6 md:px-10 justify-around items-center md:flex-row gap-8 mt-10 md:mt-32 bg-secondary-600 rounded-3xl py-8'
-      transition-all duration-700 ease-out
-          ${contactsInView ? 'opacity-100 -translate-y-4' : 'opacity-0 translate-y-4'}`}
-        style={{ animationDelay: `1s` }}
-      >
-        <div className='flex-1 w-full'>
-          <Support />
+        <div className="mt-14 grid gap-5 md:grid-cols-6">
+          <Reveal className="md:col-span-4 md:row-span-2">
+            <Card className="flex flex-col overflow-hidden">
+              <div className="flex gap-2">
+                <IconTile src={height} />
+                <IconTile src={weight} className="bg-success-100" />
+                <IconTile src={foot} className="bg-secondary-100" />
+              </div>
+              <h3 className="mt-6 text-2xl font-semibold">{features.growth.title.ua}</h3>
+              <p className="mt-2 max-w-md text-gray-500">{features.growth.text.ua}</p>
+              <div className="-mx-6 -mb-6 mt-6 flex flex-1 items-end justify-center bg-gradient-to-b from-transparent to-primary-100/60 px-6 md:-mx-8 md:-mb-8">
+                <img
+                  src={weightCard}
+                  alt=""
+                  className="w-full max-w-lg translate-y-[12%] drop-shadow-xl"
+                />
+              </div>
+            </Card>
+          </Reveal>
+
+          <Reveal className="md:col-span-2" delay={100}>
+            <Card>
+              <IconTile src={eye} className="bg-info-100" />
+              <h3 className="mt-6 text-xl font-semibold">{features.eyes.title.ua}</h3>
+              <p className="mt-2 text-gray-500">{features.eyes.text.ua}</p>
+            </Card>
+          </Reveal>
+
+          <Reveal className="md:col-span-2" delay={200}>
+            <Card>
+              <AvatarStack count={4} size="size-12" />
+              <h3 className="mt-6 text-xl font-semibold">{features.family.title.ua}</h3>
+              <p className="mt-2 text-gray-500">{features.family.text.ua}</p>
+            </Card>
+          </Reveal>
+
+          <Reveal className="md:col-span-6">
+            <Card className="grid items-center gap-8 overflow-hidden lg:grid-cols-[1fr_1.6fr]">
+              <div>
+                <IconTile src={vaccine} className="bg-secondary-100" />
+                <h3 className="mt-6 text-2xl font-semibold">{features.vaccines.title.ua}</h3>
+                <p className="mt-2 text-gray-500">{features.vaccines.text.ua}</p>
+              </div>
+              <img
+                src={vaccination}
+                alt=""
+                className="w-full drop-shadow-xl"
+              />
+            </Card>
+          </Reveal>
         </div>
+      </section>
 
-        <div className='flex-1 mb-8 lg:my-8 flex rounded-3xl overflow-hidden lg:mr-10 relative group'>
-          <img
-            className='w-full absolute top-0 left-0 transition-opacity duration-600 opacity-100 group-hover:opacity-0'
-            src={staticPreview}
-            alt="preview"
-          />
-          <img
-            className='w-full transition-opacity duration-600 opacity-0 group-hover:opacity-100'
-            src={giff}
-            alt="gif"
-          />
+      {/* Steps */}
+      <section className="border-y border-primary-900/5 bg-white">
+        <div className="mx-auto max-w-6xl px-4 py-20 md:px-8 md:py-28">
+          <SectionHeading eyebrow={steps.eyebrow.ua} title={steps.title.ua} />
+
+          <ol className="relative mt-14 grid gap-10 md:grid-cols-3 md:gap-8">
+            <div className="absolute left-[16%] right-[16%] top-7 hidden h-px bg-gradient-to-r from-primary-200 via-secondary-200 to-primary-200 md:block" />
+            {steps.list.map((step, i) => (
+              <Reveal key={step.title.ua} delay={i * 120}>
+                <li className="relative flex flex-col items-center text-center">
+                  <span className="flex size-14 items-center justify-center rounded-full bg-white text-lg font-semibold text-primary-600 ring-1 ring-primary-200 shadow-[0_0_0_8px_white]">
+                    0{i + 1}
+                  </span>
+                  <h3 className="mt-6 text-xl font-semibold">{step.title.ua}</h3>
+                  <p className="mt-2 max-w-xs text-gray-500">{step.text.ua}</p>
+                </li>
+              </Reveal>
+            ))}
+          </ol>
+
+          <Reveal className="mt-14 flex justify-center">
+            <Button
+              size="lg"
+              color="primary"
+              radius="full"
+              className="px-8 font-medium shadow-lg shadow-primary-500/30"
+              onPress={() => navigate('signup')}
+            >
+              {hero.primary.ua}
+            </Button>
+          </Reveal>
         </div>
+      </section>
 
-      </div>
-      
+      {/* Mobile */}
+      <section className="mx-auto max-w-6xl px-4 py-20 md:px-8 md:py-28">
+        <Reveal>
+          <div className="relative grid items-center gap-10 overflow-hidden rounded-[2.5rem] bg-primary-800 px-6 pt-12 md:px-14 lg:grid-cols-2 lg:py-6">
+            <div className="pointer-events-none absolute -right-24 -top-24 size-96 rounded-full bg-primary-500/40 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-32 left-10 size-80 rounded-full bg-secondary-500/20 blur-3xl" />
+
+            <div className="relative">
+              <Eyebrow light>{mobile.eyebrow.ua}</Eyebrow>
+              <h2 className="mt-4 text-3xl md:text-4xl font-bold leading-tight tracking-tight text-white">
+                {mobile.title.ua}
+              </h2>
+              <ul className="mt-8 space-y-4">
+                {mobile.list.map((item) => (
+                  <li key={item.ua} className="flex items-center gap-3 text-primary-100">
+                    <span className="flex size-8 items-center justify-center rounded-full bg-white/10 text-info-300">
+                      <CheckIcon />
+                    </span>
+                    {item.ua}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <img
+              src={phone}
+              alt="Kidty на телефоні"
+              className="relative mx-auto w-full max-w-md lg:max-w-none"
+            />
+          </div>
+        </Reveal>
+      </section>
+
+      {/* Contact */}
+      <section className="mx-auto max-w-6xl px-4 pb-24 md:px-8 md:pb-32">
+        <Reveal>
+          <div className="grid gap-10 rounded-[2.5rem] bg-gradient-to-br from-primary-900 to-primary-700 p-6 sm:p-10 md:p-14 lg:grid-cols-[1fr_1.2fr]">
+            <div>
+              <Eyebrow light>{contact.eyebrow.ua}</Eyebrow>
+              <h2 className="mt-4 text-3xl md:text-4xl font-bold leading-tight tracking-tight text-white">
+                {contact.title.ua}
+              </h2>
+              <p className="mt-4 max-w-sm text-lg text-primary-200">{contact.text.ua}</p>
+            </div>
+            <Support />
+          </div>
+        </Reveal>
+      </section>
     </div>
   );
 };
+
 export default HomePage;

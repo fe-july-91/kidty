@@ -4,14 +4,14 @@ import { Button } from '@heroui/react';
 type Props = {
   message: string;
   handleApplyClick: () => void;
-  handleCanсelClick: (value: boolean) => void;
+  handleCancelClick: (value: boolean) => void;
   isLoading?: boolean;
 };
 
 export const PopUpWindow: React.FC<Props> = ({
   message,
   handleApplyClick,
-  handleCanсelClick,
+  handleCancelClick,
   isLoading = false,
 }) => {
   return (
@@ -28,7 +28,7 @@ export const PopUpWindow: React.FC<Props> = ({
       <Button
         color="primary"
           className="text-white rounded-xl my-2 w-24"
-          onPress={() => handleCanсelClick(false)}
+          onPress={() => handleCancelClick(false)}
       >
         Ні
       </Button>
