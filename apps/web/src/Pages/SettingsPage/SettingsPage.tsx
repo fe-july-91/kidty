@@ -1,267 +1,155 @@
-import { useCallback, useState } from 'react';
-import { useLocalStorage } from '../../Shared/CustomHooks/useLocalStorage';
+import { useContext, useState } from 'react';
+import { Link, useNavigate } from 'react-router';
+import { Button, Input } from '@heroui/react';
+import { useTranslation } from 'react-i18next';
 import { client } from '../../Utils/httpClient';
 import { PersonalData } from '../../Shared/types/types';
-import { Button, Input, PressEvent } from '@heroui/react';
-import { Link, useNavigate } from 'react-router';
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from "@heroui/react";
-import { useTranslation } from 'react-i18next';
+import { AuthContext } from '../../Context/AuthContext';
+
+const card = 'grid gap-4 rounded-[22px] bg-white p-5 shadow-card md:p-6';
+const EMAIL = /^\S+@\S+\.\S+$/;
+
+type Notice = { kind: 'success' | 'error'; text: string } | null;
+
+const NoticeBox = ({ notice }: { notice: Notice }) =>
+  notice && (
+    <p
+      role={notice.kind === 'error' ? 'alert' : 'status'}
+      className={`rounded-xl px-4 py-3 text-sm ${
+        notice.kind === 'error' ? 'bg-danger-100 text-danger-700' : 'bg-primary-100 text-primary-800'
+      }`}
+    >
+      {notice.text}
+    </p>
+  );
 
 export const SettingsPage = () => {
   const { t } = useTranslation();
-  const [savedEmail, setSavedEmail] = useLocalStorage<string>('email', '');
-  const [savedUserName, setSavedUserName] = useLocalStorage<string>('userName', '');
-  const [errorMessage, setErrorMessage] = useState('');
-  const [isChangePassword, setIsChangePassword] = useState(false);
-  const [email, setEmail] = useState(savedEmail);
-  const [name, setName] = useState(savedUserName);
-  const [password1, setPassword1] = useState('');
-  const [password2, setPassword2] = useState('');
-  const [isSuccess, setIsSuccess] = useState('');
-  const [isLoading, setIsLoading] = useState({
-    data: false,
-    password: false,
-    delete: false
-  });
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const navigate = useNavigate();
+  const { user, setUser } = useContext(AuthContext);
 
-  const [errors, setErrors] = useState({
-    name: false,
-    email: false,
-  });
-  const [passwordsErrors, setPasswordsErrors] = useState({
-    password1: false,
-    password2: false,
-  });
+  const [name, setName] = useState(user?.name ?? '');
+  const [email, setEmail] = useState(user?.email ?? '');
+  const [dataNotice, setDataNotice] = useState<Notice>(null);
+  const [savingData, setSavingData] = useState(false);
 
-  const isSaveValid = name.trim() !== '' && email.trim() !== '' && /^\S+@\S+\.\S+$/.test(email);
-  const isPasswordsValid = password1.trim() !== '' && password2.trim() === password1.trim();
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [password, setPassword] = useState('');
+  const [repeatPassword, setRepeatPassword] = useState('');
+  const [passwordNotice, setPasswordNotice] = useState<Notice>(null);
+  const [savingPassword, setSavingPassword] = useState(false);
 
-  const handleDataSubmit = (e: PressEvent | React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    if ('preventDefault' in e) e.preventDefault();
-    
-    setErrorMessage('');
-    setIsLoading(prev => ({...prev, data: true}));
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState('');
 
-    if (!isSaveValid) {
-      setErrorMessage(t('common.checkInput'));
-      setIsLoading(prev => ({...prev, data: false}));
-      return;
-    }
+  const dataValid = name.trim() !== '' && EMAIL.test(email.trim());
+  const passwordValid = currentPassword !== '' && password !== '' && password === repeatPassword;
 
-    client.put<PersonalData>('account/reset-data', { name, email })
-      .then((response) => {
-        setEmail(response.email);
-        setName(response.name);
-        setSavedUserName(response.name);
-        setSavedEmail(response.email);
-        setIsSuccess(t('settings.dataSaved'));
-      })
-      .catch((error) => setErrorMessage(error.message || t('settings.dataError')))
-      .finally(() => setIsLoading(prev => ({...prev, data: false})));
-  };
-
-  const handlePasswordSubmit = (e: PressEvent | React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    if ('preventDefault' in e) e.preventDefault();
-    
-    setErrorMessage('');
-    setIsSuccess('');
-    setIsLoading(prev => ({...prev, password: true}));
-
-    if (!isPasswordsValid) {
-      setErrorMessage(t('common.checkInput'));
-      setIsLoading(prev => ({...prev, password: false}));
-      return;
-    }
-
-    client.put('account/reset-password', { password: password1, repeatPassword: password2 })
-      .then(() => {
-        setIsSuccess(t('settings.passwordSaved'));
-        setIsChangePassword(false);
-        setPassword1('');
-        setPassword2('');
-      })
-      .catch((error) => setErrorMessage(error.message || t('settings.passwordError')))
-      .finally(() => setIsLoading(prev => ({...prev, password: false})));
-  };
-
-  const deleteAccount = useCallback(async () => {
+  const saveData = async () => {
+    setSavingData(true);
+    setDataNotice(null);
     try {
-      setIsLoading(prev => ({...prev, delete: true}));
-      setErrorMessage('');
-      
-      await client.delete("account/delete");
-      setSavedEmail('');
-      setSavedUserName('');
-      localStorage.clear(); 
-      
-      navigate("/", { replace: true }); 
-    } catch (error) {
-      if (error instanceof Error) {
-        setErrorMessage(error.message);
-      } else {
-        setErrorMessage(t('settings.deleteError'));
-      }
-      onOpen();
+      const updated = await client.put<PersonalData>('account/reset-data', {
+        name: name.trim(),
+        email: email.trim(),
+      });
+      setUser(updated);
+      setDataNotice({ kind: 'success', text: t('settings.dataSaved') });
+    } catch (err) {
+      setDataNotice({ kind: 'error', text: err instanceof Error ? err.message : t('settings.dataError') });
     } finally {
-      setIsLoading(prev => ({...prev, delete: false}));
+      setSavingData(false);
     }
-  }, [navigate, onOpen, setSavedEmail, setSavedUserName]);
+  };
+
+  const savePassword = async () => {
+    setSavingPassword(true);
+    setPasswordNotice(null);
+    try {
+      await client.put('account/reset-password', { currentPassword, password, repeatPassword });
+      setCurrentPassword('');
+      setPassword('');
+      setRepeatPassword('');
+      setPasswordNotice({ kind: 'success', text: t('settings.passwordSaved') });
+    } catch (err) {
+      setPasswordNotice({ kind: 'error', text: err instanceof Error ? err.message : t('settings.passwordError') });
+    } finally {
+      setSavingPassword(false);
+    }
+  };
+
+  const deleteAccount = async () => {
+    setDeleting(true);
+    setDeleteError('');
+    try {
+      await client.delete('account/delete');
+      setUser(null);
+      navigate('/', { replace: true });
+    } catch (err) {
+      setDeleteError(err instanceof Error ? err.message : t('settings.deleteError'));
+      setDeleting(false);
+    }
+  };
 
   return (
-    <div className="flex justify-center bg-primary-800 min-h-[calc(100vh-96px)] lg:min-h-[calc(100vh-128px)]">
-      <div className="flex flex-col gap-8 bg-background shadow-custom border-1 border-primary p-6 md:p-10 rounded-xl mt-8 h-fit opacity-0 animate-floatUp w-full max-w-2xl">
-      <div className='flex text-primary text-sm'>
-         <div className="border-b-1 border-background hover:border-primary transition-border duration-100 cursor-pointer">
-          <Link to="/account" >
-            {t('nav.logout')}
-          </Link>
-        </div>
-        </div>
+    <div className="min-h-[calc(100vh-96px)] bg-canvas text-ink lg:min-h-[calc(100vh-120px)]">
+      <div className="mx-auto grid max-w-2xl gap-5 px-4 py-6 md:py-8">
+        <Link to="/account" className="w-fit text-sm text-primary hover:text-primary-700">
+          ← {t('settings.back')}
+        </Link>
+        <h1 className="text-[26px] font-semibold leading-tight">{t('settings.title')}</h1>
 
-        <div className="text-2xl md:text-3xl text-primary-700">
-          {t('settings.title')}
-        </div>
-
-        <form className="flex flex-col w-full gap-4">
-          <Input
-            label={t('settings.name')}
-            type="text"
-            value={name}
-            isInvalid={errors.name}
-            id="name"
-            onChange={(event) => setName(event.target.value)}
-            onBlur={() => setErrors(prev => ({...prev, name: name.trim() === ''}))}
-          />
-          
-          <Input
-            label={t('settings.email')}
-            type="email"
-            value={email}
-            isInvalid={errors.email}
-            id="email"
-            onChange={(event) => setEmail(event.target.value)}
-            onBlur={() => setErrors(prev => ({
-              ...prev,
-              email: email.trim() === '' || !/^\S+@\S+\.\S+$/.test(email),
-            }))}
-          />
-
-          <Button 
-            type="submit" 
-            variant="solid" 
-            color="primary" 
-            onPress={handleDataSubmit}
-            isLoading={isLoading.data}
-          >
+        <section className={card}>
+          <h2 className="text-[17px] font-semibold">{t('settings.personalData')}</h2>
+          <Input label={t('settings.name')} value={name} onValueChange={setName} variant="bordered" autoComplete="name" />
+          <Input label={t('settings.email')} type="email" value={email} onValueChange={setEmail} variant="bordered" autoComplete="email" />
+          <NoticeBox notice={dataNotice} />
+          <Button className="w-fit" radius="full" color="primary" onPress={saveData} isLoading={savingData} isDisabled={!dataValid}>
             {t('common.save')}
           </Button>
+        </section>
 
-          {isSuccess && (
-            <div className="p-4 text-green-700 bg-green-100 rounded-lg">
-              {isSuccess}
-            </div>
-          )}
-          {errorMessage && (
-            <div className="p-4 text-danger-700 bg-danger-100 rounded-lg">
-              {errorMessage}
-            </div>
-          )}
-          <hr />
-        </form>
+        <section className={card}>
+          <h2 className="text-[17px] font-semibold">{t('settings.changePassword')}</h2>
+          <Input label={t('settings.currentPassword')} type="password" value={currentPassword} onValueChange={setCurrentPassword} variant="bordered" autoComplete="current-password" />
+          <Input label={t('settings.newPassword')} type="password" value={password} onValueChange={setPassword} variant="bordered" autoComplete="new-password" />
+          <Input
+            label={t('settings.repeatNewPassword')}
+            type="password"
+            value={repeatPassword}
+            onValueChange={setRepeatPassword}
+            variant="bordered"
+            autoComplete="new-password"
+            isInvalid={repeatPassword !== '' && repeatPassword !== password}
+            errorMessage={t('apiErrors.passwordsMismatch')}
+          />
+          <NoticeBox notice={passwordNotice} />
+          <Button className="w-fit" radius="full" color="primary" onPress={savePassword} isLoading={savingPassword} isDisabled={!passwordValid}>
+            {t('settings.changePassword')}
+          </Button>
+        </section>
 
-        <div className="flex flex-col gap-4">
-          <div className='flex flex-row justify-between'>
-              <Button
-                variant="light"
-                color="primary"
-                onPress={() => setIsChangePassword(!isChangePassword)}
-              >
-                {isChangePassword ? t('settings.cancelPasswordChange') : t('settings.changePassword')}
+        <section className={card}>
+          <h2 className="text-[17px] font-semibold">{t('settings.deleteAccount')}</h2>
+          <p className="text-sm text-ink-2">{t('settings.deleteText')}</p>
+          {deleteError && <p role="alert" className="text-sm text-danger-600">{deleteError}</p>}
+          {confirmDelete ? (
+            <div className="flex flex-wrap gap-2">
+              <Button radius="full" className="bg-secondary-600 text-white" onPress={deleteAccount} isLoading={deleting}>
+                {t('settings.deleteConfirm')}
               </Button>
-            {!isChangePassword && (
-              <Button
-                  variant="light"
-                  color="danger"
-                  onPress={onOpen}
-                  isLoading={isLoading.delete}
-                >
-                  {t('settings.deleteAccount')}
-                </Button>
-            )}
-          </div>
-
-          {isChangePassword && (
-            <form className="flex flex-col gap-4">
-              <Input
-                label={t('settings.newPassword')}
-                type="password"
-                value={password1}
-                isInvalid={passwordsErrors.password1}
-                id="new-password"
-                onChange={(event) => setPassword1(event.target.value)}
-                onBlur={() => setPasswordsErrors(prev => ({
-                  ...prev,
-                  password1: password1.trim() === '',
-                }))}
-              />
-              
-              <Input
-                label={t('settings.repeatNewPassword')}
-                type="password"
-                value={password2}
-                isInvalid={passwordsErrors.password2}
-                id="confirm-password"
-                onChange={(event) => setPassword2(event.target.value)}
-                onBlur={() => setPasswordsErrors(prev => ({
-                  ...prev,
-                  password2: password2.trim() !== password1.trim(),
-                }))}
-              />
-
-              <Button 
-                type="submit" 
-                variant="solid" 
-                color="primary" 
-                onPress={handlePasswordSubmit}
-                isLoading={isLoading.password}
-              >
-                {t('common.confirm')}
+              <Button radius="full" variant="bordered" className="border-hairline text-ink-2" onPress={() => setConfirmDelete(false)} isDisabled={deleting}>
+                {t('common.cancel')}
               </Button>
-            </form>
+            </div>
+          ) : (
+            <Button className="w-fit border-hairline text-secondary-600" radius="full" variant="bordered" onPress={() => setConfirmDelete(true)}>
+              {t('settings.deleteAccount')}
+            </Button>
           )}
-        </div>
+        </section>
       </div>
-
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1">{t('settings.deleteTitle')}</ModalHeader>
-              <ModalBody>
-                <p className="text-primary-600">
-                  {t('settings.deleteText')}
-                </p>
-                {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
-              </ModalBody>
-              <ModalFooter>
-                <Button 
-                  color="danger" 
-                  variant="solid" 
-                  onPress={deleteAccount}
-                  isLoading={isLoading.delete}
-                >
-                  {t('common.delete')}
-                </Button>
-                <Button color="primary" variant="light" onPress={onClose}>
-                  {t('common.cancel')}
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
     </div>
   );
 };

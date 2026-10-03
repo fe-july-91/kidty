@@ -16,7 +16,7 @@ describe('auth', () => {
       where: { email: 'mixed@example.com' },
     });
     expect(user.passwordHash).not.toContain(password);
-    expect(headers.authorization).toMatch(/^Bearer .+/);
+    expect(headers.cookie).toMatch(/^kidty_session=.+/);
   });
 
   it('rejects a duplicate email', async () => {
@@ -67,6 +67,27 @@ describe('auth', () => {
     });
     expect(res.statusCode).toBe(401);
     expect(res.json().code).toBe('invalidCredentials');
+  });
+
+  it('keeps the session in an httpOnly cookie, not in the response body', async () => {
+    const { email, password } = await signUp(ctx.app);
+    const res = await ctx.app.inject({
+      method: 'POST',
+      url: '/api/auth/login',
+      payload: { email, password },
+    });
+    const cookie = res.cookies.find((c) => c.name === 'kidty_session');
+    expect(cookie).toMatchObject({ httpOnly: true, sameSite: 'Lax', path: '/' });
+    expect(res.json()).toEqual({ user: expect.objectContaining({ email }) });
+    expect(JSON.stringify(res.json())).not.toContain(cookie!.value);
+  });
+
+  it('clears the session cookie on logout', async () => {
+    const { headers } = await signUp(ctx.app);
+    const res = await ctx.app.inject({ method: 'POST', url: '/api/auth/logout', headers });
+    expect(res.statusCode).toBe(204);
+    const cookie = res.cookies.find((c) => c.name === 'kidty_session');
+    expect(cookie?.value).toBe('');
   });
 
   it('requires a valid token on protected routes', async () => {

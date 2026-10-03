@@ -34,3 +34,5 @@ Other useful commands:
 - `npm run db:down` – stop the database (data is kept in a Docker volume)
 - `npm run build` – build all apps
 - `npm test -w @kidty/api` – API tests (use a separate `kidty_test` database)
+- `EMAIL=… PASSWORD=… node scripts/smoke-auth.mjs` – login/logout smoke test in headless Chrome
+- `scripts/screenshots` – regenerate the home page mockups (see its README)

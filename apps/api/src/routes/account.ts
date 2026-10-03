@@ -39,8 +39,16 @@ export const accountRoutes: FastifyPluginAsyncZod = async (app) => {
 
   app.put(
     '/reset-password',
-    { schema: { body: newPasswordBody } },
+    {
+      schema: {
+        body: newPasswordBody.and(z.object({ currentPassword: z.string().min(1, 'passwordRequired') })),
+      },
+    },
     async (request) => {
+      const user = await prisma.user.findUniqueOrThrow({ where: { id: request.userId } });
+      if (!(await argon2.verify(user.passwordHash, request.body.currentPassword))) {
+        throw new HttpError(400, 'currentPasswordWrong', 'The current password is wrong');
+      }
       await prisma.user.update({
         where: { id: request.userId },
         data: { passwordHash: await argon2.hash(request.body.password) },
@@ -52,6 +60,6 @@ export const accountRoutes: FastifyPluginAsyncZod = async (app) => {
   app.delete('/delete', async (request, reply) => {
     // Children and their data are removed by cascading deletes.
     await prisma.user.delete({ where: { id: request.userId } });
-    return reply.status(204).send();
+    return reply.endSession().status(204).send();
   });
 };

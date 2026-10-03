@@ -3,22 +3,20 @@ import { useContext, useState } from 'react';
 import { AuthContext } from '../Context/AuthContext';
 import { client } from '../Utils/httpClient';
 import { useLocalStorage } from '../Shared/CustomHooks/useLocalStorage';
+import { PersonalData } from '../Shared/types/types';
 import { Button, Input, PressEvent, Checkbox } from '@heroui/react';
 import { useTranslation } from 'react-i18next';
 
 export const LogInForm = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  // "Remember me" keeps only the email; the password is never stored.
   const [savedEmail, setSavedEmail] = useLocalStorage<string>('email', '');
-  const [savedPassword, setSavedPassword] = useLocalStorage<string>(
-    'password',
-    ''
-  );
 
-  const { logIn, setToken } = useContext(AuthContext);
+  const { logIn } = useContext(AuthContext);
   const [errowMessage, setErrowmessage] = useState('');
   const [email, setEmail] = useState(savedEmail);
-  const [password, setPassword] = useState(savedPassword);
+  const [password, setPassword] = useState('');
   const [checked, setChecked] = useState(true);
 
   const handleCheckedButton = () => {
@@ -34,16 +32,11 @@ export const LogInForm = () => {
     setErrowmessage('');
 
     client
-      .post('auth/login', { email: email.trim(), password: password.trim() })
-      .then((response: any) => {
-          logIn();
-          navigate('/account');
-          setToken(response.token);
-
-        if (checked) {
-          setSavedEmail(email);
-          setSavedPassword(password);
-        }
+      .post<{ user: PersonalData }>('auth/login', { email: email.trim(), password })
+      .then(({ user }) => {
+        setSavedEmail(checked ? email.trim() : '');
+        logIn(user);
+        navigate('/account');
       })
       .catch((error) => {
         setErrowmessage(error.message)

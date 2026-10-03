@@ -26,14 +26,23 @@ describe('account', () => {
     expect(taken.statusCode).toBe(409);
   });
 
-  it('changes the password', async () => {
-    const { headers, email } = await signUp(ctx.app);
+  it('changes the password only with the current one', async () => {
+    const { headers, email, password } = await signUp(ctx.app);
+
+    const wrong = await ctx.app.inject({
+      method: 'PUT',
+      url: '/api/account/reset-password',
+      headers,
+      payload: { currentPassword: 'not-my-password', password: 'changed-password', repeatPassword: 'changed-password' },
+    });
+    expect(wrong.statusCode).toBe(400);
+    expect(wrong.json().code).toBe('currentPasswordWrong');
 
     const res = await ctx.app.inject({
       method: 'PUT',
       url: '/api/account/reset-password',
       headers,
-      payload: { password: 'changed-password', repeatPassword: 'changed-password' },
+      payload: { currentPassword: password, password: 'changed-password', repeatPassword: 'changed-password' },
     });
     expect(res.statusCode).toBe(200);
 

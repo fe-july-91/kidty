@@ -17,7 +17,12 @@ const schema = z.object({
   PORT: z.coerce.number().int().default(8088),
   DATABASE_URL: z.url(),
   JWT_SECRET: z.string().min(32, 'JWT_SECRET must be at least 32 characters'),
-  JWT_EXPIRES_IN: z.string().default('7d'),
+  /** How long a login session lasts. */
+  SESSION_DAYS: z.coerce.number().int().positive().default(7),
+  /** Send the session cookie over HTTPS only (on by default in production). */
+  COOKIE_SECURE: z.stringbool().optional(),
+  /** 'lax' when the app and API share a site; 'none' (with HTTPS) when they don't. */
+  COOKIE_SAMESITE: z.enum(['lax', 'strict', 'none']).default('lax'),
   /** Comma-separated list of allowed frontend origins. */
   CORS_ORIGIN: z.string().default('http://localhost:3000'),
   /** Public URL of the frontend, used in password reset links. */

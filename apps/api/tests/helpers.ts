@@ -24,7 +24,7 @@ export function setupApp(options: { rateLimit?: boolean } = {}) {
 
 let counter = 0;
 
-/** Registers a user and returns auth headers for it. */
+/** Registers a user, logs in and returns the session cookie header. */
 export async function signUp(app: App, overrides: { email?: string } = {}) {
   const email = overrides.email ?? `user${++counter}@example.com`;
   const password = 'correct-horse-battery';
@@ -44,10 +44,13 @@ export async function signUp(app: App, overrides: { email?: string } = {}) {
     payload: { email, password },
   });
 
+  const session = login.cookies.find((c) => c.name === 'kidty_session');
+  if (!session) throw new Error('Login did not set a session cookie');
+
   return {
     email,
     password,
-    headers: { authorization: `Bearer ${login.json().token}` },
+    headers: { cookie: `kidty_session=${session.value}` },
   };
 }
 

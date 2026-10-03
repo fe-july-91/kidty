@@ -6,6 +6,7 @@ import { env } from '../env.js';
 import { HttpError } from '../lib/errors.js';
 import { email, name, newPasswordBody } from '../lib/schemas.js';
 import { createResetToken, hashToken } from '../lib/tokens.js';
+import { toUserDto } from '../lib/dto.js';
 
 const RESET_TOKEN_TTL_MS = 60 * 60 * 1000;
 
@@ -50,7 +51,7 @@ export const authRoutes: FastifyPluginAsyncZod = async (app) => {
         }),
       },
     },
-    async (request) => {
+    async (request, reply) => {
       const { email, password } = request.body;
       const user = await prisma.user.findUnique({ where: { email } });
 
@@ -62,9 +63,11 @@ export const authRoutes: FastifyPluginAsyncZod = async (app) => {
         throw new HttpError(401, 'invalidCredentials', 'Wrong email or password');
       }
 
-      return { token: app.jwt.sign({ sub: user.id }) };
+      return reply.startSession(user.id).send({ user: toUserDto(user) });
     }
   );
+
+  app.post('/logout', async (_request, reply) => reply.endSession().status(204).send());
 
   // Always answers the same way so the endpoint can't be used to check
   // which emails are registered.

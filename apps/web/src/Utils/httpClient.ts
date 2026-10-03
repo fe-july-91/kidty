@@ -33,12 +33,13 @@ function request<T>(
   method: RequestMethod = 'GET',
   data: any = null
 ): Promise<T> {
-  const authToken = localStorage.getItem('authToken');
-  const options: RequestInit = { method };
-
-  if (authToken && !url.startsWith('auth/')) {
-    options.headers = { Authorization: `Bearer ${authToken}` };
-  }
+  // The session is an httpOnly cookie, so it has to travel with every
+  // request. Accept-Language picks the language of emails the API sends.
+  const options: RequestInit = {
+    method,
+    credentials: 'include',
+    headers: { 'Accept-Language': i18n.language },
+  };
 
   if (data) {
     options.body = JSON.stringify(data);
@@ -54,9 +55,9 @@ function request<T>(
       throw new Error(i18n.t('errors.network'));
     })
     .then(async (response) => {
-      // A 401 from auth/* (e.g. a wrong password) is a normal form error;
-      // anywhere else it means the session has expired.
-      if (response.status === 401 && !url.startsWith('auth/')) {
+      // A 401 from auth/* (e.g. a wrong password) is a normal form error, and
+      // account/me just reports "not logged in"; elsewhere the session expired.
+      if (response.status === 401 && !url.startsWith('auth/') && url !== 'account/me') {
         window.location.hash = '#/login';
         throw new Error(i18n.t('errors.unauthorized'));
       }

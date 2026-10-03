@@ -83,6 +83,7 @@ export async function buildApp({
   await app.register(cors, {
     origin: env.CORS_ORIGIN.split(',').map((origin) => origin.trim()),
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true, // the session cookie
   });
   if (enableRateLimit) {
     await app.register(rateLimit, { global: false });

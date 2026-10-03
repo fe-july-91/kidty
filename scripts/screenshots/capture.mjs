@@ -46,19 +46,21 @@ const send = (method, params = {}) => new Promise((resolve, reject) => {
 const evaluate = async (expression) =>
   (await send('Runtime.evaluate', { expression, awaitPromise: true, returnByValue: true })).result.value;
 
-const { token } = await (await fetch(`${API}/auth/login`, {
+const login = await fetch(`${API}/auth/login`, {
   method: 'POST', headers: { 'content-type': 'application/json' },
   body: JSON.stringify({ email: process.env.SHOWCASE_EMAIL, password: process.env.SHOWCASE_PASSWORD }),
-})).json();
-if (!token) throw new Error('Showcase login failed');
+});
+const session = login.headers.getSetCookie().map((c) => c.split(';')[0].split('='))
+  .find(([name]) => name === 'kidty_session')?.[1];
+if (!session) throw new Error('Showcase login failed');
 
 async function open(width, height, scale, mobile, setup = '') {
   await send('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor: scale, mobile });
   await send('Emulation.setDefaultBackgroundColorOverride', {});
   await send('Page.navigate', { url: `${APP}/#/about` });
   await sleep(1500);
-  await evaluate(`localStorage.setItem('authToken', ${JSON.stringify(token)});
-    localStorage.setItem('isAuthorized', 'true'); localStorage.setItem('kidty-lang', 'en'); true`);
+  await send('Network.setCookie', { name: 'kidty_session', value: session, domain: 'localhost', path: '/', httpOnly: true });
+  await evaluate(`localStorage.setItem('kidty-lang', 'en'); true`);
   await send('Page.navigate', { url: `${APP}/#/account` });
   await evaluate(`location.reload(); true`);
   await sleep(5000); // initial loading screen + data
@@ -98,6 +100,7 @@ const clickAllTime = (heading) => `(() => {
 })()`;
 
 await send('Page.enable');
+await send('Network.enable');
 await send('Runtime.enable');
 
 // Desktop dashboard: height by year, weight over all time.

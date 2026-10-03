@@ -1,63 +1,80 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { client } from '../Utils/httpClient';
+import { PersonalData } from '../Shared/types/types';
+
+type Status = 'checking' | 'authorized' | 'guest';
 
 interface AuthContextType {
+  /** True while the session is being checked on first load. */
+  checking: boolean;
   authorized: boolean;
-  setAuthorized: (value: boolean) => void;
-  logIn: () => void;
-  logOut: () => void;
-  setToken: (token: string) => void;
-  isloading: boolean;
-  setisLoading: (value: boolean) => void;
+  user: PersonalData | null;
+  logIn: (user: PersonalData) => void;
+  logOut: () => Promise<void>;
+  setUser: (user: PersonalData | null) => void;
 }
 
 export const AuthContext = React.createContext<AuthContextType>({
+  checking: true,
   authorized: false,
-  setAuthorized: () => {},
+  user: null,
   logIn: () => {},
-  logOut: () => {},
-  setToken: () => {},
-  isloading: false,
-  setisLoading: () => {},
+  logOut: async () => {},
+  setUser: () => {},
 });
 
-type Props = {
-  children: React.ReactNode;
-};
+// Older versions kept the token, a login flag and even the password here.
+for (const key of ['authToken', 'isAuthorized', 'password', 'userName']) {
+  try {
+    localStorage.removeItem(key);
+  } catch {
+    // Storage unavailable: nothing to clean up.
+  }
+}
 
-export const AuthProvider: React.FC<Props> = ({ children }) => {
-  const [authorized, setAuthorized] = useState(() => {
-    return localStorage.getItem('isAuthorized') === 'true';
-  });
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [status, setStatus] = useState<Status>('checking');
+  const [user, setUserState] = useState<PersonalData | null>(null);
 
-  const [isloading, setisLoading] = useState(false);
+  // The session lives in an httpOnly cookie; ask the API whether it is valid.
+  useEffect(() => {
+    client
+      .get<PersonalData>('account/me')
+      .then((me) => {
+        setUserState(me);
+        setStatus('authorized');
+      })
+      .catch(() => setStatus('guest'));
+  }, []);
 
-  const setToken = (token: string) => {
-    localStorage.setItem('authToken', token);
-  };
+  const logIn = useCallback((me: PersonalData) => {
+    setUserState(me);
+    setStatus('authorized');
+  }, []);
 
-  const logIn = () => {
-    setAuthorized(true);
-    localStorage.setItem('isAuthorized', 'true');
-  };
+  const logOut = useCallback(async () => {
+    try {
+      await client.post('auth/logout', {});
+    } finally {
+      setUserState(null);
+      setStatus('guest');
+    }
+  }, []);
 
-  const logOut = () => {
-    setAuthorized(false);
-    localStorage.removeItem('isAuthorized');
-    // localStorage.removeItem("password");
-    // localStorage.removeItem("email");
-    localStorage.removeItem('authToken');
-  };
+  const setUser = useCallback((next: PersonalData | null) => {
+    setUserState(next);
+    setStatus(next ? 'authorized' : 'guest');
+  }, []);
 
   return (
     <AuthContext.Provider
       value={{
-        authorized,
-        setAuthorized,
+        checking: status === 'checking',
+        authorized: status === 'authorized',
+        user,
         logIn,
         logOut,
-        setToken,
-        isloading,
-        setisLoading,
+        setUser,
       }}
     >
       {children}
