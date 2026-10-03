@@ -75,9 +75,9 @@ export const AccountPage: React.FC = () => {
         client.get<VaccineData[]>(`children/${child.id}/vaccination`)
       ]).then(([weightData, heightData, footData, eyeData,vaccineDate]) => {
         setLastDataValues({
-          weight: { name: "Вага", value: Math.max(...weightData.map(obj => obj.value)) || 0, unit: "кг" },
-          height: { name: "Зріст", value: Math.max(...heightData.map(obj => obj.value)) || 0, unit: "см" },
-          foot: { name: "Стопа", value: Math.max(...footData.map(obj => obj.value)) || 0, unit: "см" },
+          weight: { name: "Вага", value: weightData.at(-1)?.value ?? 0, unit: "кг" },
+          height: { name: "Зріст", value: heightData.at(-1)?.value ?? 0, unit: "см" },
+          foot: { name: "Стопа", value: footData.at(-1)?.value ?? 0, unit: "см" },
           yeys: {name: "Зір", value: `L${eyeData.leftEye} R${eyeData.rightEye}`, unit: ""}, 
           vaccination: {name:"Щеплення" , value: `${vaccineDate[vaccineDate.length-1]?.date || ""} ${vaccineDate[vaccineDate.length-1]?.type || ""}`, unit: ""}
         });

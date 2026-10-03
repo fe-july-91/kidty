@@ -87,6 +87,7 @@ export const CardEyes: React.FC<Props> = ({ childId }) => {
               sliderValue={leftSliderValue}
               sliderWidth="100%"
               range={sliderRange.eye}
+              step={0.25}
             />
           </div>
         )}
@@ -105,6 +106,7 @@ export const CardEyes: React.FC<Props> = ({ childId }) => {
               sliderValue={rightSliderValue}
               sliderWidth="100%"
               range={sliderRange.eye}
+              step={0.25}
             />
           </div>
         )}

@@ -23,6 +23,8 @@ import { findKeyByValue } from '../../Shared/hendlers/findKeyByValue';
 import { PressEvent } from '@heroui/react';
 import { deleteChildData } from '../../api/DataUpdate';
 
+const sliderSteps = { height: 0.5, weight: 0.1, foot: 0.5, eye: 0.25 };
+
 type Props = {
   years: string[];
   cardType: string;
@@ -44,7 +46,7 @@ export const CardItem: React.FC<Props> = ({ years, cardType, childId }) => {
       .get<Data[]>(`children/${childId}/${typeOfValue}`)
       .then((response) => {
         setData(response);
-        setSliderValue({ x: response[response.length - 1].value });
+        setSliderValue({ x: response.at(-1)?.value ?? 0 });
       })
       .catch((err) => setErrorMessage(err.message || 'Щось пішло не так'))
       .finally(() => {
@@ -74,6 +76,8 @@ export const CardItem: React.FC<Props> = ({ years, cardType, childId }) => {
         e.preventDefault();
       }
 
+      setErrorMessage('');
+
       const newParametr: Omit<Data, 'id'> = {
         year: state.selectedYear,
         month: state.selectedMonth,
@@ -91,13 +95,17 @@ export const CardItem: React.FC<Props> = ({ years, cardType, childId }) => {
               d.id === response.id ? response : d
             );
             dispatch({ type: 'data', payload: updatedData });
-          });
+          })
+          .catch((err) => setErrorMessage(err.message || 'Не вдалося зберегти дані'));
       } else {
         client
           .post<Data>(`children/${childId}/${typeOfValue}`, newParametr)
           .then((response) => {
-            dispatch({ type: 'data', payload: [...state.data, response] });
-          });
+            // Saving a month that already had a value replaces it.
+            const otherData = state.data.filter((d) => d.id !== response.id);
+            dispatch({ type: 'data', payload: [...otherData, response] });
+          })
+          .catch((err) => setErrorMessage(err.message || 'Не вдалося зберегти дані'));
       }
     },
     [
@@ -172,6 +180,7 @@ export const CardItem: React.FC<Props> = ({ years, cardType, childId }) => {
                 setSliderValue={(value) => setSliderValue(value)}
                 sliderValue={sliderValue}
                 range={sliderRange[typeOfValue]}
+                step={sliderSteps[typeOfValue]}
                 title={cardType}
               />
             )}
@@ -181,7 +190,6 @@ export const CardItem: React.FC<Props> = ({ years, cardType, childId }) => {
               setActiveSlider={setActiveSlider}
               deleteData={deleteData}
               dataId={currentData?.id}
-              sliderValue={sliderValue.x}
             />
           </div>
         </div>

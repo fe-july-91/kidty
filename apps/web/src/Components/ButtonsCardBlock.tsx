@@ -8,13 +8,12 @@ type Props = {
   ) => void;
   setActiveSlider: (value: boolean) => void;
   activeSlider: boolean;
-  sliderValue?: number ;
   deleteData?: (value: number) => void;
   dataId?:number
 };
 
 export const ButtonsCardBlock: React.FC<Props> = React.memo(
-  ({ activeSlider, handleData, setActiveSlider, deleteData, dataId, sliderValue = 0 }) => {
+  ({ activeSlider, handleData, setActiveSlider, deleteData, dataId }) => {
     const handleEditClick = () => {
       setActiveSlider(true);
     };
@@ -46,7 +45,7 @@ export const ButtonsCardBlock: React.FC<Props> = React.memo(
         ) : (
             <div
               className="w-full md:min-w-[250px] flex flex-col md:flex-row md:justify-end md:items-end gap-2">
-              {sliderValue !== 0 && (
+              {dataId !== undefined && (
                 <Button
                   variant="solid"
                   color="secondary"
