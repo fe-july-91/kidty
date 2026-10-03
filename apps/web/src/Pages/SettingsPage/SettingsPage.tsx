@@ -5,8 +5,10 @@ import { PersonalData } from '../../Shared/types/types';
 import { Button, Input, PressEvent } from '@heroui/react';
 import { Link, useNavigate } from 'react-router';
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from "@heroui/react";
+import { useTranslation } from 'react-i18next';
 
 export const SettingsPage = () => {
+  const { t } = useTranslation();
   const [savedEmail, setSavedEmail] = useLocalStorage<string>('email', '');
   const [savedUserName, setSavedUserName] = useLocalStorage<string>('userName', '');
   const [errorMessage, setErrorMessage] = useState('');
@@ -43,7 +45,7 @@ export const SettingsPage = () => {
     setIsLoading(prev => ({...prev, data: true}));
 
     if (!isSaveValid) {
-      setErrorMessage('Будь ласка, перевірте правильність введених даних.');
+      setErrorMessage(t('common.checkInput'));
       setIsLoading(prev => ({...prev, data: false}));
       return;
     }
@@ -54,9 +56,9 @@ export const SettingsPage = () => {
         setName(response.name);
         setSavedUserName(response.name);
         setSavedEmail(response.email);
-        setIsSuccess('Персональні дані успішно змінені 🎉');
+        setIsSuccess(t('settings.dataSaved'));
       })
-      .catch((error) => setErrorMessage(error.errors?.[0] || 'Помилка оновлення даних'))
+      .catch((error) => setErrorMessage(error.errors?.[0] || t('settings.dataError')))
       .finally(() => setIsLoading(prev => ({...prev, data: false})));
   };
 
@@ -68,19 +70,19 @@ export const SettingsPage = () => {
     setIsLoading(prev => ({...prev, password: true}));
 
     if (!isPasswordsValid) {
-      setErrorMessage('Будь ласка, перевірте правильність введених даних.');
+      setErrorMessage(t('common.checkInput'));
       setIsLoading(prev => ({...prev, password: false}));
       return;
     }
 
     client.put('account/reset-password', { password: password1, repeatPassword: password2 })
       .then(() => {
-        setIsSuccess('Пароль успішно змінено 🎉');
+        setIsSuccess(t('settings.passwordSaved'));
         setIsChangePassword(false);
         setPassword1('');
         setPassword2('');
       })
-      .catch((error) => setErrorMessage(error.errors?.[0] || 'Помилка зміни пароля'))
+      .catch((error) => setErrorMessage(error.errors?.[0] || t('settings.passwordError')))
       .finally(() => setIsLoading(prev => ({...prev, password: false})));
   };
 
@@ -99,7 +101,7 @@ export const SettingsPage = () => {
       if (error instanceof Error) {
         setErrorMessage(error.message);
       } else {
-        setErrorMessage('Не вдалося видалити акаунт');
+        setErrorMessage(t('settings.deleteError'));
       }
       onOpen();
     } finally {
@@ -113,18 +115,18 @@ export const SettingsPage = () => {
       <div className='flex text-primary text-sm'>
          <div className="border-b-1 border-background hover:border-primary transition-border duration-100 cursor-pointer">
           <Link to="/account" >
-            Вийти
+            {t('nav.logout')}
           </Link>
         </div>
         </div>
 
         <div className="text-2xl md:text-3xl text-primary-700">
-          Налаштування облікового запису
+          {t('settings.title')}
         </div>
 
         <form className="flex flex-col w-full gap-4">
           <Input
-            label="Ім'я"
+            label={t('settings.name')}
             type="text"
             value={name}
             isInvalid={errors.name}
@@ -134,7 +136,7 @@ export const SettingsPage = () => {
           />
           
           <Input
-            label="Адреса електронної пошти"
+            label={t('settings.email')}
             type="email"
             value={email}
             isInvalid={errors.email}
@@ -153,7 +155,7 @@ export const SettingsPage = () => {
             onPress={handleDataSubmit}
             isLoading={isLoading.data}
           >
-            Зберегти
+            {t('common.save')}
           </Button>
 
           {isSuccess && (
@@ -176,7 +178,7 @@ export const SettingsPage = () => {
                 color="primary"
                 onPress={() => setIsChangePassword(!isChangePassword)}
               >
-                {isChangePassword ? 'Скасувати зміну пароля' : 'Змінити пароль'}
+                {isChangePassword ? t('settings.cancelPasswordChange') : t('settings.changePassword')}
               </Button>
             {!isChangePassword && (
               <Button
@@ -185,7 +187,7 @@ export const SettingsPage = () => {
                   onPress={onOpen}
                   isLoading={isLoading.delete}
                 >
-                  Видалити акаунт
+                  {t('settings.deleteAccount')}
                 </Button>
             )}
           </div>
@@ -193,7 +195,7 @@ export const SettingsPage = () => {
           {isChangePassword && (
             <form className="flex flex-col gap-4">
               <Input
-                label="Новий пароль"
+                label={t('settings.newPassword')}
                 type="password"
                 value={password1}
                 isInvalid={passwordsErrors.password1}
@@ -206,7 +208,7 @@ export const SettingsPage = () => {
               />
               
               <Input
-                label="Підтвердити новий пароль"
+                label={t('settings.repeatNewPassword')}
                 type="password"
                 value={password2}
                 isInvalid={passwordsErrors.password2}
@@ -225,7 +227,7 @@ export const SettingsPage = () => {
                 onPress={handlePasswordSubmit}
                 isLoading={isLoading.password}
               >
-                Підтвердити
+                {t('common.confirm')}
               </Button>
             </form>
           )}
@@ -236,10 +238,10 @@ export const SettingsPage = () => {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">Підтвердження видалення</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1">{t('settings.deleteTitle')}</ModalHeader>
               <ModalBody>
                 <p className="text-primary-600">
-                  Ви впевнені, що хочете видалити свій акаунт? Ця дія є незворотною.
+                  {t('settings.deleteText')}
                 </p>
                 {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
               </ModalBody>
@@ -250,10 +252,10 @@ export const SettingsPage = () => {
                   onPress={deleteAccount}
                   isLoading={isLoading.delete}
                 >
-                  Видалити
+                  {t('common.delete')}
                 </Button>
                 <Button color="primary" variant="light" onPress={onClose}>
-                  Скасувати
+                  {t('common.cancel')}
                 </Button>
               </ModalFooter>
             </>

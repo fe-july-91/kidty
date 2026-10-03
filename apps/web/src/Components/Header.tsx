@@ -3,6 +3,8 @@ import { Link } from 'react-router';
 import { logoDark } from '../Utils/kit';
 import { Menu } from './Menu/Menu';
 import { AuthContext } from '../Context/AuthContext';
+import { useTranslation } from 'react-i18next';
+import { LanguageSwitcher } from './LanguageSwitcher';
 
 const navLink = 'text-ink-2 hover:text-ink transition-colors';
 
@@ -27,6 +29,7 @@ const MenuIcon = ({ open }: { open: boolean }) => (
 export const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { authorized, logOut } = useContext(AuthContext);
+  const { t } = useTranslation();
 
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
@@ -39,27 +42,28 @@ export const Header: React.FC = () => {
         <img src={logoDark} className="w-20 lg:w-24" alt="Kidty" />
       </Link>
 
-      <div className="flex items-center px-4 lg:px-6">
+      <div className="flex items-center gap-4 px-4 lg:px-6">
+        <LanguageSwitcher className="hidden md:inline-flex" />
         <nav className="hidden md:flex items-center gap-6 text-sm">
           {authorized ? (
             <>
               <Link to="account/settings" className={navLink}>
-                Налаштування
+                {t('nav.settings')}
               </Link>
               <Link to="/" className={navLink} onClick={() => logOut()}>
-                Вийти
+                {t('nav.logout')}
               </Link>
             </>
           ) : (
             <>
               <Link to="login" className={navLink}>
-                Увійти
+                {t('nav.login')}
               </Link>
               <Link
                 to="signup"
                 className="rounded-full bg-primary px-4 py-1.5 text-white hover:bg-primary-600 transition-colors"
               >
-                Зареєструватися
+                {t('nav.signup')}
               </Link>
             </>
           )}
@@ -69,7 +73,7 @@ export const Header: React.FC = () => {
           type="button"
           className="md:hidden flex items-center justify-center text-ink"
           onClick={toggleMenu}
-          aria-label={isMenuOpen ? 'Закрити меню' : 'Відкрити меню'}
+          aria-label={isMenuOpen ? t('nav.closeMenu') : t('nav.openMenu')}
           aria-expanded={isMenuOpen}
         >
           <MenuIcon open={isMenuOpen} />

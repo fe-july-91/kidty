@@ -1,9 +1,10 @@
 import { Button, Form, Input, Textarea } from '@heroui/react';
 import { mailToSupport } from '../api/support';
 import { useState } from 'react';
-import { button, support } from '../Utils/Lang';
+import { useTranslation } from 'react-i18next';
 
 export const Support = () => {
+  const { t } = useTranslation();
 
     const [isSend, setIsSend] = useState(false);
   
@@ -31,7 +32,7 @@ export const Support = () => {
     <div className="flex flex-col justify-start w-full">
             {isSend ? (
         <div className="text-2xl lg:text-xl text-white p-4 border-small rounded-lg">
-          {support.success.ua}
+          {t('support.success')}
         </div>
             ) : (
               <Form
@@ -43,9 +44,9 @@ export const Support = () => {
               <Input
                 className="font-sans"
                 isRequired
-                errorMessage="Please enter your name"
+                errorMessage={t('support.nameRequired')}
                 name="name"
-                placeholder={support.name.ua}
+                placeholder={t('support.name')}
               type="text"
               classNames={{ errorMessage: "text-warning-500 min-h-[20px]"}}
 
@@ -53,9 +54,9 @@ export const Support = () => {
 
               <Input
                 isRequired
-                errorMessage="Please enter a valid email"
+                errorMessage={t('support.emailInvalid')}
                 name="email"
-                placeholder={support.email.ua}
+                placeholder={t('support.email')}
                 type="email"
                 classNames={{ errorMessage: "text-warning-500 min-h-[20px]"}}
               />
@@ -63,7 +64,7 @@ export const Support = () => {
               <Textarea 
               name="message" 
               className=" max-w-2xl" 
-              placeholder={support.message.ua}
+              placeholder={t('support.message')}
             />
 
               <div className="flex w-full flex-col md:flex-row gap-2 ">
@@ -72,7 +73,7 @@ export const Support = () => {
                   type="reset"
                   color="warning"
                   variant="ghost">
-                    {button.reset.ua}
+                    {t('common.reset')}
                 </Button>
                 
                 <Button
@@ -80,7 +81,7 @@ export const Support = () => {
                   color='primary'
                   type="submit"
                 >
-                  {button.send.ua}
+                  {t('common.send')}
                 </Button>
               </div>
             </Form>

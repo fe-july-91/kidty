@@ -2,13 +2,16 @@ import { useEffect, useState } from 'react';
 import { Button } from '@heroui/react';
 import { Dashboard } from '../Components/Dashboard';
 import { Avatar } from '../Components/Avatar';
-import { AddModal } from '../Components/AddModal';
-import { EditModal } from '../Components/EditModal';
+import { ChildFormModal } from '../Components/ChildFormModal';
 import { Child } from '../Shared/types/types';
 import { calculateFullChildAge } from '../Shared/hendlers/generateYearArray';
 import { client } from '../Utils/httpClient';
+import { useTranslation } from 'react-i18next';
+import { useFormat } from '../i18n/useFormat';
 
 export const AccountPage: React.FC = () => {
+  const { t } = useTranslation();
+  const f = useFormat();
   const [children, setChildren] = useState<Child[]>([]);
   const [child, setChild] = useState<Child | null>(null);
   const [isAddModal, setIsAddModal] = useState(false);
@@ -27,7 +30,7 @@ export const AccountPage: React.FC = () => {
         }
       })
       .catch((err) =>
-        setErrorMessage(err.message || 'Щось пішло не так, спробуйте ще раз')
+        setErrorMessage(err.message || t('profile.loadChildrenError'))
       );
   }, []);
 
@@ -55,7 +58,7 @@ export const AccountPage: React.FC = () => {
                 type="button"
                 onClick={() => setIsEditModal(true)}
                 className="shrink-0 rounded-[18px] md:rounded-[22px] overflow-hidden focus-visible:outline-2 focus-visible:outline-primary"
-                aria-label="Редагувати профіль"
+                aria-label={t('profile.edit')}
               >
                 <Avatar index={child.image} className="size-16 md:size-[84px]" />
               </button>
@@ -64,20 +67,20 @@ export const AccountPage: React.FC = () => {
                   {child.name} {child.surname}
                 </h1>
                 <p className="mt-1 text-sm text-ink-2">
-                  {age.years} р. {age.months} міс. · {child.birth.replaceAll('-', '.')} ·{' '}
-                  {child.genderName.toLowerCase()}
+                  {f.age((age.years * 12) + age.months)} · {f.date(child.birth)} ·{' '}
+                  {f.gender(child.genderName).toLowerCase()}
                 </p>
                 <button
                   type="button"
                   onClick={() => setIsEditModal(true)}
                   className="mt-1 text-sm text-primary hover:text-primary-700"
                 >
-                  Редагувати профіль
+                  {t('profile.edit')}
                 </button>
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center gap-4" role="group" aria-label="Діти">
+            <div className="flex flex-wrap items-center gap-4" role="group" aria-label={t('profile.children')}>
               {children.map((item) => (
                 <button
                   key={item.id}
@@ -98,7 +101,7 @@ export const AccountPage: React.FC = () => {
                 </button>
               ))}
               <Button color="primary" radius="full" onPress={() => setIsAddModal(true)}>
-                Додати дитину
+                {t('profile.addChild')}
               </Button>
             </div>
           </section>
@@ -108,24 +111,32 @@ export const AccountPage: React.FC = () => {
       </div>
 
       {isAddModal && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/50">
-          <AddModal
-            children={children}
-            setModal={setIsAddModal}
-            setCurrentChild={showChild}
-          />
-        </div>
+        <ChildFormModal
+          canClose={children.length > 0}
+          onClose={() => setIsAddModal(false)}
+          onSaved={(saved) => {
+            showChild(saved);
+            setIsAddModal(false);
+          }}
+        />
       )}
 
       {child && isEditModal && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/50">
-          <EditModal
-            setModal={setIsEditModal}
-            currentChild={child}
-            setCurrentChild={showChild}
-            setChildren={setChildren}
-          />
-        </div>
+        <ChildFormModal
+          child={child}
+          canClose
+          onClose={() => setIsEditModal(false)}
+          onSaved={(saved) => {
+            showChild(saved);
+            setIsEditModal(false);
+          }}
+          onDeleted={(rest) => {
+            setChildren(rest);
+            setChild(rest[0] ?? null);
+            setIsEditModal(false);
+            if (rest.length === 0) setIsAddModal(true);
+          }}
+        />
       )}
     </div>
   );

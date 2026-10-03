@@ -52,13 +52,6 @@ export type Child = {
   userName: string;
 };
 
-export enum CardTitleTypes {
-  height = 'Зріст',
-  weight = 'Вага',
-  foot = 'Стопа',
-  eyes = 'Зір',
-  vactination = 'Щеплення',
-}
 
 export type PersonalData = {
   id: number;

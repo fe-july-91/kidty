@@ -1,7 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import { extent, line, range, scaleLinear, scalePoint } from 'd3';
 import { useElementWidth } from '../../Shared/CustomHooks/useElementWidth';
-import { MONTH_SHORT, formatValue, monthName } from './growth';
+import { useTranslation } from 'react-i18next';
+import { useFormat } from '../../i18n/useFormat';
 import { ChartTooltip } from './ChartTooltip';
 
 type YearPoint = { month: number; value: number };
@@ -31,6 +32,8 @@ export const YearChart: React.FC<Props> = ({
   emptyDomain,
   onSelectMonth,
 }) => {
+  const { t } = useTranslation();
+  const f = useFormat();
   const [ref, width] = useElementWidth<HTMLDivElement>();
   const [hover, setHover] = useState<number | null>(null);
 
@@ -77,7 +80,7 @@ export const YearChart: React.FC<Props> = ({
         viewBox={`0 0 ${width} ${HEIGHT}`}
         className="block h-[240px] w-full overflow-visible"
         role="img"
-        aria-label={`Значення за ${year} рік`}
+        aria-label={t('growth.chartYear', { year })}
       >
         {preview && (
           <rect
@@ -96,7 +99,7 @@ export const YearChart: React.FC<Props> = ({
               <g key={t}>
                 <line className="stroke-grid" x1={M.left} x2={width - M.right} y1={y(t)} y2={y(t)} />
                 <text className="fill-muted text-xs tabular-nums" x={M.left - 8} y={y(t)} dy="0.32em" textAnchor="end">
-                  {formatValue(t)}
+                  {f.number(t)}
                 </text>
               </g>
             ))}
@@ -115,13 +118,13 @@ export const YearChart: React.FC<Props> = ({
             y={HEIGHT - M.bottom + 18}
             textAnchor="middle"
           >
-            {MONTH_SHORT[m - 1]}
+            {f.monthShort(m)}
           </text>
         ))}
 
         {shown.length === 0 && (
           <text className="fill-muted text-sm" x={(M.left + width - M.right) / 2} y={(HEIGHT / 2) - 10} textAnchor="middle">
-            Натисніть на місяць, щоб додати перший замір
+            {t('growth.clickToAddFirst')}
           </text>
         )}
 
@@ -148,7 +151,7 @@ export const YearChart: React.FC<Props> = ({
 
         {labelled.map((p) => (
           <text key={p.month} className="fill-ink text-xs font-semibold tabular-nums" x={x(p.month)} y={y(p.value) - 12} textAnchor="middle">
-            {formatValue(p.value)}
+            {f.number(p.value)}
           </text>
         ))}
 
@@ -164,7 +167,7 @@ export const YearChart: React.FC<Props> = ({
               className="cursor-pointer fill-transparent outline-none focus-visible:stroke-primary focus-visible:[stroke-width:2]"
               tabIndex={0}
               role="button"
-              aria-label={`${monthName(m)} ${year}: ${p ? `${formatValue(p.value)} ${unit}` : 'немає заміру'}`}
+              aria-label={`${f.monthName(m)} ${year}: ${p ? `${f.number(p.value)} ${unit}` : t('growth.noMeasurement')}`}
               onPointerEnter={() => setHover(m)}
               onPointerLeave={() => setHover(null)}
               onFocus={() => setHover(m)}
@@ -185,8 +188,8 @@ export const YearChart: React.FC<Props> = ({
         <ChartTooltip
           x={x(hover)!}
           y={hovered ? y(hovered.value) : M.top + 10}
-          value={hovered ? `${formatValue(hovered.value)} ${unit}` : 'Немає заміру'}
-          label={`${monthName(hover)} ${year}${hovered ? '' : ' · натисніть, щоб додати'}`}
+          value={hovered ? `${f.number(hovered.value)} ${unit}` : t('growth.noMeasurement')}
+          label={`${f.monthName(hover)} ${year}${hovered ? '' : ` · ${t('growth.clickToAdd')}`}`}
         />
       )}
     </div>

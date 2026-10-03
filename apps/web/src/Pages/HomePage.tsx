@@ -16,9 +16,8 @@ import {
 import { Support } from '../Components/Support';
 import { Reveal } from '../Components/Reveal';
 import { Avatar } from '../Components/Avatar';
-import { homePage } from '../Utils/Lang';
+import { useTranslation } from 'react-i18next';
 
-const { hero, features, steps, mobile, contact } = homePage;
 
 const Eyebrow: React.FC<{ children: React.ReactNode; light?: boolean }> = ({
   children,
@@ -76,7 +75,7 @@ const AvatarStack: React.FC<{ count?: number; size?: string }> = ({
   count = 5,
   size = 'size-10',
 }) => (
-  <div className="flex -space-x-3">
+  <div className="flex shrink-0 -space-x-3">
     {avatars.slice(0, count).map((src: string, i: number) => (
       <Avatar
         key={src}
@@ -99,6 +98,9 @@ const CheckIcon = () => (
 
 export const HomePage: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const stepItems = t('home.steps.items', { returnObjects: true }) as { title: string; text: string }[];
+  const mobileItems = t('home.mobile.items', { returnObjects: true }) as string[];
 
   return (
     <div className="bg-[#F7F7FB] text-primary-900">
@@ -110,16 +112,16 @@ export const HomePage: React.FC = () => {
         <div className="relative mx-auto grid max-w-6xl items-center gap-14 px-4 pt-14 pb-20 md:px-8 md:pt-24 md:pb-28 lg:grid-cols-[1fr_1.1fr]">
           <div className="text-center lg:text-left">
             <div className="opacity-0 animate-floatUp">
-              <Eyebrow>{hero.eyebrow.ua}</Eyebrow>
+              <Eyebrow>{t('home.hero.eyebrow')}</Eyebrow>
             </div>
 
             <h1
               className="mt-6 text-4xl sm:text-5xl lg:text-[3.6rem] font-bold leading-[1.08] tracking-tight opacity-0 animate-floatUp"
               style={{ animationDelay: '100ms' }}
             >
-              {hero.title.ua}{' '}
+              {t('home.hero.title')}{' '}
               <span className="bg-gradient-to-r from-primary-500 to-secondary-500 bg-clip-text text-transparent">
-                {hero.titleAccent.ua}
+                {t('home.hero.titleAccent')}
               </span>
             </h1>
 
@@ -127,7 +129,7 @@ export const HomePage: React.FC = () => {
               className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-gray-500 lg:mx-0 opacity-0 animate-floatUp"
               style={{ animationDelay: '200ms' }}
             >
-              {hero.text.ua}
+              {t('home.hero.text')}
             </p>
 
             <div
@@ -141,7 +143,7 @@ export const HomePage: React.FC = () => {
                 className="px-8 font-medium shadow-lg shadow-primary-500/30"
                 onPress={() => navigate('signup')}
               >
-                {hero.primary.ua}
+                {t('home.hero.primary')}
               </Button>
               <Button
                 size="lg"
@@ -150,7 +152,7 @@ export const HomePage: React.FC = () => {
                 className="border-primary-200 bg-white/70 px-8 font-medium text-primary-800"
                 onPress={() => navigate('account')}
               >
-                {hero.secondary.ua}
+                {t('home.hero.secondary')}
               </Button>
             </div>
 
@@ -159,7 +161,7 @@ export const HomePage: React.FC = () => {
               style={{ animationDelay: '400ms' }}
             >
               <AvatarStack />
-              <span className="text-sm text-gray-500">{hero.note.ua}</span>
+              <span className="text-sm text-gray-500">{t('home.hero.note')}</span>
             </div>
           </div>
 
@@ -170,15 +172,15 @@ export const HomePage: React.FC = () => {
             <div className="absolute inset-x-6 inset-y-10 rounded-[2.5rem] bg-gradient-to-br from-primary-200 via-primary-100 to-secondary-100" />
             <img
               src={notebook}
-              alt="Kidty на ноутбуці"
+              alt={t('home.hero.laptopAlt')}
               className="relative w-full drop-shadow-2xl"
             />
 
             <div className="absolute -left-2 bottom-10 hidden items-center gap-3 rounded-2xl bg-white/90 px-4 py-3 shadow-xl ring-1 ring-primary-900/5 backdrop-blur sm:flex motion-safe:animate-floatY">
               <IconTile src={height} className="bg-success-100 size-10" />
               <div>
-                <div className="text-xs text-gray-500">{features.growth.title.ua}</div>
-                <div className="font-semibold">Зріст · Вага · Стопа</div>
+                <div className="text-xs text-gray-500">{t('home.features.growthTitle')}</div>
+                <div className="font-semibold">{t('home.features.growthChip')}</div>
               </div>
             </div>
 
@@ -186,7 +188,7 @@ export const HomePage: React.FC = () => {
               style={{ animationDelay: '-3s' }}
             >
               <IconTile src={vaccine} className="bg-secondary-100 size-10" />
-              <div className="font-semibold">{features.vaccines.title.ua}</div>
+              <div className="font-semibold">{t('home.features.vaccinesTitle')}</div>
             </div>
           </div>
         </div>
@@ -195,9 +197,9 @@ export const HomePage: React.FC = () => {
       {/* Features */}
       <section className="mx-auto max-w-6xl px-4 py-20 md:px-8 md:py-28">
         <SectionHeading
-          eyebrow={features.eyebrow.ua}
-          title={features.title.ua}
-          text={features.text.ua}
+          eyebrow={t('home.features.eyebrow')}
+          title={t('home.features.title')}
+          text={t('home.features.text')}
         />
 
         <div className="mt-14 grid gap-5 md:grid-cols-6">
@@ -208,8 +210,8 @@ export const HomePage: React.FC = () => {
                 <IconTile src={weight} className="bg-success-100" />
                 <IconTile src={foot} className="bg-secondary-100" />
               </div>
-              <h3 className="mt-6 text-2xl font-semibold">{features.growth.title.ua}</h3>
-              <p className="mt-2 max-w-md text-gray-500">{features.growth.text.ua}</p>
+              <h3 className="mt-6 text-2xl font-semibold">{t('home.features.growthTitle')}</h3>
+              <p className="mt-2 max-w-md text-gray-500">{t('home.features.growthText')}</p>
               <div className="-mx-6 -mb-6 mt-6 flex flex-1 items-end justify-center bg-gradient-to-b from-transparent to-primary-100/60 px-6 md:-mx-8 md:-mb-8">
                 <img
                   src={weightCard}
@@ -223,16 +225,16 @@ export const HomePage: React.FC = () => {
           <Reveal className="md:col-span-2" delay={100}>
             <Card>
               <IconTile src={eye} className="bg-info-100" />
-              <h3 className="mt-6 text-xl font-semibold">{features.eyes.title.ua}</h3>
-              <p className="mt-2 text-gray-500">{features.eyes.text.ua}</p>
+              <h3 className="mt-6 text-xl font-semibold">{t('home.features.eyesTitle')}</h3>
+              <p className="mt-2 text-gray-500">{t('home.features.eyesText')}</p>
             </Card>
           </Reveal>
 
           <Reveal className="md:col-span-2" delay={200}>
             <Card>
               <AvatarStack count={4} size="size-12" />
-              <h3 className="mt-6 text-xl font-semibold">{features.family.title.ua}</h3>
-              <p className="mt-2 text-gray-500">{features.family.text.ua}</p>
+              <h3 className="mt-6 text-xl font-semibold">{t('home.features.familyTitle')}</h3>
+              <p className="mt-2 text-gray-500">{t('home.features.familyText')}</p>
             </Card>
           </Reveal>
 
@@ -240,8 +242,8 @@ export const HomePage: React.FC = () => {
             <Card className="grid items-center gap-8 overflow-hidden lg:grid-cols-[1fr_1.6fr]">
               <div>
                 <IconTile src={vaccine} className="bg-secondary-100" />
-                <h3 className="mt-6 text-2xl font-semibold">{features.vaccines.title.ua}</h3>
-                <p className="mt-2 text-gray-500">{features.vaccines.text.ua}</p>
+                <h3 className="mt-6 text-2xl font-semibold">{t('home.features.vaccinesTitle')}</h3>
+                <p className="mt-2 text-gray-500">{t('home.features.vaccinesText')}</p>
               </div>
               <img
                 src={vaccination}
@@ -256,18 +258,18 @@ export const HomePage: React.FC = () => {
       {/* Steps */}
       <section className="border-y border-primary-900/5 bg-white">
         <div className="mx-auto max-w-6xl px-4 py-20 md:px-8 md:py-28">
-          <SectionHeading eyebrow={steps.eyebrow.ua} title={steps.title.ua} />
+          <SectionHeading eyebrow={t('home.steps.eyebrow')} title={t('home.steps.title')} />
 
           <ol className="relative mt-14 grid gap-10 md:grid-cols-3 md:gap-8">
             <div className="absolute left-[16%] right-[16%] top-7 hidden h-px bg-gradient-to-r from-primary-200 via-secondary-200 to-primary-200 md:block" />
-            {steps.list.map((step, i) => (
-              <Reveal key={step.title.ua} delay={i * 120}>
+            {stepItems.map((step, i) => (
+              <Reveal key={step.title} delay={i * 120}>
                 <li className="relative flex flex-col items-center text-center">
                   <span className="flex size-14 items-center justify-center rounded-full bg-white text-lg font-semibold text-primary-600 ring-1 ring-primary-200 shadow-[0_0_0_8px_white]">
                     0{i + 1}
                   </span>
-                  <h3 className="mt-6 text-xl font-semibold">{step.title.ua}</h3>
-                  <p className="mt-2 max-w-xs text-gray-500">{step.text.ua}</p>
+                  <h3 className="mt-6 text-xl font-semibold">{step.title}</h3>
+                  <p className="mt-2 max-w-xs text-gray-500">{step.text}</p>
                 </li>
               </Reveal>
             ))}
@@ -281,7 +283,7 @@ export const HomePage: React.FC = () => {
               className="px-8 font-medium shadow-lg shadow-primary-500/30"
               onPress={() => navigate('signup')}
             >
-              {hero.primary.ua}
+              {t('home.hero.primary')}
             </Button>
           </Reveal>
         </div>
@@ -295,17 +297,17 @@ export const HomePage: React.FC = () => {
             <div className="pointer-events-none absolute -bottom-32 left-10 size-80 rounded-full bg-secondary-500/20 blur-3xl" />
 
             <div className="relative">
-              <Eyebrow light>{mobile.eyebrow.ua}</Eyebrow>
+              <Eyebrow light>{t('home.mobile.eyebrow')}</Eyebrow>
               <h2 className="mt-4 text-3xl md:text-4xl font-bold leading-tight tracking-tight text-white">
-                {mobile.title.ua}
+                {t('home.mobile.title')}
               </h2>
               <ul className="mt-8 space-y-4">
-                {mobile.list.map((item) => (
-                  <li key={item.ua} className="flex items-center gap-3 text-primary-100">
+                {mobileItems.map((item) => (
+                  <li key={item} className="flex items-center gap-3 text-primary-100">
                     <span className="flex size-8 items-center justify-center rounded-full bg-white/10 text-info-300">
                       <CheckIcon />
                     </span>
-                    {item.ua}
+                    {item}
                   </li>
                 ))}
               </ul>
@@ -313,7 +315,7 @@ export const HomePage: React.FC = () => {
 
             <img
               src={phone}
-              alt="Kidty на телефоні"
+              alt={t('home.mobile.phoneAlt')}
               className="relative mx-auto w-full max-w-md lg:max-w-none"
             />
           </div>
@@ -325,11 +327,11 @@ export const HomePage: React.FC = () => {
         <Reveal>
           <div className="grid gap-10 rounded-[2.5rem] bg-gradient-to-br from-primary-900 to-primary-700 p-6 sm:p-10 md:p-14 lg:grid-cols-[1fr_1.2fr]">
             <div>
-              <Eyebrow light>{contact.eyebrow.ua}</Eyebrow>
+              <Eyebrow light>{t('home.contact.eyebrow')}</Eyebrow>
               <h2 className="mt-4 text-3xl md:text-4xl font-bold leading-tight tracking-tight text-white">
-                {contact.title.ua}
+                {t('home.contact.title')}
               </h2>
-              <p className="mt-4 max-w-sm text-lg text-primary-200">{contact.text.ua}</p>
+              <p className="mt-4 max-w-sm text-lg text-primary-200">{t('home.contact.text')}</p>
             </div>
             <Support />
           </div>

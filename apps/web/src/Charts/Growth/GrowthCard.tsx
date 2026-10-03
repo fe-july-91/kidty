@@ -4,17 +4,15 @@ import { client } from '../../Utils/httpClient';
 import { Child, Data } from '../../Shared/types/types';
 import { HistoryChart } from './HistoryChart';
 import { YearChart } from './YearChart';
+import { useTranslation } from 'react-i18next';
+import { useFormat } from '../../i18n/useFormat';
 import {
   METRICS,
   MetricType,
   Point,
   ageInMonths,
+  apiMonth,
   byDate,
-  formatAge,
-  formatSigned,
-  formatValue,
-  monthLabel,
-  monthName,
   parseBirth,
   pointKey,
   summarize,
@@ -29,7 +27,11 @@ const thisMonth = new Date().getMonth() + 1;
 const today = new Date().getDate();
 
 export const GrowthCard: React.FC<Props> = ({ child, metric }) => {
+  const { t } = useTranslation();
+  const f = useFormat();
   const m = METRICS[metric];
+  const unit = t(`metrics.${m.unit}`);
+  const title = t(`metrics.${metric}`);
   const [points, setPoints] = useState<Point[]>([]);
   const [mode, setMode] = useState<Mode>('year');
   const [year, setYear] = useState(thisYear);
@@ -46,7 +48,7 @@ export const GrowthCard: React.FC<Props> = ({ child, metric }) => {
         // Open the year of the latest measurement.
         setYear(loaded.at(-1)?.year ?? thisYear);
       })
-      .catch((err) => setError(err.message || 'Не вдалося завантажити дані'));
+      .catch((err) => setError(err.message || t('common.loadError')));
   }, [child.id, metric]);
 
   const birthYear = parseBirth(child.birth).year;
@@ -75,7 +77,7 @@ export const GrowthCard: React.FC<Props> = ({ child, metric }) => {
 
   const save = async () => {
     if (!editing) return;
-    const body = { year: String(year), month: monthName(editing.month), value: editing.value };
+    const body = { year: String(year), month: apiMonth(editing.month), value: editing.value };
     setSaving(true);
     setError('');
     try {
@@ -88,7 +90,7 @@ export const GrowthCard: React.FC<Props> = ({ child, metric }) => {
       );
       setEditing(null);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Не вдалося зберегти дані');
+      setError(err instanceof Error ? err.message : t('common.saveError'));
     } finally {
       setSaving(false);
     }
@@ -103,7 +105,7 @@ export const GrowthCard: React.FC<Props> = ({ child, metric }) => {
       setPoints((prev) => prev.filter((p) => p.id !== existing.id));
       setEditing(null);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Не вдалося видалити дані');
+      setError(err instanceof Error ? err.message : t('common.deleteError'));
     } finally {
       setSaving(false);
     }
@@ -115,42 +117,42 @@ export const GrowthCard: React.FC<Props> = ({ child, metric }) => {
     <div className="grid gap-3.5 p-5 pb-4">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h2 className="text-[17px] font-semibold text-ink">{m.title}</h2>
+          <h2 className="text-[17px] font-semibold text-ink">{title}</h2>
           <p className="mt-0.5 text-[13px] text-muted">
-            {child.name}, {formatAge(currentAge)}
+            {child.name}, {f.age(currentAge)}
           </p>
         </div>
         <div className="text-right max-sm:text-left" aria-live="polite">
           {summary ? (
             <>
               <div className="text-[26px] font-semibold leading-tight text-ink">
-                {formatValue(summary.last.value)}
-                <small className="ml-1 text-sm font-medium text-ink-2">{m.unit}</small>
+                {f.number(summary.last.value)}
+                <small className="ml-1 text-sm font-medium text-ink-2">{unit}</small>
               </div>
               <div className="text-[13px] text-ink-2">
                 {summary.delta !== null && (
                   <>
                     <b className="font-semibold text-ink">
-                      {formatSigned(summary.delta)} {m.unit}
+                      {f.signed(summary.delta)} {unit}
                     </b>{' '}
-                    за {summary.months} міс. ·{' '}
+                    {t('growth.change', { count: summary.months ?? 0 })} ·{' '}
                   </>
                 )}
-                {monthLabel(summary.last)}
+                {f.monthLabel(summary.last)}
               </div>
             </>
           ) : (
-            <div className="text-[13px] text-ink-2">Ще немає замірів</div>
+            <div className="text-[13px] text-ink-2">{t('growth.noData')}</div>
           )}
         </div>
       </div>
 
       <div className="flex flex-wrap items-center gap-2.5">
-        <div className="inline-flex rounded-full bg-soft p-[3px]" role="group" aria-label="Період">
+        <div className="inline-flex rounded-full bg-soft p-[3px]" role="group" aria-label={t('growth.period')}>
           {(
             [
-              ['year', 'Рік'],
-              ['history', 'Вся історія'],
+              ['year', t('growth.year')],
+              ['history', t('growth.history')],
             ] as const
           ).map(([value, label]) => (
             <button
@@ -171,7 +173,7 @@ export const GrowthCard: React.FC<Props> = ({ child, metric }) => {
         </div>
         {mode === 'year' && (
           <select
-            aria-label="Рік"
+            aria-label={t('growth.year')}
             value={year}
             onChange={(e) => {
               setYear(+e.target.value);
@@ -193,7 +195,7 @@ export const GrowthCard: React.FC<Props> = ({ child, metric }) => {
           year={year}
           points={yearPoints}
           preview={editing}
-          unit={m.unit}
+          unit={unit}
           step={m.step}
           emptyDomain={[m.min, (m.min + m.max) / 2]}
           onSelectMonth={(month) => openEditor(month)}
@@ -202,7 +204,7 @@ export const GrowthCard: React.FC<Props> = ({ child, metric }) => {
         <HistoryChart
           points={points.map((p) => ({ ...p, age: ageInMonths(child.birth, p.year, p.month) }))}
           currentAge={currentAge}
-          unit={m.unit}
+          unit={unit}
           onSelect={(p) => openEditor(p.month, p.year)}
         />
       )}
@@ -211,17 +213,17 @@ export const GrowthCard: React.FC<Props> = ({ child, metric }) => {
         <div className="grid gap-2.5 rounded-2xl bg-soft px-3.5 py-3">
           <div className="flex flex-wrap items-center justify-between gap-2.5">
             <span className="text-[13px] text-ink-2">
-              {existing ? 'Змінити замір · ' : 'Новий замір · '}
+              {existing ? t('growth.editEntry') : t('growth.newEntry')} ·{' '}
               <b className="font-semibold capitalize text-ink">
-                {monthName(editing.month)} {year}
+                {f.monthName(editing.month)} {year}
               </b>
             </span>
             <span className="text-lg font-semibold tabular-nums text-ink">
-              {formatValue(editing.value)} {m.unit}
+              {f.number(editing.value)} {unit}
             </span>
           </div>
           <Slider
-            aria-label={m.title}
+            aria-label={title}
             color="secondary"
             size="sm"
             minValue={m.min}
@@ -233,20 +235,20 @@ export const GrowthCard: React.FC<Props> = ({ child, metric }) => {
           <div className="flex flex-wrap items-center justify-between gap-2.5">
             <span className="text-xs text-muted">
               {existing && existing.value === editing.value
-                ? 'Збережене значення'
-                : 'Ще не збережено. На графіку попередній перегляд'}
+                ? t('growth.savedValue')
+                : t('growth.unsaved')}
             </span>
             <div className="flex flex-wrap gap-2">
               {existing && (
                 <Button size="sm" radius="full" variant="bordered" className="border-hairline text-secondary-600" onPress={remove} isDisabled={saving}>
-                  Видалити
+                  {t('common.delete')}
                 </Button>
               )}
               <Button size="sm" radius="full" variant="bordered" className="border-hairline text-ink-2" onPress={() => setEditing(null)} isDisabled={saving}>
-                Скасувати
+                {t('common.cancel')}
               </Button>
               <Button size="sm" radius="full" color="primary" onPress={save} isLoading={saving}>
-                Зберегти
+                {t('common.save')}
               </Button>
             </div>
           </div>
@@ -256,29 +258,29 @@ export const GrowthCard: React.FC<Props> = ({ child, metric }) => {
       {error && <p className="text-[13px] text-danger-600">{error}</p>}
 
       <details className="text-[13px] text-ink-2">
-        <summary className="w-fit cursor-pointer">Показати таблицею</summary>
+        <summary className="w-fit cursor-pointer">{t('common.showTable')}</summary>
         <div className="mt-2 overflow-x-auto">
           <table className="min-w-[260px] border-collapse tabular-nums">
             <thead>
               <tr className="text-left text-muted">
-                <th className="py-1 pr-4 font-medium">Місяць</th>
-                <th className="py-1 pr-4 font-medium">Вік</th>
-                <th className="py-1 pr-4 font-medium">Значення</th>
+                <th className="py-1 pr-4 font-medium">{t('growth.month')}</th>
+                <th className="py-1 pr-4 font-medium">{t('growth.age')}</th>
+                <th className="py-1 pr-4 font-medium">{t('growth.value')}</th>
               </tr>
             </thead>
             <tbody>
               {tableRows.map((p) => (
                 <tr key={p.id} className="border-t border-grid">
-                  <td className="py-1 pr-4 capitalize">{monthLabel(p)}</td>
-                  <td className="py-1 pr-4">{formatAge(ageInMonths(child.birth, p.year, p.month))}</td>
+                  <td className="py-1 pr-4 capitalize">{f.monthLabel(p)}</td>
+                  <td className="py-1 pr-4">{f.age(ageInMonths(child.birth, p.year, p.month))}</td>
                   <td className="py-1 pr-4">
-                    {formatValue(p.value)} {m.unit}
+                    {f.number(p.value)} {unit}
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-          {tableRows.length === 0 && <p className="py-1 text-muted">Немає записів</p>}
+          {tableRows.length === 0 && <p className="py-1 text-muted">{t('common.noRecords')}</p>}
         </div>
       </details>
     </div>

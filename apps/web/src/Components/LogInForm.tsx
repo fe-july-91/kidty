@@ -3,10 +3,11 @@ import { useContext, useState } from 'react';
 import { AuthContext } from '../Context/AuthContext';
 import { client } from '../Utils/httpClient';
 import { useLocalStorage } from '../Shared/CustomHooks/useLocalStorage';
-import { button, logInForm } from '../Utils/Lang';
 import { Button, Input, PressEvent, Checkbox } from '@heroui/react';
+import { useTranslation } from 'react-i18next';
 
 export const LogInForm = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [savedEmail, setSavedEmail] = useLocalStorage<string>('email', '');
   const [savedPassword, setSavedPassword] = useLocalStorage<string>(
@@ -52,10 +53,10 @@ export const LogInForm = () => {
   return (
     <div className="flex max-w-[400px] bg-background px-4 md:px-10 py-10 mx-4 my-12 rounded-3xl shadow-custom">
       <form className="flex flex-col gap-6">
-        <div className="text-xl md:text-2xl text-primary-700">{logInForm.header.ua}</div>
+        <div className="text-xl md:text-2xl text-primary-700">{t('auth.welcome')}</div>
 
         <Input
-          label={logInForm.email.ua}
+          label={t('auth.email')}
           type="email"
           value={email}
           isInvalid={!!errowMessage}
@@ -64,7 +65,7 @@ export const LogInForm = () => {
         />
 
         <Input
-          label={logInForm.password.ua}
+          label={t('auth.password')}
           type="password"
           value={password}
           isInvalid={!!errowMessage}
@@ -80,16 +81,16 @@ export const LogInForm = () => {
 
         <div className="flex justify-between items-center">
           <Checkbox size='sm' isSelected={checked} onChange={handleCheckedButton}>
-            {logInForm.remember.ua}
+            {t('auth.remember')}
           </Checkbox>
 
           <Link to="/recovery" className="text-xs md:text-sm text-primary">
-            {logInForm.forgot.ua}
+            {t('auth.forgot')}
           </Link>
         </div>
 
         <Button variant="solid" color="primary" onPress={handleSubmit}>
-          {button.logIn.ua}
+          {t('auth.login')}
         </Button>
 
         <Button
@@ -97,7 +98,7 @@ export const LogInForm = () => {
           variant='light'
           className="flex flex-row gap-2 justify-center items-center border-1 border-primary bg-white"
         >
-          <i className="icons icons--google"></i> {button.logIn.ua} з Google
+          <i className="icons icons--google"></i> {t('auth.loginWithGoogle')}
         </Button>
       </form>
     </div>

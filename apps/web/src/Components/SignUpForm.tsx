@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { client } from '../Utils/httpClient';
-import { button, signUpForm } from '../Utils/Lang';
 import { Button, Input, PressEvent } from '@heroui/react';
+import { useTranslation } from 'react-i18next';
 
 export const SignUpForm = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [errowMessage, setErrowmessage] = useState('');
   const [email, setEmail] = useState('');
@@ -49,7 +50,7 @@ export const SignUpForm = () => {
     setIsLoading(true); 
 
     if (!validateFields()) {
-      setErrowmessage('Будь ласка, перевірте правильність введених даних.');
+      setErrowmessage(t('common.checkInput'));
       setIsLoading(false); 
       return;
     }
@@ -78,11 +79,11 @@ export const SignUpForm = () => {
         <div className="flex max-w-[400px] bg-background px-4 md:px-10 py-10 mx-4 my-12 rounded-3xl shadow-custom">
           <form className="flex flex-col gap-4">
             <div className="text-xl md:text-2xl text-primary-700">
-              {signUpForm.header.ua}
+              {t('auth.welcome')}
             </div>
 
             <Input
-              label={signUpForm.name.ua}
+              label={t('auth.name')}
               type="text"
               value={name}
               isInvalid={errors.name}
@@ -94,7 +95,7 @@ export const SignUpForm = () => {
             />
 
             <Input
-              label={signUpForm.email.ua}
+              label={t('auth.email')}
               type="email"
               value={email}
               isInvalid={errors.email}
@@ -109,7 +110,7 @@ export const SignUpForm = () => {
             />
 
             <Input
-              label={signUpForm.password.ua}
+              label={t('auth.password')}
               type="password"
               value={password1}
               isInvalid={errors.password1}
@@ -124,7 +125,7 @@ export const SignUpForm = () => {
             />
 
             <Input
-              label={signUpForm.repeatPassword.ua}
+              label={t('auth.repeatPassword')}
               type="password"
               value={password2}
               isInvalid={errors.password2}
@@ -151,7 +152,7 @@ export const SignUpForm = () => {
               isDisabled={!isFormValid || isLoading} 
               isLoading={isLoading} 
             >
-              {button.signUp.ua}
+              {t('auth.signup')}
             </Button>
 
             <Button
@@ -159,25 +160,24 @@ export const SignUpForm = () => {
               variant='light'
               className="flex flex-row gap-2 justify-center items-center border-1 border-primary bg-white"
             >
-              <i className="icons icons--google"></i> {button.signUp.ua} з
-              Google
+              <i className="icons icons--google"></i> {t('auth.signupWithGoogle')}
             </Button>
           </form>
         </div>
       ) : (
         <div className="mx-4 p-8 bg-background rounded-2xl shadow-custom max-w-[400px]">
           <div className="text-2xl text-primary-700 pb-2">
-            {signUpForm.success.header.ua}
+            {t('auth.signupSuccessTitle')}
           </div>
           <p className="text-md text-primary-600">
-            {signUpForm.success.text.ua} {email}
+            {t('auth.signupSuccessText')} {email}
           </p>
           <Button
             className="mt-6 w-full"
             color="primary"
             onPress={() => navigate('/login')}
           >
-            {button.logIn.ua}
+            {t('auth.login')}
           </Button>
         </div>
       )}

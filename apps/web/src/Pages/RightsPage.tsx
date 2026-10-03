@@ -1,11 +1,10 @@
 import { Maria, Yana } from '../Utils/kit';
 import { Avatar } from '../Components/Avatar';
-import { useContext } from 'react';
 import { Link } from 'react-router';
-import { LangContext } from '../Context/LangContext';
+import { useTranslation } from 'react-i18next';
 
 export const RightsPage: React.FC = () => {
-  const { currentLang } = useContext(LangContext);
+  const { t } = useTranslation();
 
   return (
     <div className=" h-full py-8 md:py-12 z-50 relative bg-[#F6F7F8] min-h-[calc(100vh-96px)] md:min-h-[calc(100vh-128px)]">
@@ -15,12 +14,10 @@ export const RightsPage: React.FC = () => {
       >
         <div className="z-20 col-span-full h-fit flex flex-col gap-4 items-start  mb-4">
           <header className="text-5xl text-secondary-500 font-medium">
-            {currentLang === 'UA' ? 'Вітаємо!' : 'Hi!'}
+            {t('about.hi')}
           </header>
           <p className="col-span-2 pb-2 text-[20px] text-left text-gray-800 sm:col-span-full">
-            {currentLang === 'UA'
-              ? 'KIDTY - веб-додаток створений для батьків, щоб допомогти контролювати фізіологічні дані своїх дітей, а також вести облік та графік щеплень. Додаток являє собою дашборт із візуалізацією даних, які можна додавати, видаляти, вносити зміни та проводити аналіз змін із плином часу.'
-              : "KIDTY is a web application created for parents to help monitor their children's physiological data, as well as keep records and vaccination schedules. The application is a dashboard with data visualization that can be added, deleted, modified, and analyzed over time."}
+            {t('about.intro')}
           </p>
         </div>
 
@@ -33,7 +30,7 @@ export const RightsPage: React.FC = () => {
                 </div>
                 <div className="flex flex-col gap-1 text-lg text-white">
                   <h3 className="text-3xl text-left">
-                    {currentLang === 'UA' ? 'Марія Шмакова' : 'Maria Shmakova'}
+                    {t('about.maria')}
                   </h3>
                   <p>Front End Developer, UX/UI Designer</p>
                   <div className="text-left flex flex-row gap-2">
@@ -57,9 +54,7 @@ export const RightsPage: React.FC = () => {
                 </div>
               </div>
               <div className="text-[18px] text-gray-100 text-left">
-                {currentLang === 'UA'
-                  ? 'Привіт! Я фронтенд-розробниця, яка захоплена візуалізацією даних. Сподіваюся, що з цією програмою я зможу подарувати мамам трішки спокою та впевненості, а ще усмішку, адже наші дітки-котики так швидко ростуть!'
-                  : 'Hi there! I’m a front-end developer with a passion for data visualization. As a mom of two, I know firsthand how important it is to have everything you need right at your fingertips. That’s why I created this app—designed especially for moms. My hope is that it brings you a little peace of mind, confidence, and maybe even a smile as you watch your little ones grow up so quickly!'}
+                {t('about.mariaText')}
               </div>
             </div>
 
@@ -70,7 +65,7 @@ export const RightsPage: React.FC = () => {
                 </div>
                 <div className="flex flex-col gap-1 text-lg text-white">
                   <h3 className="text-3xl text-left">
-                    {currentLang === 'UA' ? 'Яна Степанова' : 'Yana Stepanova'}
+                    {t('about.yana')}
                   </h3>
                   <p className="text-left">Java Developer</p>
                   <div className="text-left flex flex-row gap-2">
@@ -94,9 +89,7 @@ export const RightsPage: React.FC = () => {
                 </div>
               </div>
               <div className="text-[18px] text-gray-100 text-left">
-                {currentLang === 'UA'
-                  ? 'Привіт! Я — бекенд-розробниця. Як мама, я щиро зацікавилася кожним елементом цього проєкту. Особливо захоплює зручне графічне відображення даних, яке робить інформацію про здоров’я та динаміку розвитку дитини зрозумілою та легкою для аналізу.'
-                  : 'Hi! Working on the backend part of this project was not only a professional challenge for me but also a true pleasure. As a mom, I found myself deeply invested in every element of this project. I’m especially fascinated by the intuitive graphical representation of data, which makes information about a child’s health and development dynamics clear and easy to analyze.'}
+                {t('about.yanaText')}
               </div>
             </div>
           </div>
@@ -104,9 +97,7 @@ export const RightsPage: React.FC = () => {
 
         <div className="z-20 col-span-full mt-4">
           <p className="z-20 text-lg text-gray-800 mb-4 text-center">
-            {currentLang === 'UA'
-              ? 'У разі запитань та пропозицій звертайтесь до нас!'
-              : 'If you have any questions or suggestions, please contact us!'}
+            {t('about.contact')}
           </p>
           <div className="col-span-full">
             <div className="flex flex-row gap-8 justify-center ">
@@ -116,7 +107,7 @@ export const RightsPage: React.FC = () => {
               >
                 <Avatar
                   index={1}
-                  alt="Марія"
+                  alt={t('about.maria')}
                   className="w-[100px] rounded-xl shadow-custom transition-transform duration-300 hover:scale-110"
                 />
               </Link>
@@ -127,7 +118,7 @@ export const RightsPage: React.FC = () => {
               >
                 <Avatar
                   index={3}
-                  alt="Яна"
+                  alt={t('about.yana')}
                   className="w-[100px] rounded-xl shadow-custom transition-transform duration-300 hover:scale-110"
                 />
               </Link>

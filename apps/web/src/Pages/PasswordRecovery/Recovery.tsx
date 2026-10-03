@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import './Recovery.scss';
 import { client } from '../../Utils/httpClient';
+import { useTranslation } from 'react-i18next';
 
 export const Recovery = () => {
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [errowMessage, setErrowmessage] = useState('');
   const [isSuccess, setIsSuccess] = useState('');
@@ -16,7 +18,7 @@ export const Recovery = () => {
       .post('auth/forgot-password', { email: email.trim() })
       .then(() =>
         setIsSuccess(
-          'Посилання для зміни пароля надіслано на вашу електронну адресу!'
+          t('auth.recoverySent')
         )
       )
       .catch((error) => {
@@ -29,12 +31,12 @@ export const Recovery = () => {
     <div className="Recovery">
       {!isSuccess && (
         <div className="Recovery__container">
-          <div className="Recovery__header">Відновлення пароля</div>
+          <div className="Recovery__header">{t('auth.recoveryTitle')}</div>
 
           <form className="settings__form">
             <div className="form__input">
               <label htmlFor="exampleInputEmail1" className="form__label">
-                Введіть адресу електронної пошти
+                {t('auth.recoveryText')}
               </label>
               <input
                 type="email"
@@ -51,7 +53,7 @@ export const Recovery = () => {
               className="form__button"
               onClick={(e) => handleSubmit(e)}
             >
-              Відправіти
+              {t('common.send')}
             </button>
           </form>
         </div>

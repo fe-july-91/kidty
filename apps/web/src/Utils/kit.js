@@ -130,6 +130,8 @@ export const logoDark = logoimageDark;
 //   ]
 // }
 
+// Month and vaccine names below are data keys used by the API (always
+// Ukrainian). Translated labels live in src/i18n/locales.
 export const months = [
     "Січень",
     "Лютий",

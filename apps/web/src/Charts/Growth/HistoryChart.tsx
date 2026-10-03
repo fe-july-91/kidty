@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { bisector, extent, line, range, scaleLinear } from 'd3';
 import { useElementWidth } from '../../Shared/CustomHooks/useElementWidth';
 import { ChartTooltip } from './ChartTooltip';
-import { Point, formatAge, formatValue, monthLabel } from './growth';
+import { useTranslation } from 'react-i18next';
+import { useFormat } from '../../i18n/useFormat';
+import { Point } from './growth';
 
 type AgedPoint = Point & { age: number };
 
@@ -20,13 +22,15 @@ const M = { top: 26, right: 12, bottom: 30, left: 40 };
 const nearest = bisector<AgedPoint, number>((p) => p.age).center;
 
 export const HistoryChart: React.FC<Props> = ({ points, currentAge, unit, onSelect }) => {
+  const { t } = useTranslation();
+  const f = useFormat();
   const [ref, width] = useElementWidth<HTMLDivElement>();
   const [hover, setHover] = useState<AgedPoint | null>(null);
 
   if (!points.length) {
     return (
       <div ref={ref} className="grid h-[240px] place-items-center text-sm text-muted">
-        Історія з’явиться після першого заміру
+        {t('growth.historyEmpty')}
       </div>
     );
   }
@@ -57,13 +61,13 @@ export const HistoryChart: React.FC<Props> = ({ points, currentAge, unit, onSele
         viewBox={`0 0 ${width} ${HEIGHT}`}
         className="block h-[240px] w-full overflow-visible"
         role="img"
-        aria-label="Значення за всю історію"
+        aria-label={t('growth.chartHistory')}
       >
         {ticks.map((t) => (
           <g key={t}>
             <line className="stroke-grid" x1={M.left} x2={width - M.right} y1={y(t)} y2={y(t)} />
             <text className="fill-muted text-xs tabular-nums" x={M.left - 8} y={y(t)} dy="0.32em" textAnchor="end">
-              {formatValue(t)}
+              {f.number(t)}
             </text>
           </g>
         ))}
@@ -73,7 +77,7 @@ export const HistoryChart: React.FC<Props> = ({ points, currentAge, unit, onSele
         <line className="stroke-hairline" x1={M.left} x2={width - M.right} y1={HEIGHT - M.bottom} y2={HEIGHT - M.bottom} />
         {years.map((a) => (
           <text key={a} className="fill-muted text-xs" x={x(a)} y={HEIGHT - M.bottom + 18} textAnchor="middle">
-            {a === 0 ? 'нар.' : `${a / 12} р.`}
+            {a === 0 ? t('growth.birth') : t('growth.ageYears', { count: a / 12 })}
           </text>
         ))}
 
@@ -90,7 +94,7 @@ export const HistoryChart: React.FC<Props> = ({ points, currentAge, unit, onSele
           />
         ))}
         <text className="fill-ink text-xs font-semibold tabular-nums" x={x(last.age)} y={y(last.value) - 12} textAnchor="end">
-          {formatValue(last.value)} {unit}
+          {f.number(last.value)} {unit}
         </text>
 
         <rect
@@ -109,8 +113,8 @@ export const HistoryChart: React.FC<Props> = ({ points, currentAge, unit, onSele
         <ChartTooltip
           x={x(hover.age)}
           y={y(hover.value)}
-          value={`${formatValue(hover.value)} ${unit}`}
-          label={`${monthLabel(hover)} · ${formatAge(hover.age)}`}
+          value={`${f.number(hover.value)} ${unit}`}
+          label={`${f.monthLabel(hover)} · ${f.age(hover.age)}`}
         />
       )}
     </div>

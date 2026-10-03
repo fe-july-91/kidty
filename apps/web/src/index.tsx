@@ -1,5 +1,6 @@
 // Tailwind first, so its layer order is declared before any SCSS layers.
 import './index.css';
+import './i18n';
 import { createRoot } from 'react-dom/client';
 import Root from './Root';
 

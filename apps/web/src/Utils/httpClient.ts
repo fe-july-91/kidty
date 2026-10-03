@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import i18n from '../i18n';
+
 const BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8088/api/';
 
 function wait(delay: number) {
@@ -31,10 +33,15 @@ function request<T>(
 
   return wait(0)
     .then(() => fetch(BASE_URL + url, options))
+    .catch(() => {
+      throw new Error(i18n.t('errors.network'));
+    })
     .then(async (response) => {
-      if (response.status === 401) {
+      // A 401 from auth/* (e.g. a wrong password) is a normal form error;
+      // anywhere else it means the session has expired.
+      if (response.status === 401 && !url.startsWith('auth/')) {
         window.location.hash = '#/login';
-        throw new Error('Неавторизований. Будь ласка, увійдіть до системи');
+        throw new Error(i18n.t('errors.unauthorized'));
       }
 
       if (!response.ok) {
@@ -44,7 +51,7 @@ function request<T>(
             cause: { status: response.status, details: errorData }
           });
         }
-        throw new Error(errorData.message || errorData.error || 'Помилка на сервері', {
+        throw new Error(errorData.message || errorData.error || i18n.t('errors.server'), {
           cause: { status: response.status, details: errorData }
         });
       }

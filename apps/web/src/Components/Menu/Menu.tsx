@@ -4,7 +4,8 @@ import { useContext } from 'react';
 import { NavLink } from 'react-router';
 import { AuthContext } from '../../Context/AuthContext';
 import { useLockBodyScroll } from 'react-use';
-import { LangContext } from '../../Context/LangContext';
+import { useTranslation } from 'react-i18next';
+import { LanguageSwitcher } from '../LanguageSwitcher';
 
 const getStylelink = ({ isActive }: { isActive: boolean }) => {
   return classNames('menu__link', {
@@ -26,7 +27,7 @@ export const Menu: React.FC<Props> = ({
   const { logOut } = useContext(AuthContext);
   useLockBodyScroll(isMenuOpen);
 
-  const { currentLang } = useContext(LangContext);
+  const { t } = useTranslation();
 
   return (
 
@@ -35,23 +36,23 @@ export const Menu: React.FC<Props> = ({
         'menu--visible': isMenuOpen,
       })}
     >
-      <div className='flex items-center justify-center -translate-y-12'>
+      <div className='flex flex-col items-center justify-center -translate-y-12'>
         {!authorized ? (
           <nav className="menu__nav">
             <NavLink to="/" className={getStylelink} onClick={toggleMenu}>
-              {currentLang === 'UA' ? 'Головна сторінка' : 'Main Page'}
+              {t('nav.home')}
             </NavLink>
             <NavLink to="login" className={getStylelink} onClick={toggleMenu}>
-              {currentLang === 'UA' ? 'Увійти в додаток' : 'Log In'}
+              {t('nav.login')}
             </NavLink>
             <NavLink to="signup" className={getStylelink} onClick={toggleMenu}>
-              {currentLang === 'UA' ? 'Зареєструватися' : 'Sign Up'}
+              {t('nav.signup')}
             </NavLink>
           </nav>
         ) : (
           <nav className="menu__nav">
             <NavLink to="#" className={getStylelink} onClick={toggleMenu}>
-              {currentLang === 'UA' ? 'Головна сторінка' : 'Main Page'}
+              {t('nav.home')}
             </NavLink>
 
             <NavLink
@@ -59,7 +60,7 @@ export const Menu: React.FC<Props> = ({
               className={getStylelink}
               onClick={toggleMenu}
             >
-              {currentLang === 'UA' ? 'Налаштування' : 'Settings'}
+              {t('nav.settings')}
             </NavLink>
             <NavLink
               to="/"
@@ -69,11 +70,11 @@ export const Menu: React.FC<Props> = ({
                 toggleMenu();
               }}
             >
-              {currentLang === 'UA' ? 'Вийти з додатку' : 'Log Out'}
+              {t('nav.logout')}
             </NavLink>
           </nav>
         )}
-
+        <LanguageSwitcher className="mt-6" />
       </div>
     </div>
   );

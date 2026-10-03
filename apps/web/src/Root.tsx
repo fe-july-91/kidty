@@ -9,7 +9,6 @@ import { RequireAuth } from './Components/RequireAuth';
 import { SettingsPage } from './Pages/SettingsPage/SettingsPage';
 import { Recovery } from './Pages/PasswordRecovery/Recovery';
 import { RightsPage } from './Pages/RightsPage';
-import { LangProvider } from './Context/LangContext';
 import { HeroUIProvider } from '@heroui/react';
 import { SuccessPage } from './Pages/SuccessPage';
 
@@ -39,11 +38,9 @@ const router = createHashRouter([
 const Root = () => {
   return (
     <AuthProvider>
-      <LangProvider>
-        <HeroUIProvider>
-          <RouterProvider router={router} />
-        </HeroUIProvider>
-      </LangProvider>
+      <HeroUIProvider>
+        <RouterProvider router={router} />
+      </HeroUIProvider>
     </AuthProvider>
   );
 };
