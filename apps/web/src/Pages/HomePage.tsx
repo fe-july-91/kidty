@@ -15,6 +15,7 @@ import {
 } from '../Utils/kit';
 import { Support } from '../Components/Support';
 import { Reveal } from '../Components/Reveal';
+import { Avatar } from '../Components/Avatar';
 import { homePage } from '../Utils/Lang';
 
 const { hero, features, steps, mobile, contact } = homePage;
@@ -76,12 +77,11 @@ const AvatarStack: React.FC<{ count?: number; size?: string }> = ({
   size = 'size-10',
 }) => (
   <div className="flex -space-x-3">
-    {avatars.slice(0, count).map((src) => (
-      <img
+    {avatars.slice(0, count).map((src: string, i: number) => (
+      <Avatar
         key={src}
-        src={src}
-        alt=""
-        className={`${size} rounded-full object-cover ring-2 ring-white`}
+        index={i}
+        className={`${size} rounded-full ring-2 ring-white`}
       />
     ))}
   </div>

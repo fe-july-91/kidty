@@ -110,6 +110,31 @@ export const avatars = [
   avatarImage20,
 ]
 
+// Soft background behind each avatar (same order as `avatars`); the
+// avatar images themselves have transparent backgrounds.
+export const avatarBackgrounds = [
+  '#dfeaf1',
+  '#dee0f2',
+  '#f2ecde',
+  '#dff2f2',
+  '#f0e0e6',
+  '#f1e0df',
+  '#f2ecde',
+  '#dfeaf1',
+  '#e8e0f0',
+  '#f0e0e6',
+  '#e7e0f0',
+  '#e3eded',
+  '#dee0f2',
+  '#e7e0f0',
+  '#dfeaf1',
+  '#dee0f2',
+  '#e8e0f0',
+  '#f0e0e6',
+  '#e8e0f1',
+  '#f0e0e6',
+];
+
 export const colors = [
   "#cdbdda", 
   "#adb0d9", 

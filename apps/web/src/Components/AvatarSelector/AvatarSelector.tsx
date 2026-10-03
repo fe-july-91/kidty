@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { avatars } from '../../Utils/kit';
+import { Avatar } from '../Avatar';
 import './AvatarSelector.scss';
 
 type Props = {
@@ -26,19 +27,19 @@ export const AvatarSelector: React.FC<Props> = ({
     <div className="avatar-selector">
       <label className="avatar-selector__label">Виберіть аватар</label>
       <div className="avatar-selector__selected" onClick={toggleDropdown}>
-        <img src={`${avatars[avatarIndex]}`} alt="Selected Avatar" />
+        <Avatar index={avatarIndex} alt="Обраний аватар" />
       </div>
       {showDropdown && (
         <div className="avatar-selector__dropdown">
-          {avatars.map((avatar, index) => (
+          {avatars.map((_: string, index: number) => (
             <div
               key={index}
               className="avatar-selector__dropdown--item"
               onClick={() => handleAvatarSelect(index)}
             >
-              <img
-                src={`${avatar}`}
-                alt={`Avatar ${index + 1}`}
+              <Avatar
+                index={index}
+                alt={`Аватар ${index + 1}`}
                 className="avatar-selector__dropdown--image"
               />
             </div>

@@ -1,4 +1,5 @@
-import { avatars, Maria, Yana } from '../Utils/kit';
+import { Maria, Yana } from '../Utils/kit';
+import { Avatar } from '../Components/Avatar';
 import { useContext } from 'react';
 import { Link } from 'react-router';
 import { LangContext } from '../Context/LangContext';
@@ -113,9 +114,9 @@ export const RightsPage: React.FC = () => {
                 to="https://www.linkedin.com/in/mariashmakova"
                 target="_blank"
               >
-                <img
-                  src={avatars[1]}
-                  alt="kitty"
+                <Avatar
+                  index={1}
+                  alt="Марія"
                   className="w-[100px] rounded-xl shadow-custom transition-transform duration-300 hover:scale-110"
                 />
               </Link>
@@ -124,9 +125,9 @@ export const RightsPage: React.FC = () => {
                 to="https://www.linkedin.com/in/yana-stepanova-syna"
                 target="_blank"
               >
-                <img
-                  src={avatars[3]}
-                  alt="kitty"
+                <Avatar
+                  index={3}
+                  alt="Яна"
                   className="w-[100px] rounded-xl shadow-custom transition-transform duration-300 hover:scale-110"
                 />
               </Link>
