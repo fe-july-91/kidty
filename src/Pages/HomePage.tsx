@@ -1,7 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import Sketch from '../Components/Sketch';
-import BannerWrapper from '../Components/Banner/Wrapper';
+import { Banner } from '../Components/Banner/Banner';
 import { Button} from '@heroui/react';
 import { carouselImages, giff, staticPreview } from '../Utils/kit';
 import { Carousel } from '../Components/Carousel';
@@ -32,7 +31,7 @@ export const HomePage: React.FC = () => {
         >
           {homePage.header.ua}
         </div>
-        <BannerWrapper sketch={Sketch} />
+        <Banner />
 
         {/* buttons */}
         <div className=' w-full flex flex-col items-center'>

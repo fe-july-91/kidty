@@ -52,6 +52,10 @@ module.exports = {
           '0%': { opacity: '0' },
           '100%': { opacity: '1' },
         },
+        confetti: {
+          '0%': { transform: 'translateY(-20px) rotate(0deg)' },
+          '100%': { transform: 'translateY(770px) rotate(720deg)' },
+        },
         spinDelay: {
           '0%': { transform: 'scale(1)' },
           '50%': { transform: 'scale(1.5)', opacity: '0.5' },
@@ -64,6 +68,7 @@ module.exports = {
         fadeIn: 'fadeIn 1s ease-in-out forwards',
         floatIn: 'floatIn 0.8s ease-out forwards',
         spinDelay: 'spinDelay 1s ease-in-out infinite',
+        confetti: 'confetti 8s linear infinite',
       },
       colors: {
         primary: {

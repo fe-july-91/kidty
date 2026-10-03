@@ -1,110 +1,92 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import './Banner.scss';
+import React, { useEffect, useState } from 'react';
 import { avatars } from '../../Utils/kit';
 
-const letters = ['K', 'I', 'D', 'T', 'Y'];
-const shapes = ['circle', 'square', 'rectangle', 'd-shape', 't-shape'];
-const colors = ['#6771DE', '#C88CF8', '#50C3F9', '#6c6e90'];
+const ROWS = 3;
+const CONFETTI_COUNT = 60;
+const CONFETTI_COLORS = [
+  '#FF3232',
+  '#32FF32',
+  '#3232FF',
+  '#FFFF32',
+  '#FF32FF',
+  '#32FFFF',
+];
+const CONFETTI_SHAPES = ['rounded-full', 'rounded-none', 'triangle'];
 
-const rows = 10;
-const columns = 5;
-const updateRate = 0.2;
-
-const generateRandomItem = (key: number, columnIndex: number) => {
-  const randomType = Math.random();
-
-  if (randomType < 0.33) {
-    const letterIndex = key % letters.length;
-    const randomLetter = letters[letterIndex];
-    return {
-      type: 'letter',
-      content: randomLetter,
-      color: '#6c6e90',
-      key,
-      columnIndex,
-    };
-  } else if (randomType < 0.66) {
-    const randomShape = shapes[Math.floor(Math.random() * shapes.length)];
-    const randomColor = colors[Math.floor(Math.random() * colors.length)];
-    return {
-      type: `shape ${randomShape}`,
-      color: randomColor,
-      key,
-      columnIndex,
-    };
-  } else {
-    const randomAvatar = avatars[Math.floor(Math.random() * avatars.length)];
-    return { type: 'avatar', src: randomAvatar, key, columnIndex };
-  }
+const getColumns = (width: number) => {
+  if (width < 480) return 2;
+  if (width < 768) return 4;
+  if (width < 1040) return 5;
+  if (width < 1280) return 6;
+  if (width < 1440) return 7;
+  return 9;
 };
 
-const Banner = () => {
-  const generateInitialGrid = () => {
-    const items = [];
-    for (let i = 0; i < rows; i++) {
-      for (let j = 0; j < columns; j++) {
-        items.push(generateRandomItem(i * columns + j, j));
-      }
-    }
-    return items;
-  };
+const random = (min: number, max: number) => Math.random() * (max - min) + min;
 
-  const [grid, setGrid] = useState(() => generateInitialGrid());
+const randomAvatar = () => avatars[Math.floor(Math.random() * avatars.length)];
 
-  const partiallyUpdateGrid = useCallback(() => {
-    setGrid((prevGrid) => {
-      const totalItems = prevGrid.length;
-      const itemsToUpdate = Math.floor(totalItems * updateRate);
-      const updatedIndices = new Set<number>();
+const createConfetti = () =>
+  Array.from({ length: CONFETTI_COUNT }, (_, i) => ({
+    id: i,
+    left: random(0, 100),
+    size: random(8, 15),
+    duration: random(4, 12),
+    delay: -random(0, 12),
+    color: CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)],
+    shape: CONFETTI_SHAPES[Math.floor(Math.random() * CONFETTI_SHAPES.length)],
+  }));
 
-      while (updatedIndices.size < itemsToUpdate) {
-        const randomIndex = Math.floor(Math.random() * totalItems);
-        updatedIndices.add(randomIndex);
-      }
-
-      return prevGrid.map((item, index) =>
-        updatedIndices.has(index)
-          ? generateRandomItem(item.key, item.columnIndex)
-          : item
-      );
-    });
-  }, []);
+export const Banner: React.FC = () => {
+  const [columns, setColumns] = useState(() => getColumns(window.innerWidth));
+  const [avatarList] = useState(() =>
+    Array.from({ length: ROWS * getColumns(Infinity) }, randomAvatar)
+  );
+  const [confetti] = useState(createConfetti);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      partiallyUpdateGrid();
-    }, 6000);
+    const handleResize = () => setColumns(getColumns(window.innerWidth));
 
-    return () => clearInterval(interval);
-  }, [partiallyUpdateGrid]);
-
-  const handleBannerClick = () => {
-    partiallyUpdateGrid();
-  };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return (
-    <div className="banner-container" onClick={handleBannerClick}>
-      <div className="grid">
-        {grid.map((item, i) => (
+    <div className="relative w-full h-[750px] overflow-hidden bg-primary-800">
+      {confetti.map((c) => (
+        <span
+          key={c.id}
+          className={`absolute top-0 animate-confetti ${c.shape === 'triangle' ? '' : c.shape}`}
+          style={{
+            left: `${c.left}%`,
+            width: c.size,
+            height: c.size,
+            backgroundColor: c.color,
+            clipPath:
+              c.shape === 'triangle'
+                ? 'polygon(50% 0, 100% 100%, 0 100%)'
+                : undefined,
+            animationDuration: `${c.duration}s`,
+            animationDelay: `${c.delay}s`,
+          }}
+        />
+      ))}
+
+      <div
+        className="relative mt-[140px] mx-auto grid gap-y-6 justify-items-center w-full px-4"
+        style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}
+      >
+        {avatarList.slice(0, ROWS * columns).map((src, i) => (
           <div
             key={i}
-            className={`grid-item ${item.type}`}
-            style={{
-              backgroundColor: item.type.startsWith('shape')
-                ? item.color
-                : undefined,
-              color: item.type === 'letter' ? item.color : undefined,
-            }}
+            className="transition-transform duration-300 hover:scale-[1.6] hover:z-10"
           >
-            {item.type === 'letter' && item.content}
-            {item.type === 'avatar' && (
-              <img
-                src={item.src}
-                loading="lazy"
-                alt="Avatar"
-                className="avatar"
-              />
-            )}
+            <img
+              src={src}
+              alt=""
+              className="w-[min(110px,22vw)] aspect-square opacity-0 animate-floatIn"
+              style={{ animationDelay: `${i * 0.03}s` }}
+            />
           </div>
         ))}
       </div>
