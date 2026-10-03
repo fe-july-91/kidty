@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { prisma } from '../src/db.js';
-import { hashToken } from '../src/lib/tokens.js';
+import { outbox } from '../src/lib/mailer.js';
 import { setupApp, signUp } from './helpers.js';
 
 describe('auth', () => {
@@ -100,39 +100,33 @@ describe('auth', () => {
     expect(invalid.statusCode).toBe(401);
   });
 
-  it('resets the password with a one-time token', async () => {
+  it('emails a one-time reset link in the user\'s language', async () => {
     const { email } = await signUp(ctx.app);
 
     const forgot = await ctx.app.inject({
       method: 'POST',
       url: '/api/auth/forgot-password',
+      headers: { 'accept-language': 'uk' },
       payload: { email },
     });
     expect(forgot.statusCode).toBe(200);
 
-    // The raw token only goes out by email; plant a known one instead.
-    const user = await prisma.user.findUniqueOrThrow({ where: { email } });
-    await prisma.passwordResetToken.create({
-      data: {
-        userId: user.id,
-        tokenHash: hashToken('known-token'),
-        expiresAt: new Date(Date.now() + 60_000),
-      },
-    });
+    expect(outbox).toHaveLength(1);
+    expect(outbox[0]).toMatchObject({ to: email, subject: 'Відновлення пароля Kidty' });
+    const token = /reset-password\?token=([\w-]+)/.exec(outbox[0].text)?.[1];
+    expect(token).toBeTruthy();
 
     const reset = () =>
       ctx.app.inject({
         method: 'POST',
         url: '/api/auth/reset-password',
-        payload: {
-          token: 'known-token',
-          password: 'brand-new-password',
-          repeatPassword: 'brand-new-password',
-        },
+        payload: { token, password: 'brand-new-password', repeatPassword: 'brand-new-password' },
       });
 
     expect((await reset()).statusCode).toBe(200);
-    expect((await reset()).statusCode).toBe(400);
+    const reused = await reset();
+    expect(reused.statusCode).toBe(400);
+    expect(reused.json().code).toBe('resetLinkInvalid');
 
     const login = await ctx.app.inject({
       method: 'POST',
@@ -140,6 +134,12 @@ describe('auth', () => {
       payload: { email, password: 'brand-new-password' },
     });
     expect(login.statusCode).toBe(200);
+  });
+
+  it('writes the reset email in English by default', async () => {
+    const { email } = await signUp(ctx.app);
+    await ctx.app.inject({ method: 'POST', url: '/api/auth/forgot-password', payload: { email } });
+    expect(outbox[0].subject).toBe('Reset your Kidty password');
   });
 
   it('answers forgot-password the same way for unknown emails', async () => {
@@ -150,6 +150,7 @@ describe('auth', () => {
     });
     expect(res.statusCode).toBe(200);
     expect(await prisma.passwordResetToken.count()).toBe(0);
+    expect(outbox).toHaveLength(0);
   });
 });
 

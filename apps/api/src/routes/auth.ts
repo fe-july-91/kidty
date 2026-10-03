@@ -7,6 +7,8 @@ import { HttpError } from '../lib/errors.js';
 import { email, name, newPasswordBody } from '../lib/schemas.js';
 import { createResetToken, hashToken } from '../lib/tokens.js';
 import { toUserDto } from '../lib/dto.js';
+import { sendMail } from '../lib/mailer.js';
+import { requestLang, resetPasswordEmail } from '../lib/emails.js';
 
 const RESET_TOKEN_TTL_MS = 60 * 60 * 1000;
 
@@ -92,11 +94,15 @@ export const authRoutes: FastifyPluginAsyncZod = async (app) => {
           },
         });
 
-        // TODO: send by email. Until then the link is only logged locally.
-        if (env.NODE_ENV === 'development') {
-          request.log.info(
-            `Password reset link: ${env.APP_URL}/#/reset-password?token=${token}`
-          );
+        const link = `${env.APP_URL}/#/reset-password?token=${token}`;
+        try {
+          await sendMail({
+            to: user.email,
+            ...resetPasswordEmail(requestLang(request), user.name, link),
+          });
+        } catch (error) {
+          // Don't reveal delivery problems; the user can simply try again.
+          request.log.error(error, 'Could not send the password reset email');
         }
       }
 

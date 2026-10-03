@@ -1,6 +1,7 @@
 import { afterAll, beforeAll, beforeEach } from 'vitest';
 import { buildApp, type App } from '../src/app.js';
 import { prisma } from '../src/db.js';
+import { outbox } from '../src/lib/mailer.js';
 
 export function setupApp(options: { rateLimit?: boolean } = {}) {
   const ctx = {} as { app: App };
@@ -10,6 +11,7 @@ export function setupApp(options: { rateLimit?: boolean } = {}) {
   });
 
   beforeEach(async () => {
+    outbox.length = 0;
     await prisma.$executeRawUnsafe(
       'TRUNCATE users, support_requests RESTART IDENTITY CASCADE'
     );

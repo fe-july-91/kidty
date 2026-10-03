@@ -21,6 +21,7 @@ cp apps/web/.env.example apps/web/.env.local
 cp apps/api/.env.example apps/api/.env
 
 npm run db:up                    # start PostgreSQL in Docker (localhost:5434)
+docker compose up -d mail        # Mailpit: catches emails, inbox at http://localhost:8025
 npm run db:migrate               # apply migrations
 npm run db:seed                  # create a demo account (see apps/api/.env)
 

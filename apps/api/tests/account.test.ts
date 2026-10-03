@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { prisma } from '../src/db.js';
+import { outbox } from '../src/lib/mailer.js';
 import { childPayload, setupApp, signUp } from './helpers.js';
 
 describe('account', () => {
@@ -84,5 +85,7 @@ describe('account', () => {
     });
     expect(res.statusCode).toBe(201);
     expect(await prisma.supportRequest.count()).toBe(1);
+    expect(outbox[0]).toMatchObject({ to: 'support@kidty.local', replyTo: 'm@example.com' });
+    expect(outbox[0].text).toContain('Привіт!');
   });
 });

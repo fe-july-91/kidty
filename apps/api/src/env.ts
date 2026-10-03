@@ -25,6 +25,11 @@ const schema = z.object({
   COOKIE_SAMESITE: z.enum(['lax', 'strict', 'none']).default('lax'),
   /** Comma-separated list of allowed frontend origins. */
   CORS_ORIGIN: z.string().default('http://localhost:3000'),
+  /** SMTP server, e.g. smtp://localhost:1025 (Mailpit) or smtps://user:pass@host:465. */
+  SMTP_URL: z.string().optional(),
+  MAIL_FROM: z.string().default('Kidty <no-reply@kidty.local>'),
+  /** Where messages from the support form are sent. */
+  SUPPORT_EMAIL: z.email().default('support@kidty.local'),
   /** Public URL of the frontend, used in password reset links. */
   APP_URL: z.url().default('http://localhost:3000'),
 });
