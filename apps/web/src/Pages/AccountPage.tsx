@@ -31,15 +31,15 @@ export const AccountPage: React.FC = () => {
       );
   }, []);
 
-  // Keep the list in sync after a child is added or edited in a modal.
-  useEffect(() => {
-    if (!child) return;
+  // Show a child and keep the list in sync after it is added or edited.
+  const showChild = (next: Child) => {
+    setChild(next);
     setChildren((prev) =>
-      prev.some((c) => c.id === child.id)
-        ? prev.map((c) => (c.id === child.id ? child : c))
-        : [...prev, child]
+      prev.some((c) => c.id === next.id)
+        ? prev.map((c) => (c.id === next.id ? next : c))
+        : [...prev, next]
     );
-  }, [child]);
+  };
 
   const age = child ? calculateFullChildAge(child.birth) : null;
 
@@ -112,7 +112,7 @@ export const AccountPage: React.FC = () => {
           <AddModal
             children={children}
             setModal={setIsAddModal}
-            setCurrentChild={setChild}
+            setCurrentChild={showChild}
           />
         </div>
       )}
@@ -122,7 +122,7 @@ export const AccountPage: React.FC = () => {
           <EditModal
             setModal={setIsEditModal}
             currentChild={child}
-            setCurrentChild={setChild}
+            setCurrentChild={showChild}
             setChildren={setChildren}
           />
         </div>

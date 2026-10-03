@@ -1,4 +1,4 @@
-import { CardTitleTypes, Child } from '../Shared/types/types';
+import { Child } from '../Shared/types/types';
 import { CardEyes } from '../Cards/CardEyes/CardEyes';
 import {
   calculateChildAge,
@@ -6,7 +6,7 @@ import {
 } from '../Shared/hendlers/generateYearArray';
 import { CardVaccines } from '../Cards/CardVaccines/CardVaccines';
 import { useMemo } from 'react';
-import { CardItem } from '../Cards/CardItem/CardItem';
+import { GrowthCard } from '../Charts/Growth/GrowthCard';
 
 type Props = {
   child: Child;
@@ -18,31 +18,13 @@ export const Dashboard: React.FC<Props> = ({ child }) => {
 
   const items = [
     {
-      component: (
-        <CardItem
-          childId={child.id}
-          years={years}
-          cardType={CardTitleTypes.height}
-        />
-      ),
+      component: <GrowthCard key={`${child.id}-height`} child={child} metric="height" />,
     },
     {
-      component: (
-        <CardItem
-          childId={child.id}
-          years={years}
-          cardType={CardTitleTypes.weight}
-        />
-      ),
+      component: <GrowthCard key={`${child.id}-weight`} child={child} metric="weight" />,
     },
     {
-      component: (
-        <CardItem
-          childId={child.id}
-          years={years}
-          cardType={CardTitleTypes.foot}
-        />
-      ),
+      component: <GrowthCard key={`${child.id}-foot`} child={child} metric="foot" />,
     },
     { component: <CardEyes childId={child.id} /> },
     {
