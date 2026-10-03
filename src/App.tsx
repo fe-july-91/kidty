@@ -1,6 +1,6 @@
 import './App.scss';
 import { Header } from './Components/Header';
-import { Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router';
 import { Footer } from './Components/Footer/Footer';
 import { useEffect, useState } from 'react';
 import LoadingScreen from './Components/LoadingScreen';

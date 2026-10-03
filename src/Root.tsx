@@ -1,4 +1,4 @@
-import { RouterProvider, createHashRouter } from 'react-router-dom';
+import { RouterProvider, createHashRouter } from 'react-router';
 import { App } from './App';
 import { HomePage } from './Pages/HomePage';
 import { AccountPage } from './Pages/AccountPage';

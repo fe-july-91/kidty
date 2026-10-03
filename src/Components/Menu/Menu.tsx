@@ -1,7 +1,7 @@
 import './Menu.scss';
 import classNames from 'classnames';
 import { useContext } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router';
 import { AuthContext } from '../../Context/AuthContext';
 import { useLockBodyScroll } from 'react-use';
 import { LangContext } from '../../Context/LangContext';

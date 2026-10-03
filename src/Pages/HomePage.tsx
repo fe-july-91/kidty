@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { Banner } from '../Components/Banner/Banner';
 import { Button} from '@heroui/react';
 import { carouselImages, giff, staticPreview } from '../Utils/kit';

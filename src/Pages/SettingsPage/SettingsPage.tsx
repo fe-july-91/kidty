@@ -3,7 +3,7 @@ import { useLocalStorage } from '../../Shared/CustomHooks/useLocalStorage';
 import { client } from '../../Utils/httpClient';
 import { PersonalData } from '../../Shared/types/types';
 import { Button, Input, PressEvent } from '@heroui/react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router';
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from "@heroui/react";
 
 export const SettingsPage = () => {

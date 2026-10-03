@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router';
 import { useContext, useState } from 'react';
 import { AuthContext } from '../Context/AuthContext';
 import { client } from '../Utils/httpClient';

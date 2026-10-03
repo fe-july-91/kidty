@@ -1,6 +1,6 @@
 import { avatars, Maria, Yana } from '../Utils/kit';
 import { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { LangContext } from '../Context/LangContext';
 
 export const RightsPage: React.FC = () => {
