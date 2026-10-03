@@ -56,7 +56,7 @@ export function Carousel({ images, autoPlay = true, interval = 3000 }: CarouselP
           {images.map((image, index) => (
             <div
               key={index}
-              className="w-full flex-shrink-0"
+              className="w-full shrink-0"
             >
               <img
                 src={image.src}

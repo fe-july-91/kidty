@@ -76,9 +76,9 @@ export const HomePage: React.FC = () => {
             <span className=" text-2xl lg:text-4xl text-white font-bold pb-2">
             Усі дані під рукою:
             </span>
-                {homePage.list.map(l => (
-              <div key={l.ua} className="flex flex-row items-start gap-2 bg-white shadow-custom rounded-3xl p-4 md:p-6  transition-transform duration-300 hover:scale-110">
-                <div className="flex-shrink-0 mt-2 w-3 h-3 bg-info rounded-full"></div>
+                {homePage.list.map((l, i) => (
+              <div key={i} className="flex flex-row items-start gap-2 bg-white shadow-custom rounded-3xl p-4 md:p-6  transition-transform duration-300 hover:scale-110">
+                <div className="shrink-0 mt-2 w-3 h-3 bg-info rounded-full"></div>
                   <div>
                     {l.ua}
                   </div>

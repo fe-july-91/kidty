@@ -1,7 +1,7 @@
-import React from 'react';
+// Tailwind first, so its layer order is declared before any SCSS layers.
+import './index.css';
 import { createRoot } from 'react-dom/client';
 import Root from './Root';
-import './index.css';
 
 const container = document.getElementById('root') as HTMLElement;
 

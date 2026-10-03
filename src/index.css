@@ -1,4 +1,94 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
 
+@plugin './hero.ts';
+@source '../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --breakpoint-*: initial;
+  --breakpoint-xs: 480px;
+  --breakpoint-sm: 600px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1440px;
+
+  --grid-template-columns-32px: repeat(24, 32px);
+
+  --shadow-custom: 0px 0px 8px rgba(34, 2, 73, 0.4);
+
+  --color-gray: #586f7c;
+  --color-gray-100: #eaf6f8;
+  --color-gray-200: #d5ecf1;
+  --color-gray-300: #b2ced7;
+  --color-gray-400: #89a4b0;
+  --color-gray-500: #586f7c;
+  --color-gray-600: #40586a;
+  --color-gray-700: #2c4359;
+  --color-gray-800: #1c2f47;
+  --color-gray-900: #10213b;
+
+  --color-info: #0fd3ff;
+  --color-info-100: #cffff9;
+  --color-info-200: #9ffffa;
+  --color-info-300: #6ffaff;
+  --color-info-400: #4bebff;
+  --color-info-500: #0fd3ff;
+  --color-info-600: #0aa5db;
+  --color-info-700: #077cb7;
+  --color-info-800: #045993;
+  --color-info-900: #02407a;
+
+  --animate-wiggle: wiggle 4s ease-in-out infinite;
+  --animate-floatUp: floatUp 0.8s ease-out forwards;
+  --animate-fadeIn: fadeIn 1s ease-in-out forwards;
+  --animate-floatIn: floatIn 0.8s ease-out forwards;
+  --animate-spinDelay: spinDelay 1s ease-in-out infinite;
+  --animate-confetti: confetti 8s linear infinite;
+
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(3deg); }
+  }
+  @keyframes floatUp {
+    0% { transform: translateY(20px); opacity: 0; }
+    100% { transform: translateY(0px); opacity: 1; }
+  }
+  @keyframes floatIn {
+    0% { transform: scale(0.2); opacity: 0; }
+    80% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  @keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  @keyframes confetti {
+    0% { transform: translateY(-20px) rotate(0deg); }
+    100% { transform: translateY(770px) rotate(720deg); }
+  }
+  @keyframes spinDelay {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.5); opacity: 0.5; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+}
+
+/*
+  Tailwind v4 defaults borders to `currentcolor` and buttons to the default
+  cursor; keep the v3 behaviour the existing UI was built against.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
+  }
+}

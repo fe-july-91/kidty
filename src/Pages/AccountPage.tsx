@@ -137,8 +137,8 @@ export const AccountPage: React.FC = () => {
                 </div>
               </div>
                 {/* child data */}
-              <div className='flex flex-col gap-4 flex-shrink-[2] lg:max-w-[400px]'>
-                <div className='flex flex-row flex-wrap gap-3 flex-shrink-[2]'>
+              <div className='flex flex-col gap-4 shrink-2 lg:max-w-[400px]'>
+                <div className='flex flex-row flex-wrap gap-3 shrink-2'>
                   {Object.values(lastDataValues).map(cardType => (
                     <div className='px-4 py-[6px] bg-background rounded-2xl shadow-custom'>
                       <TitleCardBlock
@@ -162,8 +162,8 @@ export const AccountPage: React.FC = () => {
                       key={childItem.id}
                       className={`w-[50px] h-[50px] md:w-[70px] md:h-[70px] rounded-full overflow-hidden shadow-custom  ${
                         child.id === childItem.id
-                          ? 'outline outline-4 outline-white'
-                          : 'outline-none'
+                          ? 'outline-solid outline-4 outline-white'
+                          : 'outline-hidden'
                       }`}
                       onClick={() => handleChildChange(childItem.id)}
                     >

@@ -1,8 +1,9 @@
-@import '../Utils/variables';
-@import '../Utils/mixins';
+// Global styles: imported once, from App.scss.
+@import './tools';
 @import '../Utils/fonts';
-@import '../Utils/typography';
-@import '../Utils/normalize';
 @import './icons';
 
-
+// Keep the reset in the base layer so Tailwind utilities can override it.
+@layer base {
+  @import '../Utils/normalize';
+}
