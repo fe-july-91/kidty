@@ -182,12 +182,12 @@ export const signUpForm = {
   },
   success: {
     header: {
-      en: "Meow 🎉 A confirmation letter has been sent to the specified email!",
-      ua: "Мяу 🎉 Лист-підтвердження надіслано на вказану електроннупошту!"
+      en: "Meow 🎉 You're registered!",
+      ua: "Мяу 🎉 Реєстрація успішна!"
     },
     text: {
-      en: "To complete registration, you need to go to your email.",
-      ua: "Для завершення реєстрації перевірте ваш імейл та пройдіть веріфікацію."
+      en: "You can now log in with your email",
+      ua: "Тепер ви можете увійти за допомогою email"
     },
   },
   errow: {

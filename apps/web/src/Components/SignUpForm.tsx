@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router';
 import { client } from '../Utils/httpClient';
 import { button, signUpForm } from '../Utils/Lang';
 import { Button, Input, PressEvent } from '@heroui/react';
 
 export const SignUpForm = () => {
+  const navigate = useNavigate();
   const [errowMessage, setErrowmessage] = useState('');
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
@@ -170,6 +172,13 @@ export const SignUpForm = () => {
           <p className="text-md text-primary-600">
             {signUpForm.success.text.ua} {email}
           </p>
+          <Button
+            className="mt-6 w-full"
+            color="primary"
+            onPress={() => navigate('/login')}
+          >
+            {button.logIn.ua}
+          </Button>
         </div>
       )}
     </>
