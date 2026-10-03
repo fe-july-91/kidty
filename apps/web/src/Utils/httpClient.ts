@@ -9,6 +9,23 @@ function wait(delay: number) {
   return new Promise((resolve) => setTimeout(resolve, delay));
 }
 
+type ApiError = {
+  code?: string;
+  message?: string;
+  errors?: { field: string; code: string }[];
+};
+
+/** Turns an API error body into a message in the current language. */
+function apiErrorMessage({ code, message, errors }: ApiError) {
+  const translate = (key: string, fallback?: string) =>
+    i18n.t(`apiErrors.${key}`, { defaultValue: fallback ?? i18n.t('apiErrors.invalid') });
+
+  if (errors?.length) {
+    return [...new Set(errors.map((e) => translate(e.code)))].join('\n');
+  }
+  return code ? translate(code, message) : message || i18n.t('errors.server');
+}
+
 type RequestMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
 function request<T>(
@@ -45,14 +62,9 @@ function request<T>(
       }
 
       if (!response.ok) {
-        const errorData = await response.json();
-        if (Array.isArray(errorData.errors)) {
-          throw new Error(errorData.errors.join('\n'), {
-            cause: { status: response.status, details: errorData }
-          });
-        }
-        throw new Error(errorData.message || errorData.error || i18n.t('errors.server'), {
-          cause: { status: response.status, details: errorData }
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(apiErrorMessage(errorData), {
+          cause: { status: response.status, details: errorData },
         });
       }
 

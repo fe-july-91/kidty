@@ -26,7 +26,7 @@ export const accountRoutes: FastifyPluginAsyncZod = async (app) => {
         where: { email, NOT: { id: request.userId } },
       });
       if (taken) {
-        throw new HttpError(409, 'Користувач з таким email вже існує');
+        throw new HttpError(409, 'emailTaken', 'This email is already registered');
       }
 
       const user = await prisma.user.update({
@@ -45,7 +45,7 @@ export const accountRoutes: FastifyPluginAsyncZod = async (app) => {
         where: { id: request.userId },
         data: { passwordHash: await argon2.hash(request.body.password) },
       });
-      return { message: 'Пароль змінено' };
+      return { message: 'Password changed' };
     }
   );
 

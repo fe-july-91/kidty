@@ -4,7 +4,6 @@ import Fastify, {
 } from 'fastify';
 import cors from '@fastify/cors';
 import rateLimit from '@fastify/rate-limit';
-import { z } from 'zod';
 import {
   hasZodFastifySchemaValidationErrors,
   serializerCompiler,
@@ -13,15 +12,13 @@ import {
 } from 'fastify-type-provider-zod';
 import { env } from './env.js';
 import { prisma } from './db.js';
-import { HttpError } from './lib/errors.js';
+import { HttpError, VALIDATION_CODES } from './lib/errors.js';
 import { Prisma } from './generated/prisma/client.js';
 import authPlugin from './plugins/auth.js';
 import { authRoutes } from './routes/auth.js';
 import { accountRoutes } from './routes/account.js';
 import { childrenRoutes } from './routes/children.js';
 import { supportRoutes } from './routes/support.js';
-
-z.config(z.locales.uk());
 
 type AppOptions = FastifyServerOptions & {
   /** Per-route request limits on auth and support endpoints. */
@@ -40,39 +37,47 @@ export async function buildApp({
   app.setValidatorCompiler(validatorCompiler);
   app.setSerializerCompiler(serializerCompiler);
 
-  // Error body: { message, errors? } — the frontend shows `errors` joined
-  // by newlines, or `message` otherwise.
+  // Error body: { code, message, errors? }. The frontend translates `code`
+  // (and each `errors[].code`); `message` is an English fallback.
   app.setErrorHandler((error: FastifyError, request, reply) => {
     if (hasZodFastifySchemaValidationErrors(error)) {
       return reply.status(400).send({
-        message: 'Некоректні дані',
-        errors: error.validation.map((issue) => issue.message),
+        code: 'validation',
+        message: 'Invalid data',
+        errors: error.validation.map((issue) => ({
+          field: issue.instancePath.slice(1).replaceAll('/', '.'),
+          code: issue.message && VALIDATION_CODES.has(issue.message) ? issue.message : 'invalid',
+        })),
       });
     }
     if (error instanceof HttpError) {
-      return reply.status(error.statusCode).send({ message: error.message });
+      return reply
+        .status(error.statusCode)
+        .send({ code: error.code, message: error.message });
     }
     if (
       error instanceof Prisma.PrismaClientKnownRequestError &&
       error.code === 'P2002'
     ) {
-      return reply.status(409).send({ message: 'Такий запис уже існує' });
+      return reply.status(409).send({ code: 'duplicate', message: 'Already exists' });
     }
     if (error.statusCode === 429) {
       return reply
         .status(429)
-        .send({ message: 'Забагато спроб. Спробуйте трохи пізніше' });
+        .send({ code: 'tooManyRequests', message: 'Too many requests' });
     }
     if (error.statusCode && error.statusCode < 500) {
-      return reply.status(error.statusCode).send({ message: error.message });
+      return reply
+        .status(error.statusCode)
+        .send({ code: 'badRequest', message: error.message });
     }
 
     request.log.error(error);
-    return reply.status(500).send({ message: 'Помилка на сервері' });
+    return reply.status(500).send({ code: 'server', message: 'Server error' });
   });
 
   app.setNotFoundHandler((_request, reply) =>
-    reply.status(404).send({ message: 'Не знайдено' })
+    reply.status(404).send({ code: 'notFound', message: 'Not found' })
   );
 
   await app.register(cors, {

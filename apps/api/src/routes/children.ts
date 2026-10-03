@@ -27,7 +27,7 @@ async function assertOwnChild(userId: number, childId: number) {
     where: { id: childId, userId },
     select: { id: true },
   });
-  if (!child) throw notFound('Дитину не знайдено');
+  if (!child) throw notFound('childNotFound', 'Child not found');
 }
 
 const toChildData = (body: z.infer<typeof childBody>) => ({
@@ -65,7 +65,7 @@ export const childrenRoutes: FastifyPluginAsyncZod = async (app) => {
       where: { id: request.params.childId, userId: request.userId },
       include: { user: true },
     });
-    if (!child) throw notFound('Дитину не знайдено');
+    if (!child) throw notFound('childNotFound', 'Child not found');
     return toChildDto(child);
   });
 

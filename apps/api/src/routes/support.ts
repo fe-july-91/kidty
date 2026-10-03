@@ -15,8 +15,8 @@ export const supportRoutes: FastifyPluginAsyncZod = async (app) => {
           message: z
             .string()
             .trim()
-            .min(1, 'Повідомлення не може бути порожнім')
-            .max(5000, 'Повідомлення занадто довге'),
+            .min(1, 'messageRequired')
+            .max(5000, 'messageTooLong'),
         }),
       },
     },
@@ -25,7 +25,7 @@ export const supportRoutes: FastifyPluginAsyncZod = async (app) => {
       await prisma.supportRequest.create({ data: request.body });
       return reply
         .status(201)
-        .send({ response: 'Повідомлення надіслано' });
+        .send({ message: 'Sent' });
     }
   );
 };

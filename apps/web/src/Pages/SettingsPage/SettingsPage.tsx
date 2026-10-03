@@ -58,7 +58,7 @@ export const SettingsPage = () => {
         setSavedEmail(response.email);
         setIsSuccess(t('settings.dataSaved'));
       })
-      .catch((error) => setErrorMessage(error.errors?.[0] || t('settings.dataError')))
+      .catch((error) => setErrorMessage(error.message || t('settings.dataError')))
       .finally(() => setIsLoading(prev => ({...prev, data: false})));
   };
 
@@ -82,7 +82,7 @@ export const SettingsPage = () => {
         setPassword1('');
         setPassword2('');
       })
-      .catch((error) => setErrorMessage(error.errors?.[0] || t('settings.passwordError')))
+      .catch((error) => setErrorMessage(error.message || t('settings.passwordError')))
       .finally(() => setIsLoading(prev => ({...prev, password: false})));
   };
 

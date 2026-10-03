@@ -32,9 +32,10 @@ describe('auth', () => {
       },
     });
     expect(res.statusCode).toBe(409);
+    expect(res.json().code).toBe('emailTaken');
   });
 
-  it('validates registration input with readable errors', async () => {
+  it('validates registration input with error codes per field', async () => {
     const res = await ctx.app.inject({
       method: 'POST',
       url: '/api/auth/registration',
@@ -46,11 +47,13 @@ describe('auth', () => {
       },
     });
     expect(res.statusCode).toBe(400);
+    expect(res.json().code).toBe('validation');
     expect(res.json().errors).toEqual(
       expect.arrayContaining([
-        "Ім'я не може бути порожнім",
-        'Некоректний email',
-        'Пароль має містити щонайменше 8 символів',
+        { field: 'name', code: 'nameRequired' },
+        { field: 'email', code: 'invalidEmail' },
+        { field: 'password', code: 'passwordTooShort' },
+        { field: 'repeatPassword', code: 'passwordsMismatch' },
       ])
     );
   });
@@ -63,7 +66,7 @@ describe('auth', () => {
       payload: { email, password: 'wrong-password' },
     });
     expect(res.statusCode).toBe(401);
-    expect(res.json().message).toBe('Невірний email або пароль');
+    expect(res.json().code).toBe('invalidCredentials');
   });
 
   it('requires a valid token on protected routes', async () => {

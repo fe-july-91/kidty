@@ -22,7 +22,7 @@ declare module 'fastify' {
 }
 
 const unauthorized = () =>
-  new HttpError(401, 'Неавторизований. Будь ласка, увійдіть до системи');
+  new HttpError(401, 'unauthorized', 'Not logged in');
 
 export default fp(async (app) => {
   await app.register(fastifyJwt, {

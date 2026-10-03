@@ -8,12 +8,12 @@ export const email = z
   .string()
   .trim()
   .toLowerCase()
-  .pipe(z.email('Некоректний email'));
+  .pipe(z.email('invalidEmail'));
 
 export const password = z
   .string()
-  .min(8, 'Пароль має містити щонайменше 8 символів')
-  .max(128, 'Пароль занадто довгий');
+  .min(8, 'passwordTooShort')
+  .max(128, 'passwordTooLong');
 
 const passwordsMatch = <T extends { password: string; repeatPassword: string }>(
   data: T
@@ -22,21 +22,21 @@ const passwordsMatch = <T extends { password: string; repeatPassword: string }>(
 export const newPasswordBody = z
   .object({ password, repeatPassword: z.string() })
   .refine(passwordsMatch, {
-    message: 'Паролі не збігаються',
+    message: 'passwordsMismatch',
     path: ['repeatPassword'],
   });
 
 export const name = z
   .string()
   .trim()
-  .min(1, "Ім'я не може бути порожнім")
-  .max(100, "Ім'я занадто довге");
+  .min(1, 'nameRequired')
+  .max(100, 'nameTooLong');
 
 /** A date in "D-M-YYYY" form that is not in the future. */
 const birthDate = z.string().transform((value, ctx) => {
   const date = parseDate(value);
   if (!date || date > new Date()) {
-    ctx.addIssue({ code: 'custom', message: 'Некоректна дата народження' });
+    ctx.addIssue({ code: 'custom', message: 'invalidBirthDate' });
     return z.NEVER;
   }
   return date;
@@ -48,7 +48,7 @@ export const childBody = z.object({
   birth: birthDate,
   genderName: z.enum(
     [GENDER_LABELS.BOY, GENDER_LABELS.GIRL],
-    'Оберіть стать дитини'
+    'genderRequired'
   ),
   image: z.coerce.number().int().min(0).max(100).default(0),
 });
@@ -64,11 +64,11 @@ export type MeasurementPath = keyof typeof measurementTypes;
 export const measurementBody = (max: number) =>
   z.object({
     year: z.coerce.number().int().min(1900).max(2100),
-    month: z.enum(MONTHS, 'Некоректний місяць'),
+    month: z.enum(MONTHS, 'invalidMonth'),
     value: z.coerce
       .number()
-      .positive('Значення має бути більшим за нуль')
-      .max(max, `Значення не може перевищувати ${max}`),
+      .positive('valueTooSmall')
+      .max(max, 'valueTooLarge'),
   });
 
 export const eyeBody = z.object({
@@ -77,11 +77,11 @@ export const eyeBody = z.object({
 });
 
 export const vaccinationBody = z.object({
-  type: z.enum(VACCINES, 'Невідома вакцина'),
+  type: z.enum(VACCINES, 'unknownVaccine'),
   date: z.string().transform((value, ctx) => {
     const date = parseDate(value);
     if (!date) {
-      ctx.addIssue({ code: 'custom', message: 'Некоректна дата щеплення' });
+      ctx.addIssue({ code: 'custom', message: 'invalidVaccinationDate' });
       return z.NEVER;
     }
     return date;

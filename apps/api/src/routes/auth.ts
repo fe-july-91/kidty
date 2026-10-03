@@ -28,14 +28,14 @@ export const authRoutes: FastifyPluginAsyncZod = async (app) => {
 
       const existing = await prisma.user.findUnique({ where: { email } });
       if (existing) {
-        throw new HttpError(409, 'Користувач з таким email вже існує');
+        throw new HttpError(409, 'emailTaken', 'This email is already registered');
       }
 
       await prisma.user.create({
         data: { name, email, passwordHash: await argon2.hash(password) },
       });
 
-      return reply.status(201).send({ message: 'Реєстрація успішна' });
+      return reply.status(201).send({ message: 'Registered' });
     }
   );
 
@@ -46,7 +46,7 @@ export const authRoutes: FastifyPluginAsyncZod = async (app) => {
       schema: {
         body: z.object({
           email,
-          password: z.string().min(1, 'Введіть пароль'),
+          password: z.string().min(1, 'passwordRequired'),
         }),
       },
     },
@@ -59,7 +59,7 @@ export const authRoutes: FastifyPluginAsyncZod = async (app) => {
         password
       );
       if (!user || !isValid) {
-        throw new HttpError(401, 'Невірний email або пароль');
+        throw new HttpError(401, 'invalidCredentials', 'Wrong email or password');
       }
 
       return { token: app.jwt.sign({ sub: user.id }) };
@@ -98,7 +98,7 @@ export const authRoutes: FastifyPluginAsyncZod = async (app) => {
       }
 
       return {
-        message: 'Якщо такий email зареєстровано, ми надіслали посилання',
+        message: 'If this email is registered, a reset link has been sent',
       };
     }
   );
@@ -122,7 +122,7 @@ export const authRoutes: FastifyPluginAsyncZod = async (app) => {
         resetToken.usedAt ||
         resetToken.expiresAt < new Date()
       ) {
-        throw new HttpError(400, 'Посилання недійсне або застаріле');
+        throw new HttpError(400, 'resetLinkInvalid', 'The reset link is invalid or has expired');
       }
 
       await prisma.$transaction([
@@ -136,7 +136,7 @@ export const authRoutes: FastifyPluginAsyncZod = async (app) => {
         }),
       ]);
 
-      return { message: 'Пароль змінено' };
+      return { message: 'Password changed' };
     }
   );
 };
