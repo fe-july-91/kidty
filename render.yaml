@@ -1,0 +1,31 @@
+# Render Blueprint for the Kidty API (see DEPLOY.md).
+services:
+  - type: web
+    name: kidty-api
+    runtime: docker
+    plan: free
+    region: frankfurt
+    branch: main
+    dockerfilePath: ./apps/api/Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/health
+    autoDeploy: true
+    # Only rebuild the API when API code (or dependencies) change.
+    buildFilter:
+      paths:
+        - apps/api/**
+        - package-lock.json
+        - render.yaml
+    envVars:
+      - key: DATABASE_URL # Neon connection string, entered in the dashboard
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CORS_ORIGIN
+        value: https://kidty.com.ua
+      - key: APP_URL
+        value: https://kidty.com.ua
+      - key: SUPPORT_EMAIL # where support form messages go
+        sync: false
+      - key: SMTP_URL # optional until an email provider is set up
+        sync: false
