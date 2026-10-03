@@ -1,0 +1,21 @@
+# Local development database. Credentials here are for local use only.
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: kidty
+      POSTGRES_PASSWORD: kidty
+      POSTGRES_DB: kidty
+    ports:
+      - '5434:5432'
+    volumes:
+      - kidty-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U kidty -d kidty']
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  kidty-db:

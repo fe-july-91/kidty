@@ -1,0 +1,125 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  name         String
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  children            Child[]
+  passwordResetTokens PasswordResetToken[]
+
+  @@map("users")
+}
+
+enum Gender {
+  GIRL
+  BOY
+}
+
+model Child {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  name      String
+  surname   String
+  birthDate DateTime @map("birth_date") @db.Date
+  gender    Gender
+  /// Index into the avatar list on the frontend.
+  avatar    Int      @default(0)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  measurements Measurement[]
+  eyeCheck     EyeCheck?
+  vaccinations Vaccination[]
+
+  @@index([userId])
+  @@map("children")
+}
+
+enum MeasurementType {
+  HEIGHT
+  WEIGHT
+  FOOT
+}
+
+/// One value per child, type and month (e.g. height in March 2025).
+model Measurement {
+  id        Int             @id @default(autoincrement())
+  childId   Int             @map("child_id")
+  type      MeasurementType
+  year      Int
+  /// 1–12
+  month     Int
+  value     Decimal         @db.Decimal(6, 2)
+  createdAt DateTime        @default(now()) @map("created_at")
+  updatedAt DateTime        @updatedAt @map("updated_at")
+
+  child Child @relation(fields: [childId], references: [id], onDelete: Cascade)
+
+  @@unique([childId, type, year, month])
+  @@map("measurements")
+}
+
+/// Latest eyesight readings (diopters) for a child.
+model EyeCheck {
+  id        Int      @id @default(autoincrement())
+  childId   Int      @unique @map("child_id")
+  leftEye   Decimal  @map("left_eye") @db.Decimal(4, 2)
+  rightEye  Decimal  @map("right_eye") @db.Decimal(4, 2)
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  child Child @relation(fields: [childId], references: [id], onDelete: Cascade)
+
+  @@map("eye_checks")
+}
+
+model Vaccination {
+  id        Int      @id @default(autoincrement())
+  childId   Int      @map("child_id")
+  /// Vaccine name as listed on the frontend (e.g. "Гепатит Б").
+  type      String
+  date      DateTime @db.Date
+  createdAt DateTime @default(now()) @map("created_at")
+
+  child Child @relation(fields: [childId], references: [id], onDelete: Cascade)
+
+  @@unique([childId, type, date])
+  @@index([childId])
+  @@map("vaccinations")
+}
+
+model PasswordResetToken {
+  id        Int       @id @default(autoincrement())
+  userId    Int       @map("user_id")
+  /// SHA-256 of the token sent by email; the raw token is never stored.
+  tokenHash String    @unique @map("token_hash")
+  expiresAt DateTime  @map("expires_at")
+  usedAt    DateTime? @map("used_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("password_reset_tokens")
+}
+
+model SupportRequest {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  message   String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("support_requests")
+}

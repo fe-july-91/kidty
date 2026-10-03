@@ -1,20 +1,34 @@
-Data Visualization Web App
-A web application for visualizing and storing data, featuring a main page and a dashboard. This project utilizes modern web technologies to provide an interactive and user-friendly experience for data analysis and visualization.
+# Kidty
 
-Features:
-Main Page & Dashboard: Provides a user interface for interacting with and visualizing data.
-Data Visualization: Utilizes the D3 library for advanced and customizable data visualizations.
-Routing: Implemented with React Router for seamless navigation between different parts of the application.
-Technologies Used:
-JavaScript
-TypeScript
-React
-React Router
-React Context
-Reactjs Protected Route
-D3 (Data Visualization Library)
-HTML
-SCSS
+A web app for parents to track a child's height, weight, foot size, eyesight
+and vaccinations, with charts built on D3.
 
-Feel free to contribute or provide feedback!
-    - [DEMO LINK](https://fe-july-91.github.io/kidti/)
+## Structure
+
+```
+apps/web   – React 19 + Vite + Tailwind 4 + HeroUI frontend
+apps/api   – Node + TypeScript backend, PostgreSQL via Prisma
+```
+
+## Getting started
+
+Requirements: Node 22+, Docker.
+
+```bash
+npm install                      # installs all workspaces, generates Prisma client
+
+cp apps/web/.env.example apps/web/.env.local
+cp apps/api/.env.example apps/api/.env
+
+npm run db:up                    # start PostgreSQL in Docker (localhost:5434)
+npm run db:migrate               # apply migrations
+npm run db:seed                  # create a demo account (see apps/api/.env)
+
+npm run dev:web                  # http://localhost:3000
+```
+
+Other useful commands:
+
+- `npm run db:studio` – browse the database in Prisma Studio
+- `npm run db:down` – stop the database (data is kept in a Docker volume)
+- `npm run build` – build all apps
