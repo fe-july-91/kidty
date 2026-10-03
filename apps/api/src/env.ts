@@ -13,7 +13,8 @@ const schema = z.object({
   NODE_ENV: z
     .enum(['development', 'test', 'production'])
     .default('development'),
-  HOST: z.string().default('127.0.0.1'),
+  // Hosting platforms need the server to listen on all interfaces.
+  HOST: z.string().default(process.env.NODE_ENV === 'production' ? '0.0.0.0' : '127.0.0.1'),
   PORT: z.coerce.number().int().default(8088),
   DATABASE_URL: z.url(),
   JWT_SECRET: z.string().min(32, 'JWT_SECRET must be at least 32 characters'),
