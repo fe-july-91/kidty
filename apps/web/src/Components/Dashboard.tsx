@@ -1,50 +1,26 @@
 import { Child } from '../Shared/types/types';
-import { EyesCard } from '../Charts/Eyes/EyesCard';
-import {
-  calculateChildAge,
-  generateYearArray,
-} from '../Shared/hendlers/generateYearArray';
-import { CardVaccines } from '../Cards/CardVaccines/CardVaccines';
-import { useMemo } from 'react';
 import { GrowthCard } from '../Charts/Growth/GrowthCard';
+import { EyesCard } from '../Charts/Eyes/EyesCard';
+import { VaccinesCard } from '../Charts/Vaccines/VaccinesCard';
 
 type Props = {
   child: Child;
 };
 
-export const Dashboard: React.FC<Props> = ({ child }) => {
-  const years = useMemo(() => generateYearArray(child.birth), [child]);
-  const age = useMemo(() => calculateChildAge(child.birth), [child]);
+const card = 'min-w-0 rounded-[22px] bg-white shadow-card';
 
-  const items = [
-    {
-      component: <GrowthCard key={`${child.id}-height`} child={child} metric="height" />,
-    },
-    {
-      component: <GrowthCard key={`${child.id}-weight`} child={child} metric="weight" />,
-    },
-    {
-      component: <GrowthCard key={`${child.id}-foot`} child={child} metric="foot" />,
-    },
-    { component: <EyesCard key={`${child.id}-eyes`} childId={child.id} /> },
-    {
-      component: <CardVaccines years={years} age={age} child={child} />,
-      big: true,
-    },
-  ];
-
-  return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 items-start gap-5">
-      {items.map((item, index) => (
-        <div
-          key={index}
-          className={`group relative min-w-0 rounded-[22px] bg-white shadow-card ${
-            item.big ? 'lg:col-span-2' : ''
-          }`}
-        >
-          {item.component}
-        </div>
-      ))}
-    </div>
-  );
-};
+export const Dashboard: React.FC<Props> = ({ child }) => (
+  <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-2">
+    {(['height', 'weight', 'foot'] as const).map((metric) => (
+      <section key={`${child.id}-${metric}`} className={card}>
+        <GrowthCard child={child} metric={metric} />
+      </section>
+    ))}
+    <section key={`${child.id}-eyes`} className={card}>
+      <EyesCard childId={child.id} />
+    </section>
+    <section key={`${child.id}-vaccines`} className={`${card} lg:col-span-2`}>
+      <VaccinesCard child={child} />
+    </section>
+  </div>
+);
