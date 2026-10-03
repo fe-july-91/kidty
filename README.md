@@ -36,4 +36,5 @@ Other useful commands:
 - `npm run build` – build all apps
 - `npm test -w @kidty/api` – API tests (use a separate `kidty_test` database)
 - `EMAIL=… PASSWORD=… node scripts/smoke-auth.mjs` – login/logout smoke test in headless Chrome
+- http://localhost:8025 – Mailpit inbox with every email the API sends locally
 - `scripts/screenshots` – regenerate the home page mockups (see its README)

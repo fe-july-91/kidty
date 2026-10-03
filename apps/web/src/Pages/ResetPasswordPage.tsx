@@ -1,36 +1,28 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router';
+import { Link, useNavigate, useSearchParams } from 'react-router';
 import { Button, Input } from '@heroui/react';
 import { useTranslation } from 'react-i18next';
 import { AuthLayout, FormError, FormNotice } from '../Components/AuthLayout';
 import { client } from '../Utils/httpClient';
 
-const EMAIL = /^\S+@\S+\.\S+$/;
-
-export const SignUpPage: React.FC = () => {
+/** Opened from the link in the password reset email (#/reset-password?token=…). */
+export const ResetPasswordPage: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [params] = useSearchParams();
+  const token = params.get('token') ?? '';
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
 
-  const valid = name.trim() && EMAIL.test(email.trim()) && password.length >= 8 && password === repeatPassword;
-
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);
     try {
-      await client.post('auth/registration', {
-        name: name.trim(),
-        email: email.trim(),
-        password,
-        repeatPassword,
-      });
+      await client.post('auth/reset-password', { token, password, repeatPassword });
       setDone(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : t('common.genericError'));
@@ -39,10 +31,21 @@ export const SignUpPage: React.FC = () => {
     }
   };
 
+  if (!token) {
+    return (
+      <AuthLayout title={t('auth.resetTitle')}>
+        <FormError message={t('auth.resetMissing')} />
+        <Link to="/recovery" className="text-center text-sm text-primary hover:text-primary-700">
+          {t('auth.requestNewLink')}
+        </Link>
+      </AuthLayout>
+    );
+  }
+
   if (done) {
     return (
-      <AuthLayout title={t('auth.signupSuccessTitle')}>
-        <FormNotice message={`${t('auth.signupSuccessText')}: ${email.trim()}`} />
+      <AuthLayout title={t('auth.resetTitle')}>
+        <FormNotice message={t('auth.resetDone')} />
         <Button color="primary" radius="full" onPress={() => navigate('/login')}>
           {t('auth.login')}
         </Button>
@@ -51,12 +54,10 @@ export const SignUpPage: React.FC = () => {
   }
 
   return (
-    <AuthLayout title={t('auth.signupTitle')} subtitle={t('auth.signupText')}>
+    <AuthLayout title={t('auth.resetTitle')} subtitle={t('auth.resetText')}>
       <form className="grid gap-4" onSubmit={submit} noValidate>
-        <Input label={t('auth.name')} value={name} onValueChange={setName} variant="bordered" autoComplete="name" isRequired />
-        <Input label={t('auth.email')} type="email" value={email} onValueChange={setEmail} variant="bordered" autoComplete="email" isRequired />
         <Input
-          label={t('auth.password')}
+          label={t('auth.newPassword')}
           type="password"
           value={password}
           onValueChange={setPassword}
@@ -66,7 +67,7 @@ export const SignUpPage: React.FC = () => {
           isRequired
         />
         <Input
-          label={t('auth.repeatPassword')}
+          label={t('auth.repeatNewPassword')}
           type="password"
           value={repeatPassword}
           onValueChange={setRepeatPassword}
@@ -77,16 +78,15 @@ export const SignUpPage: React.FC = () => {
           isRequired
         />
         <FormError message={error} />
-        <Button type="submit" color="primary" radius="full" isLoading={loading} isDisabled={!valid}>
-          {t('auth.signup')}
+        <Button type="submit" color="primary" radius="full" isLoading={loading} isDisabled={password.length < 8 || password !== repeatPassword}>
+          {t('auth.saveNewPassword')}
         </Button>
       </form>
-      <p className="text-center text-sm text-ink-2">
-        {t('auth.haveAccount')}{' '}
-        <Link to="/login" className="text-primary hover:text-primary-700">
-          {t('auth.login')}
+      {error && (
+        <Link to="/recovery" className="text-center text-sm text-primary hover:text-primary-700">
+          {t('auth.requestNewLink')}
         </Link>
-      </p>
+      )}
     </AuthLayout>
   );
 };

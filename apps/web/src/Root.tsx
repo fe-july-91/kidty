@@ -10,7 +10,7 @@ import { SettingsPage } from './Pages/SettingsPage/SettingsPage';
 import { Recovery } from './Pages/PasswordRecovery/Recovery';
 import { RightsPage } from './Pages/RightsPage';
 import { HeroUIProvider } from '@heroui/react';
-import { SuccessPage } from './Pages/SuccessPage';
+import { ResetPasswordPage } from './Pages/ResetPasswordPage';
 
 const router = createHashRouter([
   {
@@ -22,7 +22,7 @@ const router = createHashRouter([
       { path: 'recovery', element: <Recovery /> },
       { path: 'signup', element: <SignUpPage /> },
       { path: 'about', element: <RightsPage /> },
-      { path: 'success', element: <SuccessPage /> },
+      { path: 'reset-password', element: <ResetPasswordPage /> },
       {
         path: 'account',
         element: <RequireAuth />,

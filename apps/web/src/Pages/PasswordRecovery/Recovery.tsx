@@ -1,69 +1,47 @@
 import { useState } from 'react';
-import './Recovery.scss';
-import { client } from '../../Utils/httpClient';
+import { Link } from 'react-router';
+import { Button, Input } from '@heroui/react';
 import { useTranslation } from 'react-i18next';
+import { AuthLayout, FormError, FormNotice } from '../../Components/AuthLayout';
+import { client } from '../../Utils/httpClient';
 
 export const Recovery = () => {
   const { t } = useTranslation();
   const [email, setEmail] = useState('');
-  const [errowMessage, setErrowmessage] = useState('');
-  const [isSuccess, setIsSuccess] = useState('');
+  const [sent, setSent] = useState(false);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    event.preventDefault();
-
-    client
-      .post('auth/forgot-password', { email: email.trim() })
-      .then(() =>
-        setIsSuccess(
-          t('auth.recoverySent')
-        )
-      )
-      .catch((error) => {
-        const serverError = error.response?.error || error.message;
-        setErrowmessage(serverError);
-      });
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+    try {
+      await client.post('auth/forgot-password', { email: email.trim() });
+      setSent(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : t('common.genericError'));
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="Recovery">
-      {!isSuccess && (
-        <div className="Recovery__container">
-          <div className="Recovery__header">{t('auth.recoveryTitle')}</div>
-
-          <form className="settings__form">
-            <div className="form__input">
-              <label htmlFor="exampleInputEmail1" className="form__label">
-                {t('auth.recoveryText')}
-              </label>
-              <input
-                type="email"
-                value={email}
-                className="form__control"
-                id="exampleInputEmail1"
-                aria-describedby="emailHelp"
-                onChange={(event) => setEmail(event.target.value)}
-              />
-            </div>
-           <div className="text-md text-primary-600 bg-secondary-100 px-2">{errowMessage}</div>
-            <button
-              type="submit"
-              className="form__button"
-              onClick={(e) => handleSubmit(e)}
-            >
-              {t('common.send')}
-            </button>
-          </form>
-        </div>
+    <AuthLayout title={t('auth.recoveryTitle')} subtitle={sent ? undefined : t('auth.recoveryText')}>
+      {sent ? (
+        <FormNotice message={t('auth.recoverySent')} />
+      ) : (
+        <form className="grid gap-4" onSubmit={submit} noValidate>
+          <Input label={t('auth.email')} type="email" value={email} onValueChange={setEmail} variant="bordered" autoComplete="email" isRequired />
+          <FormError message={error} />
+          <Button type="submit" color="primary" radius="full" isLoading={loading} isDisabled={!email.trim()}>
+            {t('common.send')}
+          </Button>
+        </form>
       )}
-
-      {isSuccess && (
-        <div className="PopUpWindow">
-          <header className="PopUpWindow__header">{isSuccess}</header>
-        </div>
-      )}
-    </div>
+      <Link to="/login" className="text-center text-sm text-primary hover:text-primary-700">
+        {t('auth.backToLogin')}
+      </Link>
+    </AuthLayout>
   );
 };
