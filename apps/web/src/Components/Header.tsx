@@ -1,91 +1,79 @@
 import React, { useContext, useState } from 'react';
 import { Link } from 'react-router';
-import { logo, settings } from '../Utils/kit';
+import { logoDark } from '../Utils/kit';
 import { Menu } from './Menu/Menu';
 import { AuthContext } from '../Context/AuthContext';
 
+const navLink = 'text-ink-2 hover:text-ink transition-colors';
+
+const MenuIcon = ({ open }: { open: boolean }) => (
+  <svg
+    viewBox="0 0 24 24"
+    className="size-6"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    aria-hidden="true"
+  >
+    {open ? (
+      <path d="M6 6l12 12M18 6L6 18" />
+    ) : (
+      <path d="M4 7h16M4 12h16M4 17h16" />
+    )}
+  </svg>
+);
+
 export const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { authorized, logOut } = useContext(AuthContext);
 
-  const toggleMenu = () => {
-    setIsMenuOpen((prev: boolean) => !prev);
-  };
-
-  const { authorized } = useContext(AuthContext);
-  const { logOut } = useContext(AuthContext);
+  const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
   return (
-    <header className="flex items-center justify-between h-[48px] lg:h-[64px] g-4 bg-primary-800">
-      {authorized ? (
-        <Link
-          to="account"
-          className="flex items-center justify-between px-4 lg:px-6 h-full"
-        >
-          <img src={logo} className="w-20 lg:w-28" alt="logo" />
-        </Link>
-      ) : (
-        <Link
-          to="/"
-          className="flex items-center justify-between px-4 lg:px-6 h-full"
-        >
-          <img src={logo} className="w-20 lg:w-28" alt="logo" />
-        </Link>
-      )}
+    <header className="flex items-center justify-between h-[48px] lg:h-[64px] bg-white border-b border-hairline">
+      <Link
+        to={authorized ? 'account' : '/'}
+        className="flex items-center px-4 lg:px-6 h-full"
+      >
+        <img src={logoDark} className="w-20 lg:w-24" alt="Kidty" />
+      </Link>
 
-      <div className="flex items-center justify-center g-2 px-6 text-lg">
-        <div className="hidden md:flex flex-row items-center gap-8 text-base text-gray-100">
-          {!authorized ? (
-            <div className="flex flex-row justify-center gap-4 items-center">
-              <div className="hover:border-b-1 transition-border duration-100">
-                <Link to="login" className="text-gray-100 pb-1 ">
-                  Log In
-                </Link>
-              </div>
-              <div>or</div>
-              <div className="hover:border-b-1 transition-border duration-100">
-                <Link to="signup" className="text-gray-100 pb-1">
-                  Sign Up
-                </Link>
-              </div>
-            </div>
+      <div className="flex items-center px-4 lg:px-6">
+        <nav className="hidden md:flex items-center gap-6 text-sm">
+          {authorized ? (
+            <>
+              <Link to="account/settings" className={navLink}>
+                Налаштування
+              </Link>
+              <Link to="/" className={navLink} onClick={() => logOut()}>
+                Вийти
+              </Link>
+            </>
           ) : (
             <>
-              <div className="hover:border-b-1 transition-border duration-100">
-                <Link
-                  to="/"
-                  className="text-gray-100 pb-1 hover:border-b-1 transition-all duration-100"
-                  onClick={() => logOut()}
-                >
-                  Log out
-                </Link>
-              </div>
+              <Link to="login" className={navLink}>
+                Увійти
+              </Link>
               <Link
-                to="account/settings"
-                className="text-gray-300 hover:text-gray-100 transition-colors"
+                to="signup"
+                className="rounded-full bg-primary px-4 py-1.5 text-white hover:bg-primary-600 transition-colors"
               >
-                <img
-                  src={settings}
-                  className="w-6 h-6 object-contain"
-                  alt="settings"
-                />
+                Зареєструватися
               </Link>
             </>
           )}
-        </div>
+        </nav>
 
-        <div className="flex items-center justify-center md:hidden">
-          <button
-            type="button"
-            className="flex items-center justify-center bg-transparent border-transparent cursor-pointer shadow-medium"
-            onClick={toggleMenu}
-          >
-            {isMenuOpen ? (
-              <div className="icons icons--close-wight"></div>
-            ) : (
-              <div className="icons icons--menu"></div>
-            )}
-          </button>
-        </div>
+        <button
+          type="button"
+          className="md:hidden flex items-center justify-center text-ink"
+          onClick={toggleMenu}
+          aria-label={isMenuOpen ? 'Закрити меню' : 'Відкрити меню'}
+          aria-expanded={isMenuOpen}
+        >
+          <MenuIcon open={isMenuOpen} />
+        </button>
       </div>
 
       <Menu

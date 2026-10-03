@@ -25,7 +25,6 @@ export const Dashboard: React.FC<Props> = ({ child }) => {
           cardType={CardTitleTypes.height}
         />
       ),
-      delay: '0s',
     },
     {
       component: (
@@ -35,7 +34,6 @@ export const Dashboard: React.FC<Props> = ({ child }) => {
           cardType={CardTitleTypes.weight}
         />
       ),
-      delay: '0.2s',
     },
     {
       component: (
@@ -45,38 +43,26 @@ export const Dashboard: React.FC<Props> = ({ child }) => {
           cardType={CardTitleTypes.foot}
         />
       ),
-      delay: '0.4s',
     },
-    { component: <CardEyes childId={child.id} />, delay: '0.6s' },
+    { component: <CardEyes childId={child.id} /> },
     {
       component: <CardVaccines years={years} age={age} child={child} />,
-      delay: '0.8s',
       big: true,
     },
   ];
 
   return (
-    <div className="w-full px-4 sm:pl-6 md:pl-8 pt-8 overflow-hidden">
-      <div className="w-full flex flex-wrap gap-5 pb-8">
-        {items.map((item, index) => (
-          <div
-            key={index}
-            className={`
-              relative bg-white rounded-[25px] hover:shadow-lg  opacity-0 animate-floatUp
-              group ${
-                item.big
-                  ? 'w-full md:w-full xl:w-[calc(66.666%-20px)]'
-                  : 'w-full lg:w-[calc(50%-20px)] xl:w-[calc(33.333%-20px)]'
-              }
-            `}
-            style={{ animationDelay: item.delay }}
-          >
-            <div className=" ">
-              {item.component}
-            </div>
-          </div>
-        ))}
-      </div>
+    <div className="grid grid-cols-1 lg:grid-cols-2 items-start gap-5">
+      {items.map((item, index) => (
+        <div
+          key={index}
+          className={`group relative min-w-0 rounded-[22px] bg-white shadow-card ${
+            item.big ? 'lg:col-span-2' : ''
+          }`}
+        >
+          {item.component}
+        </div>
+      ))}
     </div>
   );
 };

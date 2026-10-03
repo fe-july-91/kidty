@@ -1,21 +1,14 @@
 import { Link } from 'react-router';
-import './Footer.scss';
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="flex items-center justify-between h-[48px] lg:h-[64px] g-4 bg-primary-800">
-      <div className="w-full flex flex-row gap-6 justify-center items-center">
-      <div className="hover:border-b-1 transition-all duration-100">
-        <Link to="/about" className="text-gray-100">
-          About Us
-          </Link>
-        </div>
-        <div className="hover:border-b-1 transition-all duration-100">
-          <Link to="/" className="text-gray-100">
-            Home
-          </Link>
-        </div>
-      </div>
+    <footer className="flex items-center justify-center gap-6 h-[48px] lg:h-[56px] bg-white border-t border-hairline text-sm">
+      <Link to="/about" className="text-ink-2 hover:text-ink transition-colors">
+        Про нас
+      </Link>
+      <Link to="/" className="text-ink-2 hover:text-ink transition-colors">
+        Головна
+      </Link>
     </footer>
   );
 };

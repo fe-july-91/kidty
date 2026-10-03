@@ -1,210 +1,114 @@
-import { Dashboard } from '../Components/Dashboard';
-import { avatars, bakground, colors } from '../Utils/kit';
 import { useEffect, useState } from 'react';
-import { Child, EyeResponce, VaccineData } from '../Shared/types/types';
-import { calculateFullChildAge } from '../Shared/hendlers/generateYearArray';
+import { Button } from '@heroui/react';
+import { Dashboard } from '../Components/Dashboard';
+import { Avatar } from '../Components/Avatar';
 import { AddModal } from '../Components/AddModal';
 import { EditModal } from '../Components/EditModal';
+import { Child } from '../Shared/types/types';
+import { calculateFullChildAge } from '../Shared/hendlers/generateYearArray';
 import { client } from '../Utils/httpClient';
-import { Button } from '@heroui/react';
-import { TitleCardBlock } from '../Components/TitleCardBlock';
-import { findCardImage } from '../Shared/servises/findCardImage';
-import { getChildData } from '../api/DataUpdate';
 
-export const AccountPage: React.FC = () => {  
+export const AccountPage: React.FC = () => {
   const [children, setChildren] = useState<Child[]>([]);
   const [child, setChild] = useState<Child | null>(null);
-  const [isAddmodal, setIsAddModal] = useState(false);
-  const [additingModal, setAdditingModal] = useState(false);
-  const [errowMessage, setErrowmessage] = useState('');
-  const [lastDataValues, setLastDataValues] = useState({
-    weight: { name: "Вага", value: 0, unit: "" },
-    height: { name: "Зріст", value: 0, unit: "" },
-    foot: { name: "Стопа", value: 0, unit: "" },
-    yeys: { name: "Зір", value: "", unit: "" },
-    vaccination: { name: "Щеплення", value: "", unit: "" }
-  });
-  
+  const [isAddModal, setIsAddModal] = useState(false);
+  const [isEditModal, setIsEditModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     client
-      .get<Child[]>(`children`)
+      .get<Child[]>('children')
       .then((response) => {
         setChildren(response);
         if (response.length > 0) {
           setChild(response[0]);
-        } else if (response.length === 0) {
+        } else {
           setIsAddModal(true);
         }
       })
       .catch((err) =>
-        setErrowmessage(err.message || 'Щось пішло не так, спробуйте ще раз')
+        setErrorMessage(err.message || 'Щось пішло не так, спробуйте ще раз')
       );
   }, []);
 
+  // Keep the list in sync after a child is added or edited in a modal.
   useEffect(() => {
-    if (child) {
-      client
-        .get<Child>(`children/${child.id}`)
-        .then((updatedChild) => {
-          setChildren((prevChildren) =>
-            prevChildren.map((c) =>
-              c.id === updatedChild.id ? updatedChild : c
-            )
-          );
-          client
-            .get<Child[]>(`children`)
-            .then((response) => setChildren(response))
-            .catch((err) =>
-              setErrowmessage(err.message || 'Щось пішло не так')
-            );
-        })
-        .catch((err) =>
-          setErrowmessage(err.message || 'Не вдалося оновити дані')
-        );
-    }
+    if (!child) return;
+    setChildren((prev) =>
+      prev.some((c) => c.id === child.id)
+        ? prev.map((c) => (c.id === child.id ? child : c))
+        : [...prev, child]
+    );
   }, [child]);
 
-  useEffect(() => {
-    if (child) {
-      Promise.all([
-        getChildData("weight", child.id),
-        getChildData("height", child.id),
-        getChildData("foot", child.id),
-        client.get<EyeResponce>(`children/${child.id}/eye`),
-        client.get<VaccineData[]>(`children/${child.id}/vaccination`)
-      ]).then(([weightData, heightData, footData, eyeData,vaccineDate]) => {
-        setLastDataValues({
-          weight: { name: "Вага", value: weightData.at(-1)?.value ?? 0, unit: "кг" },
-          height: { name: "Зріст", value: heightData.at(-1)?.value ?? 0, unit: "см" },
-          foot: { name: "Стопа", value: footData.at(-1)?.value ?? 0, unit: "см" },
-          yeys: {name: "Зір", value: `L${eyeData.leftEye} R${eyeData.rightEye}`, unit: ""}, 
-          vaccination: {name:"Щеплення" , value: `${vaccineDate[vaccineDate.length-1]?.date || ""} ${vaccineDate[vaccineDate.length-1]?.type || ""}`, unit: ""}
-        });
-      }).catch(err => setErrowmessage(err.message || "Помилка при завантаженні даних"));
-    }
-  }, [child]);
-
-  const handleChildChange = (index: number) => {
-    const currentChild = children.find((ch) => ch.id === index)!;
-    setChild(currentChild);
-  };
-
-  const handleAddChild = () => {
-    setIsAddModal(true);
-  };
-
-  const fullAge = child
-    ? calculateFullChildAge(child.birth)
-    : { years: 0, months: 0 };
+  const age = child ? calculateFullChildAge(child.birth) : null;
 
   return (
-    <div className="flex flex-col min-h-[calc(100vh-96px)] lg:min-h-[calc(100vh-128px)] overflow-hidden opacity-0 animate-fadeIn">
-      {errowMessage && <div className="form__error">{errowMessage}</div>}
-        <div className="absolute w-full h-full bg-black opacity-0 animate-fadeIn -z-10">
-          <img className="w-full h-full object-cover" src={bakground} alt="bg" />
-        </div>
-      {child && (
-        <div>
-          <div className=" px-4 h-full lg:px-10 bg-[#ffffffaa] flex flex-row flex-wrap gap-6 justify-between items-end py-4 shadow-custom ">
+    <div className="min-h-[calc(100vh-96px)] lg:min-h-[calc(100vh-120px)] bg-canvas text-ink">
+      <div className="mx-auto grid max-w-[1180px] gap-5 px-4 py-6 md:py-8">
+        {errorMessage && <div className="form__error">{errorMessage}</div>}
 
-            {/* Child's info */}
-            <div className='flex flex-row items-center flex-wrap gap-4 lg:gap-8'>
-              {/* child photo */}
-              <div className="flex">
-                <div className='flex flex-row justify-start gap-4 p-4 bg-background rounded-2xl shadow-custom lg:min-w-[480px]'>
-                  <img
-                    src={avatars[+child.image]}
-                    alt="avatar"
-                    className="cursor-pointer max-h-[150px] w-[120px] md:w-[130px] object-cover rounded-2xl transition-transform duration-300 hover:scale-95"
-                    onClick={() => setAdditingModal(true)}
-                    loading="lazy"
-                  />
-                  {/* child Name */}
-                  <div className="flex flex-col ">
-                    <header className="text-2xl text-primary py-2">{`${child.name} ${child.surname}`}</header>
-                    <p className="text-md text-gray-600 ">
-                      Вік: {fullAge.years}p. {fullAge.months}м.
-                    </p>
-                    <p className="text-md text-gray-600 ">
-                      Рік народження:{' '}
-                      <span className="whitespace-nowrap">{child.birth}</span>
-                    </p>
-                    <p className="text-md text-gray-600 ">
-                      Стать: {child.genderName}
-                    </p>
-                  </div>
-                </div>
-              </div>
-                {/* child data */}
-              <div className='flex flex-col gap-4 shrink-2 lg:max-w-[400px]'>
-                <div className='flex flex-row flex-wrap gap-3 shrink-2'>
-                  {Object.values(lastDataValues).map(cardType => (
-                    <div className='px-4 py-[6px] bg-background rounded-2xl shadow-custom'>
-                      <TitleCardBlock
-                        value={cardType.value.toString()}
-                        image={findCardImage(cardType.name)}
-                        title={cardType.name}
-                        unit={cardType.unit}
-                      />
-                    </div>
-                  ))}
-                </div>
+        {child && age && (
+          <section className="flex flex-wrap items-center justify-between gap-5 rounded-[22px] bg-white p-5 shadow-card">
+            <div className="flex min-w-0 items-center gap-4 md:gap-5">
+              <button
+                type="button"
+                onClick={() => setIsEditModal(true)}
+                className="shrink-0 rounded-[18px] md:rounded-[22px] overflow-hidden focus-visible:outline-2 focus-visible:outline-primary"
+                aria-label="Редагувати профіль"
+              >
+                <Avatar index={child.image} className="size-16 md:size-[84px]" />
+              </button>
+              <div className="min-w-0">
+                <h1 className="text-[22px] md:text-[26px] font-semibold leading-tight">
+                  {child.name} {child.surname}
+                </h1>
+                <p className="mt-1 text-sm text-ink-2">
+                  {age.years} р. {age.months} міс. · {child.birth.replaceAll('-', '.')} ·{' '}
+                  {child.genderName.toLowerCase()}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setIsEditModal(true)}
+                  className="mt-1 text-sm text-primary hover:text-primary-700"
+                >
+                  Редагувати профіль
+                </button>
               </div>
             </div>
 
-            {/* children */}
-            <div className="flex flex-row flex-wrap items-center gap-6">
-              <div className=" flex flex-row gap-4 items-center flex-wrap  max-w-[420px]">
-                {children.map((childItem) => (
-                  <div className="flex flex-col cursor-pointer transition-transform duration-300 hover:scale-125">
-                    <div
-                      key={childItem.id}
-                      className={`w-[50px] h-[50px] md:w-[70px] md:h-[70px] rounded-full overflow-hidden shadow-custom  ${
-                        child.id === childItem.id
-                          ? 'outline-solid outline-4 outline-white'
-                          : 'outline-hidden'
-                      }`}
-                      onClick={() => handleChildChange(childItem.id)}
-                    >
-                      <img
-                        src={avatars[+childItem.image]}
-                        alt="avatar"
-                        loading="lazy"
-                        className="w-full h-full object-cover "
-                      />
-                    </div>
-                    <div className="flex flex-col items-center text-sm text-gray-900">
-                      <div>{childItem.name}</div>
-                      {/* <div>{childItem.surname}</div> */}
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <Button
-                className='w-full sm:w-auto'
-                variant="solid"
-                color="secondary"
-                type="submit"
-                onPress={handleAddChild}
-              >
-                + Додати
+            <div className="flex flex-wrap items-center gap-4" role="group" aria-label="Діти">
+              {children.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => setChild(item)}
+                  aria-pressed={item.id === child.id}
+                  className={`grid justify-items-center gap-1 text-xs ${
+                    item.id === child.id ? 'font-semibold text-ink' : 'text-ink-2'
+                  }`}
+                >
+                  <Avatar
+                    index={item.image}
+                    className={`size-11 rounded-full outline-2 outline-offset-2 ${
+                      item.id === child.id ? 'outline-primary' : 'outline-transparent'
+                    }`}
+                  />
+                  {item.name}
+                </button>
+              ))}
+              <Button color="primary" radius="full" onPress={() => setIsAddModal(true)}>
+                Додати дитину
               </Button>
             </div>
-          </div>
+          </section>
+        )}
 
-          {/* Dashboard */}
-          <div
-            className="w-full"
-            style={{ backgroundColor: colors[child.id] }}
-          >
-            {child && <Dashboard child={child} />}
-          </div>
-        </div>
-      )}
+        {child && <Dashboard child={child} />}
+      </div>
 
-      {isAddmodal && (
-        <div className="absolute z-50 h-full bg-black bg-opacity-60 mx-auto w-full">
+      {isAddModal && (
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/50">
           <AddModal
             children={children}
             setModal={setIsAddModal}
@@ -213,10 +117,10 @@ export const AccountPage: React.FC = () => {
         </div>
       )}
 
-      {child && additingModal && (
-        <div className="absolute z-50 h-full bg-black bg-opacity-60 mx-auto w-full">
+      {child && isEditModal && (
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/50">
           <EditModal
-            setModal={setAdditingModal}
+            setModal={setIsEditModal}
             currentChild={child}
             setCurrentChild={setChild}
             setChildren={setChildren}
