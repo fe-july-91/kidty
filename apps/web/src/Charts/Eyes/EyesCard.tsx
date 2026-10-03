@@ -5,6 +5,7 @@ import { client } from '../../Utils/httpClient';
 import { EyeResponce } from '../../Shared/types/types';
 import { useElementWidth } from '../../Shared/CustomHooks/useElementWidth';
 import { useTranslation } from 'react-i18next';
+import i18n from '../../i18n';
 import { useFormat } from '../../i18n/useFormat';
 
 const MIN = -10;
@@ -50,7 +51,7 @@ export const EyesCard: React.FC<{ childId: number }> = ({ childId }) => {
       .get<EyeResponce>(`children/${childId}/eye`)
       // id 0 means nothing has been saved for this child yet.
       .then((data) => setSaved(data.id ? { leftEye: data.leftEye, rightEye: data.rightEye } : null))
-      .catch((err) => setError(err.message || t('common.loadError')));
+      .catch((err) => setError(err.message || i18n.t('common.loadError')));
   }, [childId]);
 
   const shown = draft ?? saved;

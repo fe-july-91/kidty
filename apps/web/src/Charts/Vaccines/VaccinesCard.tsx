@@ -7,6 +7,7 @@ import { Child, VaccineData } from '../../Shared/types/types';
 import { useElementWidth } from '../../Shared/CustomHooks/useElementWidth';
 import { ChartTooltip } from '../Growth/ChartTooltip';
 import { useTranslation } from 'react-i18next';
+import i18n from '../../i18n';
 import { useFormat } from '../../i18n/useFormat';
 import { ageInMonths } from '../Growth/growth';
 
@@ -38,7 +39,7 @@ export const VaccinesCard: React.FC<{ child: Child }> = ({ child }) => {
     client
       .get<VaccineData[]>(`children/${child.id}/vaccination`)
       .then(setItems)
-      .catch((err) => setError(err.message || t('common.loadError')));
+      .catch((err) => setError(err.message || i18n.t('common.loadError')));
   }, [child.id]);
 
   // Number each dose of a vaccine in date order.

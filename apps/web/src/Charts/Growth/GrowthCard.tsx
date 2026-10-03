@@ -5,6 +5,7 @@ import { Child, Data } from '../../Shared/types/types';
 import { HistoryChart } from './HistoryChart';
 import { YearChart } from './YearChart';
 import { useTranslation } from 'react-i18next';
+import i18n from '../../i18n';
 import { useFormat } from '../../i18n/useFormat';
 import {
   METRICS,
@@ -48,7 +49,7 @@ export const GrowthCard: React.FC<Props> = ({ child, metric }) => {
         // Open the year of the latest measurement.
         setYear(loaded.at(-1)?.year ?? thisYear);
       })
-      .catch((err) => setError(err.message || t('common.loadError')));
+      .catch((err) => setError(err.message || i18n.t('common.loadError')));
   }, [child.id, metric]);
 
   const birthYear = parseBirth(child.birth).year;

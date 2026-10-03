@@ -7,6 +7,7 @@ import { Child } from '../Shared/types/types';
 import { calculateFullChildAge } from '../Shared/hendlers/generateYearArray';
 import { client } from '../Utils/httpClient';
 import { useTranslation } from 'react-i18next';
+import i18n from '../i18n';
 import { useFormat } from '../i18n/useFormat';
 
 export const AccountPage: React.FC = () => {
@@ -30,7 +31,7 @@ export const AccountPage: React.FC = () => {
         }
       })
       .catch((err) =>
-        setErrorMessage(err.message || t('profile.loadChildrenError'))
+        setErrorMessage(err.message || i18n.t('profile.loadChildrenError'))
       );
   }, []);
 
