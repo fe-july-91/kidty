@@ -27,7 +27,7 @@ export const HomePage: React.FC = () => {
       {/* banner */}
       <div className='relative w-full mb-8 flex flex-col items-center justify-center'>
         <div
-          className="absolute top-10 text-2xl text-center sm:text-3xl md:text-4xl font-medium text-secondary-500 animate-floatUp snap-start"
+          className="absolute z-10 top-10 text-2xl text-center sm:text-3xl md:text-4xl font-medium text-secondary-500 animate-floatUp snap-start"
         >
           {homePage.header.ua}
         </div>
@@ -36,7 +36,7 @@ export const HomePage: React.FC = () => {
         {/* buttons */}
         <div className=' w-full flex flex-col items-center'>
           <div
-            className="w-full px-6 absolute bottom-20 md:bottom-14 xl:bottom-6 flex flex-col justify-center opacity-0 gap-4 md:flex-row animate-floatUp"
+            className="w-full px-6 absolute z-10 bottom-20 md:bottom-14 xl:bottom-6 flex flex-col justify-center opacity-0 gap-4 md:flex-row animate-floatUp"
             style={{ animationDelay: `1.2s` }}
           >
             <Button
@@ -77,7 +77,7 @@ export const HomePage: React.FC = () => {
             Усі дані під рукою:
             </span>
                 {homePage.list.map(l => (
-              <div className="flex flex-row items-start gap-2 bg-white shadow-custom rounded-3xl p-4 md:p-6  transition-transform duration-300 hover:scale-110">
+              <div key={l.ua} className="flex flex-row items-start gap-2 bg-white shadow-custom rounded-3xl p-4 md:p-6  transition-transform duration-300 hover:scale-110">
                 <div className="flex-shrink-0 mt-2 w-3 h-3 bg-info rounded-full"></div>
                   <div>
                     {l.ua}

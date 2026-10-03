@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const BASE_URL = 'http://localhost:8088/api/';
+const BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8088/api/';
 
 function wait(delay: number) {
-  const isDev = process.env.NODE_ENV === 'development';
+  const isDev = import.meta.env.DEV;
   if (!isDev) return Promise.resolve();
   return new Promise((resolve) => setTimeout(resolve, delay));
 }
@@ -33,7 +33,7 @@ function request<T>(
     .then(() => fetch(BASE_URL + url, options))
     .then(async (response) => {
       if (response.status === 401) {
-        window.location.href = 'kidty#/login';
+        window.location.hash = '#/login';
         throw new Error('Неавторизований. Будь ласка, увійдіть до системи');
       }
 
@@ -72,30 +72,3 @@ export const client = {
   put: <T>(url: string, data: any) => request<T>(url, 'PUT', data),
   delete: (url: string) => request(url, 'DELETE'),
 };
-
-export async function getChildInfo(id: number, parametr: string) {
-  const currentToken = localStorage.getItem('authToken');
-
-  if (!currentToken) {
-    throw new Error('Щось пішло не так. Необхідно знову авторизуватися');
-  }
-
-  if (!id || !parametr) {
-    throw new Error('Неправильні параметри запиту');
-  }
-
-  const url = `${BASE_URL}children/${id}/${encodeURIComponent(parametr)}`;
-
-  const response = await fetch(url, {
-    headers: {
-      Authorization: `Bearer ${currentToken}`,
-      'Content-Type': 'application/json',
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error(`Error ${response.status}: ${response.statusText}`);
-  }
-
-  return response.json();
-}
