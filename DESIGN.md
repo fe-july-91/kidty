@@ -105,6 +105,18 @@ The logo has two parts that echo each other.
 On dark backgrounds, use white letters and a light-blue stem (`#C9D8EE`). Keep
 the copper head in every version.
 
+## Link preview
+
+`apps/web/public/og-image.png` (1200×630) is shown when the site link is shared.
+
+- **Layout**: the wordmark, the hero slogan with its second line in `primary`,
+  a one-line description and `kidty.com.ua` after a copper dot on the left; a
+  tilted weight-chart card on the right; `canvas` background.
+- **Tags**: the Open Graph and Twitter meta tags are in `apps/web/index.html`.
+- **Updating**: social networks cache previews. After changing the image, give
+  it a new file name or refresh it in the network's debugger (for example
+  Facebook's Sharing Debugger).
+
 ## Language and copy
 
 - The app is bilingual. `src/i18n/locales/uk.ts` is the source, and `en.ts` must have the same keys; run `npm run i18n:check -w @kidty/web`.
