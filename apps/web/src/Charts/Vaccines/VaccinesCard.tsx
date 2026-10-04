@@ -59,19 +59,37 @@ export const VaccinesCard: React.FC<{ child: Child }> = ({ child }) => {
   const currentAge = ageInMonths(child.birth, now.getFullYear(), now.getMonth() + 1, now.getDate());
 
   const narrow = width < 560;
-  // Room for the longest vaccine name in the current language.
+  // On narrow screens the vaccine name sits above its row so the timeline
+  // gets the full width; on wide screens names form a column on the left.
   const longestLabel = Math.max(...VACCINES.map((v) => f.vaccine(v).length));
-  const labelWidth = Math.min(width * 0.42, (longestLabel * (narrow ? 6.2 : 7.4)) + 14);
-  const M = { top: 8, right: 18, bottom: 30, left: labelWidth };
-  const rowH = narrow ? 30 : 34;
+  const labelWidth = narrow ? 0 : Math.min(width * 0.42, (longestLabel * 7.4) + 14);
+  const M = { top: 8, right: narrow ? 14 : 18, bottom: 30, left: narrow ? 4 : labelWidth };
+  const rowH = narrow ? 46 : 34;
   const height = M.top + (rowH * VACCINES.length) + M.bottom;
   const maxAge = Math.max(12, currentAge);
   // A square-root scale gives the busy first year more room than later years.
   const x = scalePow().exponent(0.5).domain([0, maxAge]).range([M.left + 12, width - M.right]);
   const y = scaleBand<string>().domain(VACCINES).range([M.top, M.top + (rowH * VACCINES.length)]);
   const ticks = AGE_TICKS.filter((tick) => tick <= maxAge);
-  const r = narrow ? 9 : 10;
-  const cy = (type: string) => y(type)! + (y.bandwidth() / 2);
+  const tickLabel = (tick: number) =>
+    tick === 0
+      ? t('growth.birth')
+      : tick < 12
+        ? t('growth.ageMonths', { count: tick })
+        : t('growth.ageYears', { count: tick / 12 });
+  // Skip labels that would run into the previous one (gridlines stay).
+  const labelledTicks = new Set<number>();
+  let lastRight = -Infinity;
+  for (const tick of ticks) {
+    const half = (tickLabel(tick).length * 6.4) / 2;
+    if (x(tick) - half >= lastRight + 6) {
+      labelledTicks.add(tick);
+      lastRight = x(tick) + half;
+    }
+  }
+  const r = narrow ? 8.5 : 10;
+  // Dot centre: the row middle, or below the name on narrow screens.
+  const cy = (type: string) => y(type)! + (narrow ? 30 : y.bandwidth() / 2);
 
   const save = async () => {
     if (!draft?.date) return;
@@ -189,17 +207,19 @@ export const VaccinesCard: React.FC<{ child: Child }> = ({ child }) => {
           {ticks.map((tick) => (
             <g key={tick}>
               <line className="stroke-grid" x1={x(tick)} x2={x(tick)} y1={M.top} y2={height - M.bottom} />
-              <text className="fill-muted text-xs" x={x(tick)} y={height - M.bottom + 18} textAnchor="middle">
-                {tick === 0
-                  ? t('growth.birth')
-                  : tick < 12
-                    ? t('growth.ageMonths', { count: tick })
-                    : t('growth.ageYears', { count: tick / 12 })}
-              </text>
+              {labelledTicks.has(tick) && (
+                <text className="fill-muted text-xs" x={x(tick)} y={height - M.bottom + 18} textAnchor="middle">
+                  {tickLabel(tick)}
+                </text>
+              )}
             </g>
           ))}
           {VACCINES.map((v) => (
-            <text key={v} className="fill-ink-2" style={{ fontSize: narrow ? 11 : 13 }} x={0} y={cy(v)} dy="0.32em">
+            <text
+              key={v}
+              className="fill-ink-2"
+              // On narrow screens the name crosses gridlines; a white halo keeps it legible.
+              style={{ fontSize: narrow ? 12 : 13, ...(narrow && { paintOrder: 'stroke', stroke: '#fff', strokeWidth: 4, strokeLinejoin: 'round' }) }} x={narrow ? M.left : 0} y={narrow ? y(v)! + 10 : cy(v)} dy="0.32em">
               {f.vaccine(v)}
             </text>
           ))}
