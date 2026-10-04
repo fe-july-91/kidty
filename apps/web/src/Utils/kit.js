@@ -1,5 +1,5 @@
 
-import logoimageDark from '../assets/icons/Logo-darck.svg'
+import logoImage from '../assets/icons/logo.svg'
 import footImage from '../assets/images/foot.png'
 import heightImage from '../assets/images/height.png'
 import weightImage from '../assets/images/weight.png'
@@ -97,7 +97,7 @@ export const weight = weightImage;
 export const height = heightImage;
 export const eye = eyeImage;
 export const vaccine = vaccineImage;
-export const logoDark = logoimageDark;
+export const logo = logoImage;
 
 // export const months = {
 //   UA: [

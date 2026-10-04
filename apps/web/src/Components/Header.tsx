@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { Link } from 'react-router';
-import { logoDark } from '../Utils/kit';
+import { logo } from '../Utils/kit';
 import { Menu } from './Menu/Menu';
 import { AuthContext } from '../Context/AuthContext';
 import { useTranslation } from 'react-i18next';
@@ -39,7 +39,7 @@ export const Header: React.FC = () => {
         to={authorized ? 'account' : '/'}
         className="flex items-center px-4 lg:px-6 h-full"
       >
-        <img src={logoDark} className="w-20 lg:w-24" alt="Kidty" />
+        <img src={logo} className="h-6 lg:h-7" alt="Kidty" />
       </Link>
 
       <div className="flex items-center gap-4 px-4 lg:px-6">
