@@ -9,20 +9,45 @@ export type Mail = {
   replyTo?: string;
 };
 
-// Without SMTP nothing is delivered: tests record messages in `outbox`,
-// elsewhere they are only logged (e.g. before an email provider is set up).
-const transport = env.SMTP_URL
-  ? nodemailer.createTransport(env.SMTP_URL)
-  : nodemailer.createTransport({ jsonTransport: true });
-
 /** Messages "sent" in tests. */
 export const outbox: Mail[] = [];
 
-export async function sendMail(mail: Mail) {
-  if (!env.SMTP_URL) {
-    if (env.NODE_ENV === 'test') outbox.push(mail);
-    else console.warn(`SMTP_URL is not set; not sending "${mail.subject}" to ${mail.to}`);
-    return;
+const smtp = env.SMTP_URL ? nodemailer.createTransport(env.SMTP_URL) : null;
+
+/** Sends through Resend's HTTP API. Exported for tests. */
+export async function sendWithResend(mail: Mail, apiKey = env.RESEND_API_KEY, from = env.MAIL_FROM) {
+  const response = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      from,
+      to: [mail.to],
+      subject: mail.subject,
+      text: mail.text,
+      html: mail.html,
+      ...(mail.replyTo ? { reply_to: mail.replyTo } : {}),
+    }),
+  });
+  if (!response.ok) {
+    throw new Error(`Resend ${response.status}: ${await response.text()}`);
   }
-  await transport.sendMail({ from: env.MAIL_FROM, ...mail });
+}
+
+/**
+ * Sends an email via Resend (production), SMTP (local Mailpit) or, in
+ * tests, the in-memory outbox. Without any of them it only logs.
+ */
+export async function sendMail(mail: Mail) {
+  if (env.NODE_ENV === 'test') {
+    outbox.push(mail);
+  } else if (env.RESEND_API_KEY) {
+    await sendWithResend(mail);
+  } else if (smtp) {
+    await smtp.sendMail({ from: env.MAIL_FROM, ...mail });
+  } else {
+    console.warn(`No email transport configured; not sending "${mail.subject}" to ${mail.to}`);
+  }
 }

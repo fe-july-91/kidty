@@ -27,5 +27,7 @@ services:
         value: https://kidty.com.ua
       - key: SUPPORT_EMAIL # where support form messages go
         sync: false
-      - key: SMTP_URL # optional until an email provider is set up
+      - key: RESEND_API_KEY # email over HTTPS; free Render blocks SMTP ports
         sync: false
+      - key: MAIL_FROM
+        value: Kidty <no-reply@kidty.com.ua>

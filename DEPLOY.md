@@ -47,8 +47,16 @@ npm run deploy     # builds with .env.production and pushes to gh-pages
 
 `public/CNAME` keeps the custom domain on every deploy.
 
-## Email (later)
+## Email (Resend)
 
-Set `SMTP_URL` on Render to an SMTP provider (e.g. Resend, Brevo or Postmark;
-the sending domain has to be verified with DNS records) and `MAIL_FROM` to
-an address on that domain. Until then password reset emails are not sent.
+Render's free plan blocks outgoing SMTP, so the API sends email through
+Resend's HTTPS API.
+
+1. At https://resend.com add the domain `kidty.com.ua` and copy the DNS
+   records it shows (DKIM `TXT resend._domainkey`, and for the `send`
+   subdomain an `MX` and an SPF `TXT`) into HOSTiQ → Управление DNS.
+2. Wait until Resend shows the domain as **Verified**.
+3. Create an API key with **Sending access** and set it as
+   `RESEND_API_KEY` in Render → kidty-api → Environment.
+
+`MAIL_FROM` is `Kidty <no-reply@kidty.com.ua>` (set in `render.yaml`).

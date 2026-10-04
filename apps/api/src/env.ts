@@ -26,7 +26,9 @@ const schema = z.object({
   COOKIE_SAMESITE: z.enum(['lax', 'strict', 'none']).default('lax'),
   /** Comma-separated list of allowed frontend origins. */
   CORS_ORIGIN: z.string().default('http://localhost:3000'),
-  /** SMTP server, e.g. smtp://localhost:1025 (Mailpit) or smtps://user:pass@host:465. */
+  /** Resend API key: sends email over HTTPS (Render's free plan blocks SMTP). */
+  RESEND_API_KEY: z.string().optional(),
+  /** SMTP server for local development, e.g. smtp://localhost:1025 (Mailpit). */
   SMTP_URL: z.string().optional(),
   MAIL_FROM: z.string().default('Kidty <no-reply@kidty.local>'),
   /** Where messages from the support form are sent. */
