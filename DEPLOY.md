@@ -31,8 +31,11 @@ after that takes about a minute.
 
 1. In Render: service → **Settings → Custom Domains → Add**
    `api.kidty.com.ua`.
-2. At the DNS provider of `kidty.com.ua` add the record Render shows
-   (a `CNAME` from `api` to `<service>.onrender.com`).
+2. DNS for `kidty.com.ua` is managed in the **HOSTiQ** client panel
+   (Мои домены → kidty.com.ua → Управление DNS; HOSTiQ serves it through
+   Cloudflare name servers, but there is no separate Cloudflare account).
+   Records: four `A` records for GitHub Pages (`185.199.108–111.153`),
+   `CNAME www → fe-july-91.github.io` and `CNAME api → kidty-api.onrender.com`.
 3. Wait until Render shows the certificate as issued.
 
 ## 4. Website (GitHub Pages)
